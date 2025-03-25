@@ -13,10 +13,7 @@ let emitter = mitt();
 
 axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.withCredentials = true;
-
-
 app.config.globalProperties.$axios = axios;
-
 app.config.globalProperties.store = store;
 app.config.globalProperties.emitter = emitter;
 

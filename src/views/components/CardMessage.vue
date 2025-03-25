@@ -1,3 +1,7 @@
+<script lang="ts">
+// TODO 알림 목록 구현
+
+</script>
 <template>
   <div class="mt-4 card move-on-hover">
     <div class="card-body">

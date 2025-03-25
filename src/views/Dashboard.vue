@@ -8,8 +8,8 @@ import US from "@/assets/img/icons/flags/US.png";
 import DE from "@/assets/img/icons/flags/DE.png";
 import GB from "@/assets/img/icons/flags/GB.png";
 import BR from "@/assets/img/icons/flags/BR.png";
-
-// 데이터 받아와야되고 (최근 데이터 자료 정도 가져와야 될듯)
+// TODO 1 알림 구현 (SSE + MONGO)
+// TODO 2 데이터 받아와야되고 (최근 데이터 자료 정도 가져와야 될듯)
 const sales = {
   us: {
     country: "United States",

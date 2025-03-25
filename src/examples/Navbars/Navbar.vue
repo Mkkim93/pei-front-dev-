@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import Breadcrumbs from "../Breadcrumbs.vue";
+import axios from "@/plugins/axios.ts";
 
 const showMenu = ref(false);
 const store = useStore();
@@ -26,6 +27,16 @@ const closeMenu = () => {
     showMenu.value = false;
   }, 100);
 };
+
+const logout = async () => {
+
+  try {
+    const response = await axios.post('/logout')
+    console.log('logout response : ', response?.data);
+  } catch (error) {
+    console.log('logout : ', error);
+  }
+}
 </script>
 <template>
   <nav
@@ -63,15 +74,17 @@ const closeMenu = () => {
         </div>
         <ul class="navbar-nav justify-content-end">
           <li class="nav-item d-flex align-items-center">
+            <!-- target="_blank" : 기존 페이지를 남겨두고 새로운 페이지를 랜더링 -->
             <router-link
               :to="{ name: 'Signin' }"
               class="px-0 nav-link font-weight-bold text-white"
-              target="_blank"
+
+              @click="logout"
             >
             <!-- TODO 로그인 시 내정보, 이거 필요없을 듯 -->
               <i class="fa fa-user" :class="isRTL ? 'ms-sm-2' : 'me-sm-2'"></i>
-              <span v-if="isRTL" class="d-sm-inline d-none">로그인</span>
-              <span v-else class="d-sm-inline d-none">로그인</span>
+              <span v-if="isRTL" class="d-sm-inline d-none">로그아웃</span>
+              <span v-else class="d-sm-inline d-none">로그아웃</span>
             </router-link>
           </li>
           <li class="nav-item d-xl-none ps-3 d-flex align-items-center">

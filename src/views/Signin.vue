@@ -6,6 +6,7 @@ import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 import axios from "@/plugins/axios.ts";
+import router from "@/router/router.ts";
 const body = document.getElementsByTagName("body")[0];
 
 const store = useStore();
@@ -36,11 +37,15 @@ const handleLogin = async () => {
     }, {
       headers: { "Content-Type" : "application/json" },
     });
-  
+
     store.dispatch('login', response.headers['authorization']);
-  
+    console.log(response);
+    
+    alert(response?.data.message);
+    router.push('/dashboard-default');
   } catch (error) {
-    console.log('handleLogin error', error);
+    console.log("에러 응답:", error.response?.data); // 👈 여기서 확인
+    alert(error.response?.data.message);
   }
 }
 
