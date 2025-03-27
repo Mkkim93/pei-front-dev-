@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeUnmount, onBeforeMount, ref} from "vue";
+import { onBeforeUnmount, onBeforeMount, ref, onMounted} from "vue";
 import { useStore } from "vuex";
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
@@ -7,6 +7,7 @@ import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 import axios from "@/plugins/axios.ts";
 import router from "@/router/router.ts";
+import { connectToSSE } from "@/utils/sse";
 const body = document.getElementsByTagName("body")[0];
 
 const store = useStore();
@@ -27,6 +28,7 @@ onBeforeUnmount(() => {
 
 const username = ref('');
 const password = ref('');
+const errorMessage = ref('');
 
 // 🔆 compision API 에서 axios 사용 (중요 까먹지 말것))
 const handleLogin = async () => {  
@@ -40,12 +42,14 @@ const handleLogin = async () => {
 
     store.dispatch('login', response.headers['authorization']);
     console.log(response);
-    
+    connectToSSE();
     alert(response?.data.message);
     router.push('/dashboard-default');
+
   } catch (error) {
     console.log("에러 응답:", error.response?.data); // 👈 여기서 확인
-    alert(error.response?.data.message);
+    // alert(error.response?.data.message);
+    errorMessage.value = error.response?.data.message;
   }
 }
 
@@ -96,6 +100,7 @@ const handleLogin = async () => {
                         name="password"
                         size="lg"
                       />
+                      <p>{{ errorMessage }}</p>
                     </div>
                     <argon-switch id="rememberMe" name="remember-me"
                       >로그인 상태 유지</argon-switch

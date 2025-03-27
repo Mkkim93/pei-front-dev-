@@ -1,15 +1,32 @@
-<script setup>
-import { onBeforeMount, onMounted, onBeforeUnmount } from "vue";
+<script setup lang="ts">
+import { onBeforeMount, onMounted, onBeforeUnmount, reactive, ref } from "vue";
 import { useStore } from "vuex";
-
 import setNavPills from "@/assets/js/nav-pills.js";
 import setTooltip from "@/assets/js/tooltip.js";
 import ProfileCard from "./components/ProfileCard.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
+import { fetchUsersProfile } from "@/api/users";
+import { UsersType } from "@/types/users";
+
+// const nameInput = ref('');
+
+const profile = reactive<UsersType>({
+  username: '',
+  name: '',
+  phone: '',
+  mail: '',
+  roleType: ''
+});
+
+onMounted(async () => {
+  const response = await fetchUsersProfile();
+  console.log('response: ', response);
+  Object.assign(profile, response); // reactive 객체 업데이트
+  // nameInput.value = profile.name;
+});
 
 const body = document.getElementsByTagName("body")[0];
-
 const store = useStore();
 
 onMounted(() => {
@@ -17,6 +34,7 @@ onMounted(() => {
   setNavPills();
   setTooltip();
 });
+
 onBeforeMount(() => {
   store.state.imageLayout = "profile-overview";
   store.state.showNavbar = false;
@@ -60,8 +78,9 @@ onBeforeUnmount(() => {
             </div>
             <div class="col-auto my-auto">
               <div class="h-100">
-                <h5 class="mb-1">홍길동</h5>
-                <p class="mb-0 font-weight-bold text-sm">관리자</p>
+                
+                <h5 class="mb-1">{{ profile.name }}</h5>
+                <p class="mb-0 font-weight-bold text-sm"> {{ profile.roleType }}</p>
               </div>
             </div>
             <div
@@ -239,9 +258,7 @@ onBeforeUnmount(() => {
             <div class="card-header pb-0">
               <div class="d-flex align-items-center">
                 <p class="mb-0">내 정보 수정</p>
-                <argon-button color="success" size="sm" class="ms-auto"
-                  >수정</argon-button
-                >
+                <argon-button color="success" size="sm" class="ms-auto">수정</argon-button>
               </div>
             </div>
             <div class="card-body">
@@ -251,25 +268,25 @@ onBeforeUnmount(() => {
                   <label for="example-text-input" class="form-control-label"
                     >아이디</label
                   >
-                  <argon-input type="text" value="lucky.jesse" />
+                  <argon-input type="text" value="lucky.jesse" v-model="profile.username"/>
                 </div>
                 <div class="col-md-6">
                   <label for="example-text-input" class="form-control-label"
                     >이메일</label
                   >
-                  <argon-input type="email" value="jesse@example.com" />
+                  <argon-input type="email" value="jesse@example.com" v-model="profile.mail"/>
                 </div>
                 <div class="col-md-6">
                   <label for="example-text-input" class="form-control-label"
                     >이름</label
                   >
-                  <input class="form-control" type="text" value="" />
+                  <input class="form-control" type="text" v-model="profile.name"/>
                 </div>
                 <div class="col-md-6">
                   <label for="example-text-input" class="form-control-label"
                     >연락처</label
                   >
-                  <argon-input type="text" value="Lucky" />
+                  <argon-input type="text" value="Lucky" v-model="profile.phone" />
                 </div>
               </div>
               <hr class="horizontal dark" />

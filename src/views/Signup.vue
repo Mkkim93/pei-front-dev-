@@ -1,6 +1,7 @@
 <script setup>
-import { onBeforeUnmount, onBeforeMount } from "vue";
+import { onBeforeUnmount, onBeforeMount, ref } from "vue";
 import { useStore } from "vuex";
+import axios from '@/plugins/axios';
 
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import AppFooter from "@/examples/PageLayout/Footer.vue";
@@ -25,6 +26,37 @@ onBeforeUnmount(() => {
   store.state.showFooter = true;
   body.classList.add("bg-gray-100");
 });
+
+const username = ref('');
+const password = ref('');
+const confirmPassword = ref('');
+const name = ref('');
+const phone = ref('');
+const mail = ref('');
+
+const signup = async () => {
+
+  try {
+
+    const registerDTO = {
+      username: username.value,
+      password: password.value,
+      name: name.value,
+      phone: phone.value,
+      mail: mail.value
+    };
+
+
+    const response = await axios.post('/api/register', registerDTO, {
+      headers: { 
+        'Content-Type' : 'application/json',
+      },
+    });
+    console.log('signup : ', response?.data.message);
+  } catch (error) {
+    console.log('signup error', error);
+  }
+}
 </script>
 <template>
   <div class="container top-0 position-sticky z-index-sticky">
@@ -74,7 +106,7 @@ onBeforeUnmount(() => {
               </div>
             </div>
             <div class="card-body">
-              <form role="form">
+              <form role="form" @submit.prevent="signup">
                 
                 <argon-input
                   id="username"
@@ -82,11 +114,19 @@ onBeforeUnmount(() => {
                   placeholder="사용할 계정을 입력해주세요"
                   aria-label="username"
                 />
+
                 <argon-input
                   id="password"
                   type="password"
                   placeholder="비밀번호를 입력해주세요"
                   aria-label="Password"
+                />
+
+                <argon-input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="비밀번호 확인"
+                  aria-label="confirmPassword"
                 />
 
                 <argon-input
@@ -102,11 +142,19 @@ onBeforeUnmount(() => {
                   placeholder="연락처를 입력해주세요"
                   aria-label="Phone"
                 />
+
+                <argon-input
+                  id="email"
+                  type="email"
+                  placeholder="이메일 주소를 입력해주세요"
+                  aria-label="Email"
+                  />
+
                 <argon-checkbox checked>
                   <label class="form-check-label" for="flexCheckDefault">
                     PEI
                     <a href="javascript:;" class="text-dark font-weight-bolder"
-                      >이용 약관의 동의 합니다.</a
+                      >이용 약관에 동의 합니다.</a
                     >
                   </label>
                 </argon-checkbox>

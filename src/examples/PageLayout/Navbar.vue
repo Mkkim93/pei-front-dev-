@@ -45,7 +45,7 @@ defineProps({
       </button>
       <div class="collapse navbar-collapse" id="navigation">
         <ul class="navbar-nav mx-auto">
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link
               class="nav-link d-flex align-items-center me-2 active"
               aria-current="page"
@@ -58,8 +58,8 @@ defineProps({
               ></i>
               홈
             </router-link>
-          </li>
-          <li class="nav-item">
+          </li> -->
+          <!-- <li class="nav-item">
             <router-link class="nav-link me-2" to="/profile">
               <i
                 class="fa fa-user opacity-6 me-1"
@@ -68,7 +68,7 @@ defineProps({
               ></i>
               내 정보
             </router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link class="nav-link me-2" to="/signup">
               <i

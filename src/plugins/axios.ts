@@ -8,11 +8,13 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(
+
     (config) => {
         const token = store.state.accessToken;
 
         if (token) {
-            config.headers["Authorization"] = `Bearer + ${token}`;
+            config.headers["Authorization"] = `${token}`; // ✅ 수정됨
+            console.log("Authorization 헤더:", config.headers.Authorization);
         }
         return config;
     },
@@ -26,15 +28,20 @@ instance.interceptors.response.use(
         const originalRequest = error.config;
         console.log("인터셉터 에러:", error.response?.data); // 여기 찍히나요?
         
-
         if (
-            error.response?.status === 401 && 
+            error.response?.status === 401 &&
             !originalRequest._retry // _retry : 무한 루프 방지
-        ) 
+            
+        )  {
+            if (error.response?.data?.code === "REFRESH_TOKEN_NULL") {
+                store.dispatch("logout");
+                return Promise.reject(error);
+            }
+        }
         
         {
             originalRequest._retry = true;
-
+        
             try {
                 const res = await axios.post("/api/reissue", 
                     {},

@@ -17,7 +17,7 @@ const showFooter = computed(() => store.state.showFooter);
 const showConfig = computed(() => store.state.showConfig);
 const hideConfigButton = computed(() => store.state.hideConfigButton);
 const toggleConfigurator = () => store.commit("toggleConfigurator");
-console.log('hello');
+
 const navClasses = computed(() => {
   return {
     "position-sticky bg-white left-auto top-2 z-index-sticky":

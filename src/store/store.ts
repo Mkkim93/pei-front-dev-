@@ -82,7 +82,9 @@ export default createStore<State>({
     
     logout({ commit }) {
       commit("clearAccessToken");
-    }
+    },
   },
-  getters: {},
+  getters: {
+    accessToken: (state) => state.accessToken
+  },
 });

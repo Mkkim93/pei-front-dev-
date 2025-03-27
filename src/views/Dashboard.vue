@@ -1,8 +1,23 @@
-<script setup>
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import MiniStatisticsCard from "@/examples/Cards/MiniStatisticsCard.vue";
 import GradientLineChart from "@/examples/Charts/GradientLineChart.vue";
 import Carousel from "./components/Carousel.vue";
 import CategoriesList from "./components/CategoriesList.vue";
+import { fetchBoardList } from "@/api/board";
+import { BoardListType, PageInfoType } from "@/types/board";
+import { formatDate } from "@/utils/date";
+
+const boardList = ref<BoardListType[]>([]);
+const pageData = ref<PageInfoType | null>(null);
+
+onMounted(async () => {
+  const response = await fetchBoardList(0, 5);
+  console.log(response);
+  boardList.value = response.data.content; // ✅ 여기로 수정
+  pageData.value = response.data.page;
+});
+
 
 import US from "@/assets/img/icons/flags/US.png";
 import DE from "@/assets/img/icons/flags/DE.png";
@@ -142,43 +157,50 @@ const sales = {
           <div class="col-lg-7 mb-lg-0 mb-4">
             <div class="card">
               <div class="p-3 pb-0 card-header">
-                <div class="d-flex justify-content-between">
-                  <h6 class="mb-4">공지 사항</h6>
-                </div>
+                <div class="p-3 pb-4 card-header d-flex justify-content-between align-items-center">
+  <h6 class="mb-0">공지 사항</h6>
+  <button class="btn btn-sm btn-outline-primary">더보기</button>
+</div>
+          
+
               </div>
               <div class="table-responsive">
                 <table class="table align-items-center">
+                  <thead>
+                    <tr class="text-center">
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>조회수</th>
+                    </tr>
+                  </thead>
                   <tbody>
-                    <tr v-for="(sale, index) in sales" :key="index">
+                    <tr v-for="(board, index) in boardList" :key="index">
                       <td class="w-30">
                         <div class="px-2 py-1 d-flex align-items-center">
-                          <div>
-                            <img :src="sale.flag" alt="Country flag" />
-                          </div>
                           <div class="ms-4">
-                            <p class="mb-0 text-xs font-weight-bold">
-                              Country:
-                            </p>
-                            <h6 class="mb-0 text-sm">{{ sale.country }}</h6>
+                            <h6 class="mb-0 text-sm">
+  {{ board.title.length > 10 ? board.title.slice(0, 5) + '...' : board.title }}
+                            </h6>
                           </div>
                         </div>
                       </td>
                       <td>
                         <div class="text-center">
-                          <p class="mb-0 text-xs font-weight-bold">Sales:</p>
-                          <h6 class="mb-0 text-sm">{{ sale.sales }}</h6>
+                          
+                          <h6 class="mb-0 text-sm">{{ board.writer }}</h6>
                         </div>
                       </td>
                       <td>
                         <div class="text-center">
-                          <p class="mb-0 text-xs font-weight-bold">Value:</p>
-                          <h6 class="mb-0 text-sm">{{ sale.value }}</h6>
+                          
+                          <h6 class="mb-0 text-sm">{{ formatDate(board.createAt)  }}</h6>
                         </div>
                       </td>
                       <td class="text-sm align-middle">
                         <div class="text-center col">
-                          <p class="mb-0 text-xs font-weight-bold">Bounce:</p>
-                          <h6 class="mb-0 text-sm">{{ sale.bounce }}</h6>
+                          
+                          <h6 class="mb-0 text-sm">{{ board.views }}</h6>
                         </div>
                       </td>
                     </tr>

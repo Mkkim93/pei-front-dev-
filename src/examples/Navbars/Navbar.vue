@@ -31,7 +31,8 @@ const closeMenu = () => {
 const logout = async () => {
 
   try {
-    const response = await axios.post('/logout')
+    const response = await axios.post('/logout');
+    store.dispatch('logout');
     console.log('logout response : ', response?.data);
   } catch (error) {
     console.log('logout : ', error);

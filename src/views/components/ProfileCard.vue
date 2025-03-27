@@ -22,7 +22,7 @@
         <a
           href="javascript:;"
           class="btn btn-sm btn-info mb-0 d-none d-lg-block"
-          >Connect</a
+          >메세지</a
         >
         <a
           href="javascript:;"
@@ -33,7 +33,7 @@
         <a
           href="javascript:;"
           class="btn btn-sm btn-dark float-right mb-0 d-none d-lg-block"
-          >Message</a
+          >1:1 대화</a
         >
         <a
           href="javascript:;"

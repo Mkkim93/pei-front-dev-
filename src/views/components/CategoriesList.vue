@@ -24,9 +24,10 @@ defineProps({
 </script>
 <template>
   <div class="card">
-    <div class="p-3 pb-0 card-header">
-      <h6 class="mb-0">{{ title }}</h6>
-    </div>
+    <div class="p-4 pb-5 card-header d-flex justify-content-between align-items-center">
+  <h6 class="mb-0">{{ title }}</h6>
+  <button class="btn btn-sm btn-outline-primary">더보기</button>
+</div>
     <div class="p-3 card-body">
       <ul :class="`list-group ${isRTL ? 'pe-0' : ''}`">
         <li
