@@ -2,27 +2,35 @@
 import { ref, onMounted } from 'vue';
 import MiniStatisticsCard from "@/examples/Cards/MiniStatisticsCard.vue";
 import GradientLineChart from "@/examples/Charts/GradientLineChart.vue";
-import Carousel from "./components/Carousel.vue";
+// import Carousel from "./components/Carousel.vue";
+import store from '@/store/store';
+import { connectToSSE } from '@/utils/sse';
+import Calendar from '@/examples/Calendar.vue';
 import CategoriesList from "./components/CategoriesList.vue";
 import { fetchBoardList } from "@/api/board";
-import { BoardListType, PageInfoType } from "@/types/board";
+import { BoardListType, PageInfoType } from "@/types/board.d";
 import { formatDate } from "@/utils/date";
-
 const boardList = ref<BoardListType[]>([]);
 const pageData = ref<PageInfoType | null>(null);
 
+onMounted(() => {
+  const token = store.getters.accessToken;
+  if (token) {
+    connectToSSE();
+  }
+});
+
 onMounted(async () => {
   const response = await fetchBoardList(0, 5);
-  console.log(response);
   boardList.value = response.data.content; // ✅ 여기로 수정
   pageData.value = response.data.page;
 });
-
 
 import US from "@/assets/img/icons/flags/US.png";
 import DE from "@/assets/img/icons/flags/DE.png";
 import GB from "@/assets/img/icons/flags/GB.png";
 import BR from "@/assets/img/icons/flags/BR.png";
+import NotifyModal from '@/examples/Modal/NotifyModal.vue';
 // TODO 1 알림 구현 (SSE + MONGO)
 // TODO 2 데이터 받아와야되고 (최근 데이터 자료 정도 가져와야 될듯)
 const sales = {
@@ -118,10 +126,10 @@ const sales = {
             />
           </div>
         </div>
-        <div class="row">
+        <div class="row align-items-stretch">
           <div class="col-lg-7 mb-lg">
             <!-- line chart 여기 차트를 일별, 월별, 주간, 월별 로 슬라이드 해서 보여줄 수 있도록 구현하는것도 괜찮을 듯-->
-            <div class="card z-index-2">
+            <div class="card z-index-2 h-100" style="min-height: 450px;">
               <gradient-line-chart
                 id="chart-line"
                 title="월별 조사 현황"
@@ -150,20 +158,19 @@ const sales = {
             </div>
           </div>
           <div class="col-lg-5">
-            <carousel />
+            <!-- <carousel /> -->
+             <calendar></calendar>
           </div>
         </div>
         <div class="row mt-4">
           <div class="col-lg-7 mb-lg-0 mb-4">
             <div class="card">
-              <div class="p-3 pb-0 card-header">
+              <div class="p-3 pb-8 card-header">
                 <div class="p-3 pb-4 card-header d-flex justify-content-between align-items-center">
   <h6 class="mb-0">공지 사항</h6>
   <button class="btn btn-sm btn-outline-primary">더보기</button>
 </div>
-          
-
-              </div>
+    \        </div>
               <div class="table-responsive">
                 <table class="table align-items-center">
                   <thead>
@@ -245,4 +252,5 @@ const sales = {
       </div>
     </div>
   </div>
+  <NotifyModal />
 </template>

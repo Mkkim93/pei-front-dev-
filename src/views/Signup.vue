@@ -1,7 +1,7 @@
 <script setup>
 import { onBeforeUnmount, onBeforeMount, ref } from "vue";
 import { useStore } from "vuex";
-import axios from '@/plugins/axios';
+import axios from '@/plugins/axiosAuth';
 
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import AppFooter from "@/examples/PageLayout/Footer.vue";

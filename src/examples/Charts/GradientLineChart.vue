@@ -128,7 +128,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="card z-index-2">
+  <div class="card z-index-2 h-100">
     <div class="pb-0 card-header mb-0">
       <h6>{{ props.title }}</h6>
       <p v-if="props.description" class="text-sm" v-html="props.description" />

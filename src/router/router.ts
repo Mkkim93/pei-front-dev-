@@ -8,7 +8,7 @@ import RTL from "../views/Rtl.vue";
 import Profile from "../views/Profile.vue";
 import Signup from "../views/Signup.vue";
 import Signin from "../views/Signin.vue";
-import axios from "@/plugins/axios";
+import axios from "@/plugins/axiosAuth";
 import store from "@/store/store";
 
 
@@ -82,7 +82,8 @@ router.beforeEach(async (to, from, next) => {
   }
 
   try {
-    console.log('라우터 가드 실행');
+    console.log('[Router Nav] to.Path: ', to.path);
+    console.log('[Router Nav] from: ', from);
 
     if (expiredCheck()) {
       const response = await axios.post('/api/reissue');

@@ -1,9 +1,9 @@
 export interface UsersType {
-    username : string;
+    mail: string;
     name: string;
     phone: string;
-    mail: string;
     roleType: string;
+    username : string;
 }
 
 export interface UsersUpdateType {

@@ -1,17 +1,14 @@
 import dayjs from 'dayjs';
-import axios from '@/plugins/axios';
+import axios from '@/plugins/axiosAuth';
 import store from '@/store/store';
 import { jwtDecode } from "jwt-decode";
 
 export function expiredCheck() :boolean {
     const token = store.getters.accessToken;
-    
     if (!token) {
         return true;
     }
-
     const rawToken = token.startsWith("Bearer ") ? token.split(" ")[1] : token;
-
     try {
         const decoded: any = jwtDecode(rawToken);
         const now = Math.floor(Date.now() / 1000);

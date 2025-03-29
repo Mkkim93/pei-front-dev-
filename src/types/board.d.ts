@@ -1,5 +1,5 @@
 // types/board.ts
-export interface BoardListType {
+export type BoardListType = {
     id: number;
     title: string;
     content: string;
@@ -9,14 +9,14 @@ export interface BoardListType {
     views: number;
   }
   
-  export interface PageInfoType {
+export interface PageInfoType {
     size: number;
     number: number;
     totalElements: number;
     totalPages: number;
   }
   
-  export interface BoardListResponse {
+export interface BoardListResponse {
     status: number;
     message: string;
     timestamp: string;

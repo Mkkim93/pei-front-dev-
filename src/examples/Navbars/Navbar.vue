@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import Breadcrumbs from "../Breadcrumbs.vue";
-import axios from "@/plugins/axios.ts";
+import axios from "@/plugins/axiosAuth";
 
 const showMenu = ref(false);
 const store = useStore();
