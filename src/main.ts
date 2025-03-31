@@ -9,6 +9,8 @@ import "./assets/css/nucleo-svg.css";
 import mitt from 'mitt';
 import Toast, { PluginOptions } from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import "material-design-icons-iconfont/dist/material-design-icons.css";
+
 
 const app = createApp(App);
 

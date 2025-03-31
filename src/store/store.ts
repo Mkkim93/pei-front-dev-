@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import notify from "./notifyStore";
 
 interface State {
   hideConfigButton: boolean;
@@ -87,4 +88,8 @@ export default createStore<State>({
   getters: {
     accessToken: (state) => state.accessToken
   },
+
+  modules: {
+    notify
+  }
 });

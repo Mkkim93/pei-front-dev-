@@ -15,3 +15,14 @@ export interface NotifyType {
     timestamp: string;
     data: NotifyType[];
   }
+
+  export interface NotifyItem {
+    id: number;
+    message: string;
+    isRead?: boolean;
+  }
+  
+  export interface NotifyState {
+    notifications: NotifyItem[];
+  }
+  

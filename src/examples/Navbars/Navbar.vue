@@ -128,6 +128,7 @@ const logout = async () => {
               :class="showMenu ? 'show' : ''"
               aria-labelledby="dropdownMenuButton"
             >
+            <p class="m-1">최근 알림</p>
               <li class="mb-2">
                 <a class="dropdown-item border-radius-md" href="javascript:;">
                   <div class="py-1 d-flex">
@@ -138,8 +139,11 @@ const logout = async () => {
                         alt="user image"
                       />
                     </div>
+                    
                     <div class="d-flex flex-column justify-content-center">
+                      
                       <h6 class="mb-1 text-sm font-weight-normal">
+                        
                         <span class="font-weight-bold">New message</span> from
                         Laur
                       </h6>

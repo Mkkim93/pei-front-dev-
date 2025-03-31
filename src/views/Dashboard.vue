@@ -10,6 +10,8 @@ import CategoriesList from "./components/CategoriesList.vue";
 import { fetchBoardList } from "@/api/board";
 import { BoardListType, PageInfoType } from "@/types/board.d";
 import { formatDate } from "@/utils/date";
+import NotifyModal from '@/examples/Modal/NotifyModal.vue';
+import ArgonButton from '@/components/ArgonButton.vue';
 const boardList = ref<BoardListType[]>([]);
 const pageData = ref<PageInfoType | null>(null);
 
@@ -21,7 +23,7 @@ onMounted(() => {
 });
 
 onMounted(async () => {
-  const response = await fetchBoardList(0, 5);
+  const response = await fetchBoardList(0, 8);
   boardList.value = response.data.content; // ✅ 여기로 수정
   pageData.value = response.data.page;
 });
@@ -30,7 +32,7 @@ import US from "@/assets/img/icons/flags/US.png";
 import DE from "@/assets/img/icons/flags/DE.png";
 import GB from "@/assets/img/icons/flags/GB.png";
 import BR from "@/assets/img/icons/flags/BR.png";
-import NotifyModal from '@/examples/Modal/NotifyModal.vue';
+
 // TODO 1 알림 구현 (SSE + MONGO)
 // TODO 2 데이터 받아와야되고 (최근 데이터 자료 정도 가져와야 될듯)
 const sales = {
@@ -165,12 +167,14 @@ const sales = {
         <div class="row mt-4">
           <div class="col-lg-7 mb-lg-0 mb-4">
             <div class="card">
-              <div class="p-3 pb-8 card-header">
+              <div class="p-3 card-header">
                 <div class="p-3 pb-4 card-header d-flex justify-content-between align-items-center">
   <h6 class="mb-0">공지 사항</h6>
-  <button class="btn btn-sm btn-outline-primary">더보기</button>
+  <router-link to="/tables">
+  <ArgonButton class="btn btn-sm btn-outline-primary" variant="gradient">더보기</ArgonButton>
+</router-link>
 </div>
-    \        </div>
+            </div>
               <div class="table-responsive">
                 <table class="table align-items-center">
                   <thead>

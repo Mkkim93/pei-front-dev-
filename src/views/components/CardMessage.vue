@@ -1,14 +1,17 @@
 <script lang="ts">
+import NotifyModal from '@/examples/Modal/NotifyModal.vue';
 // TODO 알림 목록 구현
 
 </script>
 <template>
+
   <div class="mt-4 card move-on-hover">
     <div class="card-body">
       <div class="d-flex">
         <p class="my-auto">Messages</p>
         <div class="ms-auto">
           <div class="avatar-group">
+            
             <a
               href="javascript:;"
               class="border-0 avatar avatar-sm rounded-circle"

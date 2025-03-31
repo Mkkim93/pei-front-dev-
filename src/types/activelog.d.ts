@@ -4,6 +4,7 @@ export type LogDescriptionType = {
     description: {
         title: string;
         content: string;
+        createdAt: Date;
     }
 }
 

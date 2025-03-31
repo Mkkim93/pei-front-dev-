@@ -6,6 +6,7 @@ export type BoardListType = {
     createAt: Date;
     updateAt: string;
     writer: string;
+    roleType: string;
     views: number;
   }
   

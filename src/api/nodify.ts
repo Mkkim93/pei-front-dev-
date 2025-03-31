@@ -10,3 +10,7 @@ export async function fetchNotifyList(): Promise<NotifyResponse> {
   });
   return response.data;
 }
+
+export const markNotifycationAsRead = (id: number) => {
+  return axiosAuth.patch(`/api/notify?id=${id}`);
+}

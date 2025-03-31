@@ -5,6 +5,17 @@ import { useStore } from "vuex";
 
 import SidenavItem from "./SidenavItem.vue";
 
+defineProps({
+  currentPage: {
+    type: String,
+    default: "",
+  },
+  currentDirectory: {
+    type: String,
+    default: "",
+  },
+});
+
 const store = useStore();
 const isRTL = computed(() => store.state.isRTL);
 
@@ -36,7 +47,7 @@ const getRoute = () => {
         <sidenav-item
           to="/tables"
           :class="getRoute() === 'tables' ? 'active' : ''"
-          :navText="isRTL ? '조사 설정' : '조사 설정'"
+          :navText="isRTL ? '게시글 관리' : '게시글 관리'"
         >
           <template v-slot:icon>
             <i

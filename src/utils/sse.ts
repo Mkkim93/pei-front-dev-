@@ -1,5 +1,4 @@
 import store from "@/store/store";
-import { onMounted } from "vue";
 import { useToast } from "vue-toastification";
 import { fetchNotifyList } from "@/api/nodify";
 
@@ -25,6 +24,7 @@ const token = accessToken.split(' ')[1];
 eventSource = new EventSource(`http://localhost:8080/api/notify/subscribe?token=${token}`);
 
 let initialized = false; // 중복 호출 방지
+
 // SSE 알림 수신 로그
 eventSource.onmessage = async (event) => {
 
@@ -37,7 +37,8 @@ eventSource.onmessage = async (event) => {
         toast.dismiss(item.id);
         console.log('알림 수신: ', event.data);
         console.log("response: ", response);
-        toast(item.message, { id: item.id });
+        store.dispatch("notify/addNotification", item);
+        // toast(item.message, { id: item.id });
         // toast.clear(); 모든 알림 닫기 나중에 모든 알림 닫기 창 구현
     })
 };

@@ -37,7 +37,7 @@ defineProps({
           v-else
           :class="isNavFixed ? 'text-dark' : 'text-white'"
           class="opacity-8"
-          href="#"
+          href="/"
           >메인</a
         >
       </li>

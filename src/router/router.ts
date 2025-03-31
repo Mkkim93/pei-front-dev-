@@ -8,6 +8,8 @@ import RTL from "../views/Rtl.vue";
 import Profile from "../views/Profile.vue";
 import Signup from "../views/Signup.vue";
 import Signin from "../views/Signin.vue";
+import AuthorsTable from "@/views/components/AuthorsTable.vue";
+
 import axios from "@/plugins/axiosAuth";
 import store from "@/store/store";
 
@@ -25,7 +27,7 @@ const routes = [
   },
   {
     path: "/tables",
-    name: "조사 설정",
+    name: "게시글 관리",
     component: Tables,
   },
   {
@@ -57,7 +59,11 @@ const routes = [
     path: "/signup",
     name: "Signup",
     component: Signup,
-  },
+  }, 
+  {
+    path: "/auth-table",
+    component: AuthorsTable,
+  }
 ];
 
 const router = createRouter({
@@ -65,6 +71,7 @@ const router = createRouter({
   routes,
   linkActiveClass: "active",
 });
+
 
 // router nav
 // to : 대상 Route 객체 이동
