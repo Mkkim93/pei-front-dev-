@@ -10,6 +10,9 @@
 // =========================================================
 //
 // * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+@use "sass:math";
+@use "sass:color";
+@use "sass:map";
 
 // Bootstrap Functions
 @import "argon-dashboard/bootstrap/functions";

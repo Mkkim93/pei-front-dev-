@@ -1,22 +1,20 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onBeforeMount, ref, onMounted, watch, reactive, computed } from "vue";
+import { onBeforeUnmount, onBeforeMount, watch, ref, computed } from "vue";
 import { useStore } from "vuex";
-import { AxiosError } from "axios"; // error 타입 정의
-import router from "@/router/router";
-import { ApiResponse, PasswordStranghType } from "@/types/signup";
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import AppFooter from "@/examples/PageLayout/Footer.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonCheckbox from "@/components/ArgonCheckbox.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 import PeiLogo from '@/assets/img/logos/pei_logo.jpeg';
-import { checkUsername, checkPhone, validCode, postSignup } from "@/api/signup";
+import { userSignUp } from "@/api/signup";
 import ArgonAlert from "@/components/ArgonAlert.vue";
 import ArgonProgress from "@/components/ArgonProgress.vue";
 const body = document.getElementsByTagName("body")[0];
-
-
 const store = useStore();
+const agree = ref(true);
+const registerBtn = ref(true);
+
 onBeforeMount(() => {
   store.state.hideConfigButton = true;
   store.state.showNavbar = false;
@@ -24,6 +22,7 @@ onBeforeMount(() => {
   store.state.showFooter = false;
   body.classList.remove("bg-gray-100");
 });
+
 onBeforeUnmount(() => {
   store.state.hideConfigButton = false;
   store.state.showNavbar = true;
@@ -32,46 +31,28 @@ onBeforeUnmount(() => {
   body.classList.add("bg-gray-100");
 });
 
-// TODO 각가의 인증 항목에 대해 논리값을 결정 후 최종 회원가입 권한을 부여
-const validUsername = ref(false); // 계정 중복 확인
-const validPassword = ref(false); // 비밀번호 안전 등급 확인
-const validPhone = ref(false); // 전화번호 인증 확인
-const registerBtn = ref(false);
+const {
+    signup, checkedUsername, postedCode, validedCode,
+    evaluatePasswordStrength,
 
-const username = ref('');
-const password = ref('');
-const confirmPassword = ref('');
-const name = ref('');
-const phone = ref('');
-const mail = ref('');
-const code = ref('');
+    username, password, confirmPassword,
+    name, phone, mail, code,
+    validUsername, validPassword, validPasswordMatched, validPhone,
+    
+    errorMessage, showErrorMessage,
+    successMessage, showSuccessMessage,
+    codeActivity, isPosting,
+    
+    passwordMatch, passMatches,
+    passwordStrength, passwordDescription,
+    isStrongPassword, passwordAdvicer,
+    
+    passwordProgress
+} = userSignUp();
 
-const errorMessage = ref('');
-const showErrorMessage = ref(false);
 
-const successMessage = ref('');
-const showSuccessMessage = ref(false);
-
-const codeActivity = ref(false);
-const isPosting = ref(false);
-
-const timer = ref();
+const timer = ref<number | any>();
 let interval: number | null = null;
-
-const startTimer = () => {
-  if (interval) clearInterval(interval);
-
-  timer.value = 180;
-  interval = window.setInterval(() => {
-    if (timer.value > 0) {
-      timer.value--;
-    } else {
-      clearInterval(interval!);
-      interval = null;
-      // 타이머 종료 처리 (예: 재요청 버튼 활성화)
-    }
-  }, 1000);
-};
 
 const stopTimer = () => {
   if (interval) {
@@ -80,191 +61,40 @@ const stopTimer = () => {
   }
 };
 
-const signup = async () => {
-  console.log('singup start');
-  const registerDTO = {
-    username: username.value,
-    password: password.value,
-    name: name.value,
-    phone: phone.value,
-    mail: mail.value
-  };
-
-  if (!validUsername.value) {
-    alert('계정 중복 체크를 해주세요');
-    return;
-  } else if (!validPassword.value) {
-    alert('비밀번호가 안전하지 않습니다.');
-  } else if (!validPhone.value) {
-    alert('휴대폰 번호 인증을 해주세요');
-    return;
-  } else {
-    try {
-      console.log('registerDto : ', registerDTO);
-      const response = await postSignup(registerDTO);
-      console.log('response : ', response.message);
-      alert(response.message);
-      router.push('/signin');
-    } catch (error) {
-      console.log(error);
-    }
-  }
-};
-
-async function checkedUsername() {
-
-  try {
-    const response = await checkUsername(username.value);
-
-    showSuccessMessage.value = true;
-    successMessage.value = response.message;
-    validUsername.value = true;
-    setTimeout(() => {
-      showSuccessMessage.value = false;
-    }, 3000);
-  } catch (error) {
-    const axiosError = error as AxiosError<ApiResponse>;
-
-    if (axiosError.response) {
-      errorMessage.value = axiosError.response.data.message;
-    } else {
-      console.error('알 수 없는 에러 발생: ', error);
-    }
-    showErrorMessage.value = true;
-    setTimeout(() => {
-      showErrorMessage.value = false;
-    }, 3000);
-  }
-};
-
-async function postedCode() {
-  if (isPosting.value) return;
-
-  isPosting.value = true;
-
-  try {
-    const response = await checkPhone(phone.value); // TODO 메서드 이름 변경
-
-    console.log(response);
-    codeActivity.value = true;
-    timer.value = response.data;
-    startTimer();
-
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem('pn', phone.value);
-    }
-
-  } catch (error) {
-    console.log(error);
-  } finally {
-    isPosting.value = false;
-  }
-};
-
-
-async function validedCode() {
-
-  const beforePhone: string | null = localStorage.getItem('pn');
-  // const beforePhone = '01055072536';
-
-  if (typeof beforePhone !== 'string') {
-    console.log('잘못된 형식의 번호 입니다.');
-    return;
-  }
-
-  try {
-    const response = await validCode(code.value, beforePhone);
-
-    console.log('response: ', response);
-    localStorage.removeItem('pn');
-    clearInterval(interval!);
-    codeActivity.value = false;
-
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const passwordAdvicer = reactive<PasswordStranghType>({
-  description: '',
-  grade: 0,
-  strongPassword: false,
-});
-
-const passwordMatch = ref(false);
-const passMatches = ref('');
-const passwordStrength = ref(0);
-const passwordDescription = ref('');
-const isStrongPassword = ref(false);
-
 watch([password, confirmPassword], ([newPass, newConfirm]) => {
-  if (newPass && newConfirm) {
-    passwordMatch.value = newPass === newConfirm;
-    passMatches.value = passwordMatch.value
-      ? '패스워드가 일치 합니다.'
-      : '패스워드가 일치하지 않습니다.';
-  }
-  if (newPass) {
-    const result = evaluatePasswordStrength(newPass);
-    passwordStrength.value = result.grade;
-    passwordDescription.value = result.description;
-    isStrongPassword.value = result.strongPassword;
-    passwordAdvicer.description = result.description;
-    passwordAdvicer.grade = result.grade;
-    passwordAdvicer.strongPassword = result.strongPassword;
-  } else {
-    passwordStrength.value = 0;
-    passwordDescription.value = '';
-    isStrongPassword.value = false;
-    passwordAdvicer.description = '';
-    passwordAdvicer.grade = 0;
-    passwordAdvicer.strongPassword = false;
-  }
-});
-
-const passwordProgress = computed(() => {
-  switch (passwordAdvicer.grade) {
-    case 0:
-    case 1:
-      return { color: 'danger', percentage: 25 };
-    case 2:
-      return { color: 'warning', percentage: 50 };
-    case 3:
-      return { color: 'info', percentage: 75 };
-    case 4:
-      return { color: 'success', percentage: 100 };
-    default:
-      return { color: 'danger', percentage: 0 };
-  }
-});
-
-function evaluatePasswordStrength(password: string) {
-  const MIN_LENGTH = 8;
-  const STRONG_PASSWORD_THRESHOLD = 4;
-  let strength = 0;
-  if (password.length >= MIN_LENGTH) strength++;
-  if (/\d/.test(password)) strength++;
-  if (/[a-zA-Z]/.test(password)) strength++;
-  if (/[!@#$%^&*()_+=]/.test(password)) strength++;
-  const strongPassword = strength >= STRONG_PASSWORD_THRESHOLD;
-  const description = (() => {
-    switch (strength) {
-      case 0:
-      case 1:
-        return "현재 비밀번호는 보안에 취약합니다. 최소 8자리 이상 숫자, 영문 특수문자를 조합하세요";
-      case 2:
-      case 3:
-        return "현재 비밀번호는 보안에 취약합니다. 숫자, 영문, 특수문자를 조합하세요";
-      case 4:
-        return "안전한 비밀번호 입니다.";
-      default:
-        return "사용 불가능한 비밀번호 입니다.";
+    if (newPass && newConfirm) {
+      passwordMatch.value = newPass === newConfirm;
+      passMatches.value = passwordMatch.value
+        ? '패스워드가 일치 합니다.'
+        : '패스워드가 일치하지 않습니다.';
     }
-  })();
-  return { grade: strength, description, strongPassword };
-};
+    if (newPass === newConfirm) {
+      validPasswordMatched.value = true;
+      console.log('validPasswordMatched true?: ', validPasswordMatched.value);
+    }
+  
+    if (newPass) {
+      const result = evaluatePasswordStrength(newPass);
+      passwordStrength.value = result.grade;
+      passwordDescription.value = result.description;
+      isStrongPassword.value = result.strongPassword;
+      passwordAdvicer.description = result.description;
+      passwordAdvicer.grade = result.grade;
+      passwordAdvicer.strongPassword = result.strongPassword;
+      
+    } else {
+      passwordStrength.value = 0;
+      passwordDescription.value = '';
+      isStrongPassword.value = false;
+      passwordAdvicer.description = '';
+      passwordAdvicer.grade = 0;
+      passwordAdvicer.strongPassword = false;
+    }
+});
 
-onBeforeUnmount(() => stopTimer());
+  onBeforeUnmount(() => {
+    stopTimer();
+  })
 </script>
 <template>
   <div class="container top-0 position-sticky z-index-sticky">
@@ -324,25 +154,18 @@ onBeforeUnmount(() => stopTimer());
                 <ArgonAlert v-if="showErrorMessage" :color="'warning'" :dismissible="true">
                   {{ errorMessage }}
                 </ArgonAlert>
-
                 <argon-input id="password" type="password" placeholder="비밀번호를 입력해주세요" aria-label="Password"
                   v-model="password" />
                 <argon-input id="confirmPassword" type="password" placeholder="비밀번호 확인" aria-label="confirmPassword"
                   v-model="confirmPassword" />
                 <small v-if="password || confirmPassword" :class="passwordMatch ? 'text-success' : 'text-danger'">
                   {{ passMatches }}</small>
-                <br>
-
                 <div v-if="password">
                   <small> {{ passwordAdvicer.description }} </small>
                   <ArgonProgress class="mb-3" :color="passwordProgress.color"
                     :percentage="passwordProgress.percentage" />
                 </div>
 
-                <!-- <div v-if="!passwordAdvicer.strongPassword && passwordAdvicer.grade < 2">
-                <small> {{ passwordAdvicer.description }} </small>
-                <ArgonProgress class="mb-3" color="danger" :percentage="10" />
-              </div> -->
                 <argon-input id="name" type="text" placeholder="이름을 입력해주세요" aria-label="Name" v-model="name" />
 
                 <div class="d-flex align-items-center gap-2 mb-1">
@@ -364,15 +187,17 @@ onBeforeUnmount(() => stopTimer());
 
                 <argon-input id="mail" type="email" placeholder="이메일 주소를 입력해주세요" aria-label="mail" v-model="mail" />
 
-                <argon-checkbox checked>
+                <argon-checkbox checked v-model="agree">
                   <label class="form-check-label" for="flexCheckDefault">
                     PEI
                     <a href="javascript:;" class="text-dark font-weight-bolder">이용 약관에 동의 합니다.</a>
                   </label>
                 </argon-checkbox>
+
                 <div class="text-center">
-                  <argon-button fullWidth color="dark" variant="gradient" class="my-4 mb-2" disabled="true">회원 가입</argon-button>
+                  <argon-button fullWidth color="dark" variant="gradient" class="my-4 mb-2">회원 가입</argon-button>
                 </div>
+
                 <p class="text-sm mt-3 mb-0">
                   이미 존재하는 계정이 있으신가요?
                   <a href="/signin" class="text-dark font-weight-bolder">로그인</a>

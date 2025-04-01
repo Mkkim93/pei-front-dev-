@@ -72,7 +72,6 @@ const router = createRouter({
   linkActiveClass: "active",
 });
 
-
 // router nav
 // to : 대상 Route 객체 이동
 // from: 현재 라우트로 오기전 라우트

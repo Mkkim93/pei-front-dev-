@@ -1,3 +1,12 @@
+<script lang="ts">
+import { ref, onMounted } from "vue";
+import { formatDate } from "@/utils/date";
+import ArgonPagination from "@/components/ArgonPagination.vue";
+import ArgonPaginationItem from "@/components/ArgonPaginationItem.vue";
+import { NotifyType } from "@/types/nodify";
+
+
+</script>
 <template>
   <div class="card mb-4">
     <div class="card-header pb-0">

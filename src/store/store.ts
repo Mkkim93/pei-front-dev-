@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import notify from "./notifyStore";
+import notify from "./notifystore";
 
 interface State {
   hideConfigButton: boolean;

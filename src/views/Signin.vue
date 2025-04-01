@@ -10,6 +10,7 @@ import router from "@/router/router.ts";
 import { connectToSSE } from "@/utils/sse";
 import ArgonAlert from "@/components/ArgonAlert.vue";
 
+
 const body = document.getElementsByTagName("body")[0];
 
 const store = useStore();
