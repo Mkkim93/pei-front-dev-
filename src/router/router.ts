@@ -9,9 +9,11 @@ import Profile from "../views/Profile.vue";
 import Signup from "../views/Signup.vue";
 import Signin from "../views/Signin.vue";
 import AuthorsTable from "@/views/components/AuthorsTable.vue";
+import TableDetail from "@/views/components/TableDetail.vue";
 
 import axios from "@/plugins/axiosAuth";
 import store from "@/store/store";
+
 
 
 const routes = [
@@ -63,7 +65,13 @@ const routes = [
   {
     path: "/auth-table",
     component: AuthorsTable,
-  }
+    children: [
+      {
+      path: ":id",
+      component: TableDetail,
+      }
+    ]
+  },
 ];
 
 const router = createRouter({

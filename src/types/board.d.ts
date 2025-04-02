@@ -3,7 +3,7 @@ export type BoardListType = {
     id: number;
     title: string;
     content: string;
-    createAt: Date;
+    createAt: string;
     updateAt: string;
     writer: string;
     roleType: string;
@@ -26,4 +26,23 @@ export interface BoardListResponse {
       page: PageInfoType;
     };
   }
+ 
+export type BoardDetailType = {
+  id: number;
+  title: string;
+  content: string;
+  updateAt: string;
+  writer: string;
+  views: number;
+  // TODO 나중에 파일도 들어가야됨
+}
+
+export interface BoardDetailResponse {
+  status: number;
+  message: string;
+  timestamp: string;
+  data: {
+    content: BoardDetailType[];
+  }
+}
   

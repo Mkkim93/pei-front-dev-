@@ -31,7 +31,6 @@ onBeforeUnmount(() => {
 
 const username = ref('');
 const password = ref('');
-const errorMessage = ref('');
 
 const showSuccess = ref(false);
 const successMessage = ref("");
@@ -61,10 +60,12 @@ const handleLogin = async () => {
     }, 1000);
 
   } catch (error) {
-    const message = error.data?.message || '로그인에 실패했습니다.';
+    const message = error.response?.data?.message || '로그인에 실패했습니다.';
     faildMessage.value = message;
     showFaild.value = true;
-    console.log('errorMessage.value: ', errorMessage);
+    setTimeout(() => {
+      showFaild.value = false;
+    }, 2000);
   }
 }
 

@@ -6,8 +6,6 @@ import { formatDate } from "@/utils/date";
 import ArgonPagination from "@/components/ArgonPagination.vue";
 import ArgonPaginationItem from "@/components/ArgonPaginationItem.vue";
 
-
-
 const boardList = ref<BoardListType[]>([]);
 const pageData = ref<PageInfoType | null>(null);
 
@@ -68,7 +66,9 @@ const changePage = async (page: number) => {
                     <img src="../../assets/img/team-2.jpg" class="avatar avatar-sm me-3" alt="user1" />
                   </div>
                   <div class="d-flex flex-column justify-content-center">
+                    <router-link :to="`/auth-table/${board.id}`">
                     <h6 class="mb-0 text-sm">{{ board.title }}</h6>
+                    </router-link>
                     <p class="text-xs text-secondary mb-0">
                     </p>
                   </div>
@@ -102,40 +102,8 @@ const changePage = async (page: number) => {
           <ArgonPaginationItem :disabled="currentPage + 1 >= (pageData?.totalPages ?? 1)"
             @click="changePage(currentPage + 1)" next />
         </ArgonPagination>
-
-        <!-- Pagination UI -->
-        <!-- <div class="d-flex justify-content-between align-items-center px-4 py-3">
-          <div class="text-xs text-secondary">
-            총 {{ pageData?.totalElements }}건 /
-            페이지 {{ (pageData?.number ?? 0) + 1 }} / {{ pageData?.totalPages }} 페이지
-          </div>
-
-          <div class="d-flex gap-1 align-items-center">
-
-            <button class="btn btn-sm btn-outline-secondary" :disabled="(pageData?.number ?? 0) === 0"
-              @click="changePage((pageData?.number ?? 0) - 1)">
-              ◀ 이전
-            </button>
-
-
-            <button v-for="page in pageData?.totalPages" :key="page" class="btn btn-sm"
-              :class="(pageData?.number ?? 0) === (page - 1) ? 'btn-primary' : 'btn-outline-secondary'"
-              @click="changePage(page - 1)">
-              {{ page }}
-            </button>
-
-
-            <button class="btn btn-sm btn-outline-secondary"
-              :disabled="(pageData?.number ?? 0) + 1 >= (pageData?.totalPages ?? 1)"
-              @click="changePage((pageData?.number ?? 0) + 1)">
-              다음 ▶
-            </button>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
-  <!-- 페이지네이션 영역 -->
-
-
+  <router-view></router-view>
 </template>

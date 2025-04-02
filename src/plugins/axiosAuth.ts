@@ -1,3 +1,4 @@
+// HEADER 포함 API (인증 / 인가)
 import axios from "axios";
 import store from "@/store/store";
 import router from "@/router/router";
@@ -5,6 +6,9 @@ import router from "@/router/router";
 const instance = axios.create({
     baseURL: 'http://localhost:8080',
     withCredentials: true,
+    headers: {
+        Authorization: store.getters.accessToken
+    }
 });
 
 instance.interceptors.request.use(
@@ -13,7 +17,7 @@ instance.interceptors.request.use(
         const token = store.state.accessToken;
 
         if (token) {
-            config.headers["Authorization"] = `${token}`; // ✅ 수정됨
+            config.headers["Authorization"] = `${token}`;
             // console.log("Authorization 헤더:", config.headers.Authorization);
         }
         return config;
@@ -57,7 +61,7 @@ instance.interceptors.response.use(
                 
                 return instance(originalRequest);
             } catch (reissueError) {
-                console.log('토큰 재발급 실패', reissueError);
+                console.log('[Reissue Request Error]: ', reissueError);
                 store.commit("clearAccessToken");
                 router.push("/signin");
                 return Promise.reject(reissueError);

@@ -1,6 +1,7 @@
 // api/board.ts
 import axiosAuth from "@/plugins/axiosAuth";
-import type { BoardListResponse } from "@/types/board.d";
+import type { BoardListResponse, BoardDetailResponse } from "@/types/board.d";
+import store from "@/store/store";
 
 // 게시글 목록 조회
 export async function fetchBoardList(
@@ -17,6 +18,14 @@ export async function fetchBoardList(
   }
 
 // 게시글 상세 조회
+export async function fetchBoardDetail(id :number) :Promise<BoardDetailResponse>{
+  const response = await axiosAuth.get(`/api/board/${id}`, {
+    // headers: {
+    //       Authorization: store.getters.accessToken
+    //     }
+  });
+  return response.data;
+}
 
 // 게시글 수정
 

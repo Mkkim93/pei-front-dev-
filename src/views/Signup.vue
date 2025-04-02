@@ -13,7 +13,6 @@ import ArgonProgress from "@/components/ArgonProgress.vue";
 const body = document.getElementsByTagName("body")[0];
 const store = useStore();
 const agree = ref(true);
-const registerBtn = ref(true);
 
 onBeforeMount(() => {
   store.state.hideConfigButton = true;
@@ -71,6 +70,10 @@ watch([password, confirmPassword], ([newPass, newConfirm]) => {
     if (newPass === newConfirm) {
       validPasswordMatched.value = true;
       console.log('validPasswordMatched true?: ', validPasswordMatched.value);
+    }
+
+    if (newPass !== newConfirm) {
+      validPasswordMatched.value = false;
     }
   
     if (newPass) {
