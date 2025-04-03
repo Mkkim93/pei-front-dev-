@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 import Sidenav from "./examples/Sidenav/index.vue";
 import Configurator from "./examples/Configurator.vue";

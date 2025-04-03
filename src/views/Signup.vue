@@ -118,7 +118,7 @@ watch([password, confirmPassword], ([newPass, newConfirm]) => {
           <div class="col-lg-5 text-center mx-auto">
             <h1 class="text-white mb-2 mt-5">환영합니다</h1>
             <p class="text-lead text-white">
-              회원가입을 위해 등록 버튼을 클릭해주세요
+              가입을 위해 아래 사용자 정보를 입력 해주세요.
             </p>
           </div>
         </div>

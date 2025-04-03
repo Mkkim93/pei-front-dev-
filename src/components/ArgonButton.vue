@@ -35,7 +35,7 @@ const getClasses = (variant, color, size, fullWidth, active) => {
 
   sizeValue = size ? `btn-${size}` : null;
 
-  fullWidthValue = fullWidth ? `w-100` : null;
+  fullWidthValue = fullWidth ? `w-100` : 'w-auto';
 
   activeValue = active ? `active` : null;
 

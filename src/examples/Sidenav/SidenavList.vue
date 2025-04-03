@@ -47,7 +47,7 @@ const getRoute = () => {
         <sidenav-item
           to="/tables"
           :class="getRoute() === 'tables' ? 'active' : ''"
-          :navText="isRTL ? '게시글 관리' : '게시글 관리'"
+          :navText="isRTL ? '공지 관리' : '공지 관리'"
         >
           <template v-slot:icon>
             <i

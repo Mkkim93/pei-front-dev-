@@ -26,6 +26,7 @@
     "mitt": "^3.0.1",
     "photoswipe": "^5.4.4",
     "quill": "^2.0.3",
+    "ts-pattern": "^5.7.0",
     "vanilla-datatables": "^1.6.16",
     "vue": "^3.4.19",
     "vue-class-component": "^8.0.0-rc.1",

@@ -1,21 +1,32 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { reactive, watchEffect } from "vue";
 import { fetchBoardDetail } from "@/api/board";
 import { useRoute } from "vue-router";
+import { BoardDetailType } from "@/types/board";
+import { formatDateDetail } from "@/utils/date";
 
 const route = useRoute();
 
-onMounted(async () => {
-  const id = Number(route.params.id); // 여기서 변환!
-  console.log('라우터 아이디: ', id);
+const boardContent = reactive<BoardDetailType>({
+  id: 0,
+  title: '',
+  content: '',
+  updatedAt: '',
+  writer: '',
+  views: 0,
+});
+
+watchEffect(async () => {
+  const id = Number(route.params.id);
   if (isNaN(id)) {
-    console.error("유효하지 않은 게시글 ID입니다.");
+    console.error("존재하지 않은 게시글");
     return;
   }
+  const response = await fetchBoardDetail(id);
+  Object.assign(boardContent, response.data);
+  console.log('[watchEffect]: ', response.data);
+})
 
-  const data = await fetchBoardDetail(id);
-  console.log("게시글 상세", data);
-});
 </script>
 
 <template>
@@ -28,17 +39,17 @@ onMounted(async () => {
     <div class="card-body">
       <dl class="row">
         <dt class="col-sm-2 bbs-label">제목</dt>
-        <dd class="col-sm-10 bbs-value">Vue + Spring 연동 게시판</dd>
+        <dd class="col-sm-10 bbs-value">{{ boardContent.title }}</dd>
 
         <dt class="col-sm-2 bbs-label">작성자</dt>
-        <dd class="col-sm-10 bbs-value">MK</dd>
+        <dd class="col-sm-10 bbs-value">{{ boardContent.writer }}</dd>
 
         <dt class="col-sm-2 bbs-label">등록일</dt>
-        <dd class="col-sm-10 bbs-value">2025-04-02</dd>
+        <dd class="col-sm-10 bbs-value">{{ formatDateDetail(boardContent.updatedAt) }}</dd>
 
         <dt class="col-sm-2 bbs-label">내용</dt>
         <dd class="col-sm-10 bbs-value">
-          게시판 상세 페이지 예시입니다. Argon Dashboard 스타일과 충돌 없이 표현됩니다.
+          {{ boardContent.content }}
         </dd>
       </dl>
 
@@ -55,7 +66,7 @@ onMounted(async () => {
 <style>
   .bbs-detail .bbs-label {
     font-weight: bold;
-    color: #5e72e4; /* argon primary */
+    color: #5e72e4;
   }
 
   .bbs-detail .bbs-value {

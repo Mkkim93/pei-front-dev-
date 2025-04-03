@@ -5,7 +5,6 @@ import ArgonPagination from "@/components/ArgonPagination.vue";
 import ArgonPaginationItem from "@/components/ArgonPaginationItem.vue";
 import { NotifyType } from "@/types/nodify";
 
-
 </script>
 <template>
   <div class="card mb-4">

@@ -1,7 +1,7 @@
 export interface ApiResponse<T> {
     status: number;
     message: string;
-    errorCode: string | undefined;
+    errorCode?: string;
     timestamp: string;
     data: T;
 }

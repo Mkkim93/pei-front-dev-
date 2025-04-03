@@ -17,21 +17,18 @@ export async function fetchBoardList(
     return response.data;
   }
 
-// 게시글 상세 조회
+// 상세 조회
 export async function fetchBoardDetail(id :number) :Promise<BoardDetailResponse>{
-  const response = await axiosAuth.get(`/api/board/${id}`, {
-    // headers: {
-    //       Authorization: store.getters.accessToken
-    //     }
-  });
-  return response.data;
+    const response = await axiosAuth.get(`/api/board/${id}`, {
+    });
+    return response.data;
 }
 
-// 게시글 수정
+// 수정
 
-// 게시글 작성
+// 작성
 
-// 게시글 삭제
+// 삭제
 
 
 

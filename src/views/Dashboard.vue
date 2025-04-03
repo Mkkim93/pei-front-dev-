@@ -256,5 +256,5 @@ const sales = {
       </div>
     </div>
   </div>
-  <NotifyModal />
+  <!-- <NotifyModal /> -->
 </template>

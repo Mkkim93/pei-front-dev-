@@ -1,12 +1,12 @@
 <script setup>
-import { onBeforeUnmount, onBeforeMount, ref, onMounted } from "vue";
+import { onBeforeUnmount, onBeforeMount, ref } from "vue";
 import { useStore } from "vuex";
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 import axiosAuth from "@/plugins/axiosAuth";
-import router from "@/router/router.ts";
+import router from "@/router/router";
 import { connectToSSE } from "@/utils/sse";
 import ArgonAlert from "@/components/ArgonAlert.vue";
 
@@ -18,7 +18,7 @@ onBeforeMount(() => {
   store.state.hideConfigButton = true;
   store.state.showNavbar = false;
   store.state.showSidenav = false;
-  store.state.showFooter = false;
+  store.state.showFooter = true;
   body.classList.remove("bg-gray-100");
 });
 onBeforeUnmount(() => {
@@ -60,7 +60,7 @@ const handleLogin = async () => {
     }, 1000);
 
   } catch (error) {
-    const message = error.response?.data?.message || '로그인에 실패했습니다.';
+    const message = error.data?.message || '로그인에 실패했습니다.';
     faildMessage.value = message;
     showFaild.value = true;
     setTimeout(() => {
@@ -124,13 +124,12 @@ const handleLogin = async () => {
                   <!-- //TODO router-link -->
                   <p class="mx-auto mb-4 text-sm">
                     계정을 잊어버리셨나요?
-                    <a href="javascript:;" class="text-success text-gradient font-weight-bold">계정 찾기</a>
+                    <router-link to="/recover-username" class="text-success text-gradient font-weight-bold">계정 찾기</router-link>
                   </p>
-
                   <!-- // TODO router-link -->
                   <p class="mx-auto mb-4 text-sm">
                     비밀번호를 잊어버리셨나요?
-                    <a href="javascript:;" class="text-success text-gradient font-weight-bold">비밀번호 찾기</a>
+                    <router-link to="/recover-password" class="text-success text-gradient font-weight-bold">비밀번호 찾기</router-link>
                   </p>
 
                 </div>

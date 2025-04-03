@@ -10,11 +10,10 @@ import Signup from "../views/Signup.vue";
 import Signin from "../views/Signin.vue";
 import AuthorsTable from "@/views/components/AuthorsTable.vue";
 import TableDetail from "@/views/components/TableDetail.vue";
-
+import AccountPass from "@/views/AccountPass.vue";
 import axios from "@/plugins/axiosAuth";
 import store from "@/store/store";
-
-
+import AccountUsername from "@/views/AccountUsername.vue";
 
 const routes = [
   {
@@ -63,11 +62,23 @@ const routes = [
     component: Signup,
   }, 
   {
+    path: "/recover-username",
+    name: "AccountUsername",
+    component: AccountUsername,
+  },
+  {
+    path: "/recover-password",
+    name: "AccountPass",
+    component: AccountPass,
+  },
+  {
     path: "/auth-table",
+    name: "게시글 목록",
     component: AuthorsTable,
     children: [
       {
       path: ":id",
+      name: "게시글 상세",
       component: TableDetail,
       }
     ]
@@ -95,6 +106,14 @@ router.beforeEach(async (to, from, next) => {
     return next();
   }
 
+  if (to.path === '/recover-username') {
+    return next();
+  }
+
+  if (to.path === '/recover-password') {
+    return next();
+  }
+
   try {
     console.log('[Router Nav] to.Path: ', to.path);
     console.log('[Router Nav] from: ', from);
@@ -106,7 +125,7 @@ router.beforeEach(async (to, from, next) => {
 
     next();
   } catch (error) {
-    console.error('token auth error: ', error);
+    console.error('[Token Auth Error]: ', error);
     store.dispatch('logout'); // 토큰 클리어 처리
     next('/signin'); // 로그인 페이지로 리다이렉트
   }

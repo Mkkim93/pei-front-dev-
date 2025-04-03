@@ -8,6 +8,7 @@ import ArgonPaginationItem from "@/components/ArgonPaginationItem.vue";
 
 const boardList = ref<BoardListType[]>([]);
 const pageData = ref<PageInfoType | null>(null);
+const detailViews = ref<boolean>(false); // 게시판 상세 페이지에서 게시글 목록 제어를 위한 ref 변수
 
 onMounted(async () => {
   const response = await fetchBoardList(0, 10);
@@ -29,7 +30,8 @@ const changePage = async (page: number) => {
 </script>
 
 <template>
-  <div class="card">
+  <router-view></router-view>
+  <div class="card mt-5">
     <div class="card-header pb-0">
       <h6>공지 사항</h6>
     </div>
@@ -105,5 +107,4 @@ const changePage = async (page: number) => {
       </div>
     </div>
   </div>
-  <router-view></router-view>
 </template>

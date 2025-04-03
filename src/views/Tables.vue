@@ -1,6 +1,8 @@
 <script setup>
 import AuthorsTable from "./components/AuthorsTable.vue";
 import ProjectsTable from "./components/ProjectsTable.vue";
+import TodoListCard from "./components/TodoListCard.vue";
+
 </script>
 <template>
   <div class="py-4 container-fluid">
@@ -14,5 +16,7 @@ import ProjectsTable from "./components/ProjectsTable.vue";
         <projects-table />
       </div>
     </div>
+    <TodoListCard/>
   </div>
+  
 </template>

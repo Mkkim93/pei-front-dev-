@@ -1,7 +1,6 @@
-<script setup lang="ts">
+<script setup lang="ts"> // 메인 차트
 import { ref, onMounted, nextTick } from "vue";
 import Chart from "chart.js/auto";
-
 const chartCanvas = ref<HTMLCanvasElement | null>(null);
 
 const props = defineProps({
@@ -54,7 +53,7 @@ onMounted(async () => {
   if (existingChart) {
     existingChart.destroy();
   }
-
+  
   new Chart(ctx, {
     type: "line",
     data: {

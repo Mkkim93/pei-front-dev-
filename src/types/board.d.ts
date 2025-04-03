@@ -8,15 +8,16 @@ export type BoardListType = {
     writer: string;
     roleType: string;
     views: number;
-  }
+}
   
 export interface PageInfoType {
     size: number;
     number: number;
     totalElements: number;
     totalPages: number;
-  }
-  
+}
+
+  // 페이징 처리 편하게 하기 위한 커스텀 응답 객체 생성
 export interface BoardListResponse {
     status: number;
     message: string;
@@ -25,13 +26,13 @@ export interface BoardListResponse {
       content: BoardListType[];
       page: PageInfoType;
     };
-  }
+}
  
 export type BoardDetailType = {
   id: number;
   title: string;
   content: string;
-  updateAt: string;
+  updatedAt: string;
   writer: string;
   views: number;
   // TODO 나중에 파일도 들어가야됨
