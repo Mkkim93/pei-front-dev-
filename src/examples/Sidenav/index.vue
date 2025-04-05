@@ -40,7 +40,7 @@ const darkMode = computed(() => store.state.darkMode);
           alt="main_logo"
         />
         
-        <span class="ms-2 font-weight-bold me-2">대전 가톨릭 성모병원</span>
+        <span class="ms-2 font-weight-bold me-2">병원명</span>
       </router-link>
     </div>
 

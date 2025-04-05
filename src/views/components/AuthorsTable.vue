@@ -5,10 +5,11 @@ import { BoardListType, PageInfoType } from "@/types/board";
 import { formatDate } from "@/utils/date";
 import ArgonPagination from "@/components/ArgonPagination.vue";
 import ArgonPaginationItem from "@/components/ArgonPaginationItem.vue";
+import ArgonButton from "@/components/ArgonButton.vue";
 
 const boardList = ref<BoardListType[]>([]);
 const pageData = ref<PageInfoType | null>(null);
-const detailViews = ref<boolean>(false); // 게시판 상세 페이지에서 게시글 목록 제어를 위한 ref 변수
+const detailViews = ref<boolean>(false); // TODO 게시판 상세 페이지에서 게시글 목록 제어를 위한 ref 변수
 
 onMounted(async () => {
   const response = await fetchBoardList(0, 10);
@@ -30,13 +31,19 @@ const changePage = async (page: number) => {
 </script>
 
 <template>
-  <router-view></router-view>
   <div class="card mt-5">
-    <div class="card-header pb-0">
-      <h6>공지 사항</h6>
-    </div>
+    <div class="card-header pb-0 d-flex justify-content-between align-items-center">
+  <h6>공지 사항</h6>
+  <router-link to="/board-write">
+  <ArgonButton variant="outline" size="lg" color="success">
+    <i class="fa-solid fa-pen-to-square m-1"></i>
+    글쓰기
+  </ArgonButton>
+</router-link>
+</div>
     <div class="card-body px-0 pt-0 pb-2">
       <div class="table-responsive p-0">
+        <router-view />
         <table class="table align-items-center mb-0">
 
           <!-- thead -->
@@ -59,7 +66,6 @@ const changePage = async (page: number) => {
           </thead>
 
           <!-- tbody -->
-
           <tbody>
             <tr v-for="board in boardList" :key="board.id">
               <td>
@@ -93,6 +99,7 @@ const changePage = async (page: number) => {
             </tr>
           </tbody>
         </table>
+        
         <ArgonPagination variant="gradient" class="mt-3 justify-content-center">
           <ArgonPaginationItem :disabled="currentPage === 0" @click="changePage(currentPage - 1)" prev />
 
@@ -107,4 +114,5 @@ const changePage = async (page: number) => {
       </div>
     </div>
   </div>
+
 </template>

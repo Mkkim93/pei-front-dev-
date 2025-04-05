@@ -9,20 +9,20 @@ export interface NotifyType {
   }
   
   // API 전체 응답 타입
-  export interface NotifyResponse {
+export interface NotifyResponse {
     status: number;
     message: string;
     timestamp: string;
     data: NotifyType[];
-  }
+}
 
-  export interface NotifyItem {
+export interface NotifyItem {
     id: number;
     message: string;
     isRead?: boolean;
-  }
+}
   
-  export interface NotifyState {
+export interface NotifyState {
     notifications: NotifyItem[];
-  }
+}
   

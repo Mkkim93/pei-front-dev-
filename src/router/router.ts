@@ -14,6 +14,7 @@ import AccountPass from "@/views/AccountPass.vue";
 import axios from "@/plugins/axiosAuth";
 import store from "@/store/store";
 import AccountUsername from "@/views/AccountUsername.vue";
+import BoardWrite from "@/views/components/BoardWrite.vue";
 
 const routes = [
   {
@@ -70,6 +71,12 @@ const routes = [
     path: "/recover-password",
     name: "AccountPass",
     component: AccountPass,
+  },
+  {
+    path: "/board-write",
+    name: "게시글 작성",
+    component: BoardWrite,
+    props: true,
   },
   {
     path: "/auth-table",

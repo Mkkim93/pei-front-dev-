@@ -30,7 +30,7 @@ watchEffect(async () => {
 </script>
 
 <template>
-  <<div class="container mt-5 bbs-detail">
+  <div class="container mt-5 bbs-detail">
   <div class="card shadow">
     <div class="card-header border-0">
       <h3 class="mb-0">📄 게시글 상세</h3>
@@ -52,12 +52,6 @@ watchEffect(async () => {
           {{ boardContent.content }}
         </dd>
       </dl>
-
-      <div class="text-right">
-        <router-link to="/auth-table" class="btn btn-sm btn-secondary">목록으로</router-link>
-        <a href="/board/edit/1" class="btn btn-sm btn-primary">수정</a>
-        <button class="btn btn-sm btn-danger">삭제</button>
-      </div>
     </div>
   </div>
 </div>

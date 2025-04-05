@@ -6,7 +6,6 @@ import { postedCode, postUsername } from '@/api/users';
 import { useStore } from 'vuex';
 import Navbar from '@/examples/PageLayout/Navbar.vue';
 import PeiLogo from '@/assets/img/logos/pei_logo.jpeg';
-import { P } from 'ts-pattern';
 const body = document.getElementsByTagName("body")[0];
 
 const validNumber = ref<number>(0);
