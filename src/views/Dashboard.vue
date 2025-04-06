@@ -10,7 +10,6 @@ import CategoriesList from "./components/CategoriesList.vue";
 import { fetchBoardList } from "@/api/board";
 import { BoardListType, PageInfoType } from "@/types/board.d";
 import { formatDate } from "@/utils/date";
-import NotifyModal from '@/examples/Modal/NotifyModal.vue';
 import ArgonButton from '@/components/ArgonButton.vue';
 const boardList = ref<BoardListType[]>([]);
 const pageData = ref<PageInfoType | null>(null);
@@ -23,7 +22,7 @@ onMounted(() => {
 });
 
 onMounted(async () => {
-  const response = await fetchBoardList(0, 8);
+  const response = await fetchBoardList(0, 8, undefined);
   boardList.value = response.data.content; // ✅ 여기로 수정
   pageData.value = response.data.page;
 });
@@ -67,6 +66,7 @@ const sales = {
 };
 </script>
 <template>
+  <!-- <Carousel /> -->
   <div class="py-4 container-fluid">
     <div class="row">
       <div class="col-lg-12">
@@ -256,5 +256,5 @@ const sales = {
       </div>
     </div>
   </div>
-  <!-- <NotifyModal /> -->
+
 </template>

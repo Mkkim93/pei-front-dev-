@@ -3,34 +3,42 @@ import { ref } from "vue";
 import EditorManagerment from '@/examples/editor/EditorManagerment.vue';
 import ArgonInput from '@/components/ArgonInput.vue';
 import ArgonButton from '@/components/ArgonButton.vue';
-import { Editor } from "@tiptap/vue-3";
-import StarterKit from "@tiptap/starter-kit";
+import { createPost } from "@/api/board";
+import router from "@/router/router";
 
-const editor = new Editor({
-  extensions: [StarterKit],
-  content: '',
-})
+const emit = defineEmits(['update:modelValue'])
+const title = ref('');
+const content = ref('');
 
-const content = ref<string | unknown>('');
+const submitPost = async () => {
+  try {
+    const response = await createPost(title.value, content.value);
+    alert(response.message);
+    router.push(`/auth-table/${response.data}`)
+  } catch (error) {
+    //TODO ERROR MESSAGE
+    console.log('error: ', error);
+  }
+}
 </script>
 
 <template>
   <div class="card mt-6 px-4 custom-card">
     <div class="card-header pb-4 d-flex justify-content-between align-items-center">
-  <h6>게시글 작성</h6>
-  <div class="d-flex gap-2 ms-auto">
-    <ArgonButton color="primary">작성</ArgonButton>
-    <router-link to="/auth-table">
-      <ArgonButton color="secondary">취소</ArgonButton>
-    </router-link>
-  </div>
-</div>
+      <h6>게시글 작성</h6>
+      <div class="d-flex gap-2 ms-auto">
+        <ArgonButton color="primary" @click="submitPost">작성</ArgonButton>
+        <router-link to="/auth-table">
+          <ArgonButton color="secondary">취소</ArgonButton>
+        </router-link>
+      </div>
+    </div>
 
     <div class="card-body px-4 pt-2 pb-2">
-        <div class="table-responsive p-0" style="overflow: visible;">
+      <div class="table-responsive p-0" style="overflow: visible;">
         <div class="p-4">
-          <ArgonInput type="text" placeholder="제목을 입력해주세요" class="mb-3" />
-            <EditorManagerment :editor="editor"/>
+          <ArgonInput type="text" placeholder="제목을 입력해주세요" class="mb-3" v-model="title" />
+          <EditorManagerment v-model="content" />
         </div>
       </div>
     </div>
@@ -39,7 +47,6 @@ const content = ref<string | unknown>('');
 
 <style scoped>
 .custom-card {
-    min-height: 80vh;
+  min-height: 80vh;
 }
-/* 입력창과 에디터 사이 여백 등을 추가로 조정하고 싶다면 여기에 스타일 추가하세요 */
 </style>

@@ -30,6 +30,7 @@ const cardNavLinksIcons = document.querySelectorAll(".card .nav .nav-link i");
 const cardNavSpan = document.querySelectorAll(".card .nav .nav-link span");
 
 export function activateDarkMode() {
+
   body.classList.add("bg-gray-600", "dark-version");
 
   for (var i = 0; i < cardNavLinksIcons.length; i++) {

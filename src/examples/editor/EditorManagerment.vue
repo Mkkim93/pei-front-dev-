@@ -19,11 +19,10 @@
       format_italic
     </button>
 
-    <button 
-        class="icon-btn"
-        @click="editor.chain().focus().toggleUnderline().run()" :class="{ 'is-active': editor.isActive('underline') }">
-          format_underlined
-        </button>
+    <button class="icon-btn" @click="editor.chain().focus().toggleUnderline().run()"
+      :class="{ 'is-active': editor.isActive('underline') }">
+      format_underlined
+    </button>
 
     <!-- 취소선 -->
     <button class="icon-btn" @click="editor.chain().focus().toggleStrike().run()"
@@ -48,34 +47,28 @@
       </div>
     </div>
     <p class="bar">|</p>
-    <button 
-      class="icon-btn" 
-      @click="editor.chain().focus().toggleBulletList().run()"
+    <button class="icon-btn" @click="editor.chain().focus().toggleBulletList().run()"
       :class="{ 'is-active': editor.isActive('bulletList') }">
       format_list_bulleted
     </button>
 
-    <button 
-       class="icon-btn" @click="editor.chain().focus().toggleOrderedList().run()"
+    <button class="icon-btn" @click="editor.chain().focus().toggleOrderedList().run()"
       :class="{ 'is-active': editor.isActive('orderedList') }">
       format_list_numbered
     </button>
-        <button 
-          class="icon-btn"
-        @click="editor.chain().focus().sinkListItem('listItem').run()" :disabled="!editor.can().sinkListItem('listItem')">
-          format_list_bulleted_add
-        </button>
-        <button 
-        class="icon-btn"
-        @click="editor.chain().focus().liftListItem('listItem').run()" 
-        :disabled="!editor.can().liftListItem('listItem')">
-          filter_list_off
-        </button>
-        <p class="bar">|</p>
-        
-        
+    <button class="icon-btn" @click="editor.chain().focus().sinkListItem('listItem').run()"
+      :disabled="!editor.can().sinkListItem('listItem')">
+      format_list_bulleted_add
+    </button>
+    <button class="icon-btn" @click="editor.chain().focus().liftListItem('listItem').run()"
+      :disabled="!editor.can().liftListItem('listItem')">
+      filter_list_off
+    </button>
+    <p class="bar">|</p>
 
-        <!-- <button 
+
+
+    <!-- <button 
         class="icon-btn"
         @click="editor.chain().focus().setFontFamily('Inter').run()" :class="{ 'is-active': editor.isActive('textStyle', { fontFamily: 'Inter' }) }">
           Inter
@@ -106,37 +99,29 @@
           Unset font family
         </button> -->
 
-        <button 
-        class="icon-btn"
-        @click="editor.chain().focus().setTextAlign('left').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }">
-          format_align_left
-        </button>
-        <button 
-        class="icon-btn"
-        @click="editor.chain().focus().setTextAlign('center').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }">
-          format_align_center
-        </button>
-        <button 
-        class="icon-btn"
-        @click="editor.chain().focus().setTextAlign('right').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }">
-          format_align_right
-        </button>
-        <button 
-        class="icon-btn"
-        @click="editor.chain().focus().setTextAlign('justify').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }">
-          format_align_justify
-        </button>
-        <button 
-        class="icon-btn"
-        @click="editor.chain().focus().unsetTextAlign().run()">
-          format_clear
-        </button>
-        <p class="bar">|</p>
-        <button 
-        class="icon-btn"
-        @click="addImage">
-          add_photo_alternate
-        </button>
+    <button class="icon-btn" @click="editor.chain().focus().setTextAlign('left').run()"
+      :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }">
+      format_align_left
+    </button>
+    <button class="icon-btn" @click="editor.chain().focus().setTextAlign('center').run()"
+      :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }">
+      format_align_center
+    </button>
+    <button class="icon-btn" @click="editor.chain().focus().setTextAlign('right').run()"
+      :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }">
+      format_align_right
+    </button>
+    <button class="icon-btn" @click="editor.chain().focus().setTextAlign('justify').run()"
+      :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }">
+      format_align_justify
+    </button>
+    <button class="icon-btn" @click="editor.chain().focus().unsetTextAlign().run()">
+      format_clear
+    </button>
+    <p class="bar">|</p>
+    <button class="icon-btn" @click="addImage">
+      add_photo_alternate
+    </button>
   </div>
   <editor-content :editor="editor" />
 </template>
@@ -162,11 +147,13 @@ import Paragraph from '@tiptap/extension-paragraph'
 import OrderedList from '@tiptap/extension-ordered-list'
 import Dropcursor from '@tiptap/extension-dropcursor'
 import Image from '@tiptap/extension-image'
-
-const url = ref('');
-const props = defineProps<{ editor: Editor }>()
 const color = ref('#000000');
-const showColorPicker = ref(false)
+const url = ref('');
+const showColorPicker = ref(false);
+
+
+
+// 에디터 업데이트 감지 → 부모에 emit
 
 
 const hasActiveMarks = computed(() =>
@@ -178,36 +165,27 @@ const hasActiveMarks = computed(() =>
 
 const editor = new Editor({
   extensions: [
-  StarterKit,
+    StarterKit,
     Color.configure({ types: [TextStyle.name, ListItem.name] }),
-    Paragraph,
-    Image.configure({
-    allowBase64: true,
-    inline: true,
-    }),
-    Dropcursor,
-    Text,
-    BulletList,
-    OrderedList,
-    ListItem,
+    Image.configure({ allowBase64: true, inline: true }),
     ListKeymap,
     TextStyle.configure({ mergeNestedSpanStyles: true }),
     FontFamily,
     Underline,
-    Strike,
     Highlight,
-    CodeBlock,
     Link,
-    TextAlign.configure({
-      types: ['heading', 'paragraph'],
-    }),
+    TextAlign.configure({ types: ['heading', 'paragraph'] }),
   ],
-  content: '',
+
   editorProps: {
     handleDrop(view, event, _slice, moved) {
-      if (moved) return false
-
-      const hasFiles = event.dataTransfer?.files?.length > 0
+      if (moved) {
+        return false
+      }
+      if (!event.dataTransfer) {
+        return false;
+      }
+      const hasFiles = event.dataTransfer.files.length > 0;
       if (!hasFiles) return false
 
       const images = Array.from(event.dataTransfer!.files).filter(file =>
@@ -235,6 +213,18 @@ const editor = new Editor({
       return true
     },
   },
+})
+
+const props = defineProps<{ 
+  modelValue: string
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
+
+editor.on('update', () => {
+  emit('update:modelValue', editor.getHTML())
 })
 
 const addImage = () => {
@@ -349,18 +339,19 @@ button.icon-btn {
 }
 
 img {
-    display: block;
-    height: auto;
-    margin: 1.5rem 0;
-    max-width: 100%;
+  display: block;
+  height: auto;
+  margin: 1.5rem 0;
+  max-width: 100%;
 
-    &.ProseMirror-selectednode {
-      outline: 3px solid var(--purple);
-    }
+  &.ProseMirror-selectednode {
+    outline: 3px solid var(--purple);
   }
+}
 
-  .bar {
-  height: 21px; /* 원하는 높이로 조정 (예: 100%) */
+.bar {
+  height: 21px;
+  /* 원하는 높이로 조정 (예: 100%) */
   line-height: 21px;
   font-size: 24px;
   margin: 0 1px;

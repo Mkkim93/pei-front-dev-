@@ -82,7 +82,7 @@ const logout = async () => {
               @click="logout"
             >
             <!-- TODO 로그인 시 내정보, 이거 필요없을 듯 -->
-              <i class="fa-solid fa-arrow-right-from-bracket" :class="isRTL ? 'ms-sm-2' : 'me-sm-2'"></i>
+            <font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']" :class="isRTL ? 'ms-sm-2' : 'me-sm-2'"/>
               <span v-if="isRTL" class="d-sm-inline d-none">로그아웃</span>
               <span v-else class="d-sm-inline d-none">로그아웃</span>
             </router-link>

@@ -30,26 +30,25 @@ watchEffect(async () => {
 </script>
 
 <template>
-  <div class="container mt-5 bbs-detail">
+  <div class="container-fluid bbs-detail">
   <div class="card shadow">
     <div class="card-header border-0">
-      <h3 class="mb-0">📄 게시글 상세</h3>
+
+      <dt class="col-sm-2 bbs-label">제목</dt>
+        <dd class="col-sm-10 bbs-value">{{ boardContent.title }}</dd>
     </div>
 
     <div class="card-body">
       <dl class="row">
-        <dt class="col-sm-2 bbs-label">제목</dt>
-        <dd class="col-sm-10 bbs-value">{{ boardContent.title }}</dd>
-
+        
         <dt class="col-sm-2 bbs-label">작성자</dt>
         <dd class="col-sm-10 bbs-value">{{ boardContent.writer }}</dd>
 
         <dt class="col-sm-2 bbs-label">등록일</dt>
         <dd class="col-sm-10 bbs-value">{{ formatDateDetail(boardContent.updatedAt) }}</dd>
 
-        <dt class="col-sm-2 bbs-label">내용</dt>
         <dd class="col-sm-10 bbs-value">
-          {{ boardContent.content }}
+          <div v-html="boardContent.content"></div>
         </dd>
       </dl>
     </div>

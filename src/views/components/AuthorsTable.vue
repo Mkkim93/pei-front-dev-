@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import store from "@/store/store";
 import { ref, onMounted } from "vue";
 import { fetchBoardList } from "@/api/board";
 import { BoardListType, PageInfoType } from "@/types/board";
@@ -6,24 +7,45 @@ import { formatDate } from "@/utils/date";
 import ArgonPagination from "@/components/ArgonPagination.vue";
 import ArgonPaginationItem from "@/components/ArgonPaginationItem.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
+import ArgonInput from "@/components/ArgonInput.vue";
+import { decodePayload } from "@/types/jwt.d";
 
 const boardList = ref<BoardListType[]>([]);
 const pageData = ref<PageInfoType | null>(null);
 const detailViews = ref<boolean>(false); // TODO 게시판 상세 페이지에서 게시글 목록 제어를 위한 ref 변수
+const rolesAdmin = ref<boolean>(false);
+const keyword = ref<string>('');
 
 onMounted(async () => {
-  const response = await fetchBoardList(0, 10);
+  const response = await fetchBoardList(0, 10, keyword.value);
+  boardList.value = response.data.content;
+  console.log('boardList.value: ', boardList.value);
+  pageData.value = response.data.page;
+});
+
+const onSearch = async () => {
+  console.log('keyword: ', keyword.value);
+  const response = await fetchBoardList(0, 10, keyword.value);
   boardList.value = response.data.content;
   pageData.value = response.data.page;
-  console.log('pageData.value: ', pageData.value);
-});
+  currentPage.value = 0;
+}
+
+onMounted(async () => {
+  const token = store.getters.accessToken;
+  const response = await decodePayload(token);
+  if (response.roles === 'ROLE_ADMIN') {
+    rolesAdmin.value = true;
+    console.log(rolesAdmin.value);
+  }
+})
 
 const currentPage = ref(0);
 
 const changePage = async (page: number) => {
   if (page < 0 || (pageData.value && page >= pageData.value.totalPages)) return;
 
-  const response = await fetchBoardList(page, 10);
+  const response = await fetchBoardList(page, 10, keyword.value);
   boardList.value = response.data.content;
   pageData.value = response.data.page;
   currentPage.value = page;
@@ -31,18 +53,19 @@ const changePage = async (page: number) => {
 </script>
 
 <template>
+  <div class="container-fluid"> 
   <div class="card mt-5">
     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-  <h6>공지 사항</h6>
-  <router-link to="/board-write">
-  <ArgonButton variant="outline" size="lg" color="success">
-    <i class="fa-solid fa-pen-to-square m-1"></i>
-    글쓰기
-  </ArgonButton>
-</router-link>
-</div>
-    <div class="card-body px-0 pt-0 pb-2">
-      <div class="table-responsive p-0">
+      <h6>공지 사항</h6>
+      <router-link to="/board-write">
+        <ArgonButton variant="outline" size="sm" color="success">
+          <font-awesome-icon :icon="['fas', 'pen']" />
+          글쓰기
+        </ArgonButton>
+      </router-link>
+    </div>
+    <div class="card-body px-4 pt-3 pb-2">
+      <div class="table-responsive p-3">
         <router-view />
         <table class="table align-items-center mb-0">
 
@@ -75,7 +98,7 @@ const changePage = async (page: number) => {
                   </div>
                   <div class="d-flex flex-column justify-content-center">
                     <router-link :to="`/auth-table/${board.id}`">
-                    <h6 class="mb-0 text-sm">{{ board.title }}</h6>
+                      <h6 class="mb-0 text-sm">{{ board.title }}</h6>
                     </router-link>
                     <p class="text-xs text-secondary mb-0">
                     </p>
@@ -92,14 +115,16 @@ const changePage = async (page: number) => {
               <td class="align-middle text-center">
                 <span class="text-secondary text-xs font-weight-bold">{{ formatDate(board.createAt) }}</span>
               </td>
-              <td class="align-middle">
-                <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
-                  data-original-title="Edit user">수정</a>
-              </td>
+              <div v-if="rolesAdmin">
+                <td class="align-middle">
+                  <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                    data-original-title="Edit user">수정</a>
+                </td>
+              </div>
             </tr>
           </tbody>
         </table>
-        
+
         <ArgonPagination variant="gradient" class="mt-3 justify-content-center">
           <ArgonPaginationItem :disabled="currentPage === 0" @click="changePage(currentPage - 1)" prev />
 
@@ -111,8 +136,17 @@ const changePage = async (page: number) => {
           <ArgonPaginationItem :disabled="currentPage + 1 >= (pageData?.totalPages ?? 1)"
             @click="changePage(currentPage + 1)" next />
         </ArgonPagination>
+        <div class="d-flex justify-content-center">
+          <form class="d-flex gap-2" @submit.prevent="onSearch">
+            <ArgonInput v-model="keyword" placeholder="제목 또는 내용 검색" />
+            <ArgonButton size="sm" type="submit" class="px-3" style="height: 38px">
+              <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+              검색
+            </ArgonButton>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-
+  </div>
 </template>
