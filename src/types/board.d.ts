@@ -8,6 +8,7 @@ export type BoardListType = {
     writer: string;
     roleType: string;
     views: number;
+    usersId: number;
 }
   
 export interface PageInfoType {

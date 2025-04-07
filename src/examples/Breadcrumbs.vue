@@ -33,12 +33,12 @@ defineProps({
           :class="isNavFixed ? 'text-dark' : 'text-white'"
           >لوحات القيادة</a
         >
-        <a
+        <router-link 
           v-else
           :class="isNavFixed ? 'text-dark' : 'text-white'"
           class="opacity-8"
-          href="/"
-          >메인</a
+          to="/dashboard-default"
+          >메인</router-link>
         >
       </li>
       <li

@@ -31,42 +31,49 @@ watchEffect(async () => {
 
 <template>
   <div class="container-fluid bbs-detail">
-  <div class="card shadow">
-    <div class="card-header border-0">
-
-      <dt class="col-sm-2 bbs-label">제목</dt>
-        <dd class="col-sm-10 bbs-value">{{ boardContent.title }}</dd>
-    </div>
-
-    <div class="card-body">
-      <dl class="row">
-        
-        <dt class="col-sm-2 bbs-label">작성자</dt>
-        <dd class="col-sm-10 bbs-value">{{ boardContent.writer }}</dd>
-
-        <dt class="col-sm-2 bbs-label">등록일</dt>
-        <dd class="col-sm-10 bbs-value">{{ formatDateDetail(boardContent.updatedAt) }}</dd>
-
+    <div class="card shadow">
+      <div class="card-header border-0">
+        <div class="row align-items-center">
+          <div class="col-md-5">
+            <span class="bbs-label">제목:</span>
+            <span class="bbs-value">{{ boardContent.title }}</span>
+          </div>
+          <div class="col-md-3">
+            <span class="bbs-label">작성자:</span>
+            <span class="bbs-value">{{ boardContent.writer }}</span>
+          </div>
+          <div class="col-md-4 text-md-end">
+            <span class="bbs-label">등록일:</span>
+            <span class="bbs-value">{{ formatDateDetail(boardContent.updatedAt) }}</span>
+          </div>
+        </div>
         <dd class="col-sm-10 bbs-value">
-          <div v-html="boardContent.content"></div>
-        </dd>
-      </dl>
+        <div v-html="boardContent.content"></div>
+      </dd>
+      </div>
     </div>
   </div>
-</div>
+
 </template>
 
 <style>
-  .bbs-detail .bbs-label {
-    font-weight: bold;
-    color: #5e72e4;
-  }
+.bbs-detail .bbs-label {
+  font-weight: bold;
+  color: #5e72e4;
+  margin-right: 5px;
+  padding-bottom: 10px;
+}
 
-  .bbs-detail .bbs-value {
-    padding-bottom: 10px;
-  }
+.bbs-detail .card {
+  border-radius: 1rem;
+}
 
-  .bbs-detail .card {
-    border-radius: 1rem;
-  }
+.bbs-detail .bbs-value {
+  padding-bottom: 10px;
+  display: inline-block;
+}
+
+.card-header {
+  background-color: #f8f9fe;
+}
 </style>

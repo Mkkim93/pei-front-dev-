@@ -32,7 +32,7 @@ instance.interceptors.response.use(
         const originalRequest = error.config;
         const code = error.response?.data?.code;
         const status = error.response?.status;
-
+        
         console.log("[Axios response Interceptor Issue]: ", error.response?.data); // 응답 유형 체크
 
         if (status === 400) {

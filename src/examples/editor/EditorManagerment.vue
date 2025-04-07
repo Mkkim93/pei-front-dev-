@@ -123,7 +123,7 @@
       add_photo_alternate
     </button>
   </div>
-  <editor-content :editor="editor" />
+  <editor-content :editor="editor" class="tiptap"/>
 </template>
 
 <script setup lang="ts">
@@ -131,21 +131,15 @@ import { ref, onBeforeUnmount, computed } from 'vue'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
-import Strike from '@tiptap/extension-strike'
 import TextAlign from '@tiptap/extension-text-align'
 import { Color } from '@tiptap/extension-color'
 import TextStyle from '@tiptap/extension-text-style'
 import Highlight from '@tiptap/extension-highlight'
-import CodeBlock from '@tiptap/extension-code-block'
+import Placeholder from '@tiptap/extension-placeholder'
 import Link from '@tiptap/extension-link'
 import ListItem from '@tiptap/extension-list-item'
 import FontFamily from '@tiptap/extension-font-family'
-import Text from '@tiptap/extension-text'
 import ListKeymap from '@tiptap/extension-list-keymap'
-import BulletList from '@tiptap/extension-bullet-list'
-import Paragraph from '@tiptap/extension-paragraph'
-import OrderedList from '@tiptap/extension-ordered-list'
-import Dropcursor from '@tiptap/extension-dropcursor'
 import Image from '@tiptap/extension-image'
 const color = ref('#000000');
 const url = ref('');
@@ -174,6 +168,9 @@ const editor = new Editor({
     Underline,
     Highlight,
     Link,
+    Placeholder.configure({
+      placeholder: '내용을 입력하주세요.'
+    }),
     TextAlign.configure({ types: ['heading', 'paragraph'] }),
   ],
 
@@ -351,7 +348,6 @@ img {
 
 .bar {
   height: 21px;
-  /* 원하는 높이로 조정 (예: 100%) */
   line-height: 21px;
   font-size: 24px;
   margin: 0 1px;
@@ -359,4 +355,15 @@ img {
   display: flex;
   align-items: center;
 }
+
+::v-deep(.tiptap p.is-editor-empty:first-child::before) {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+
+
 </style>

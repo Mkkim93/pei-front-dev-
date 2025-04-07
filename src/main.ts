@@ -14,13 +14,8 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fas } from "@fortawesome/free-solid-svg-icons";
 
-library.add(fas);
-
 const app = createApp(App);
-
-const options: PluginOptions = {
-    // TODO
-}
+const options: PluginOptions = {}   // TODO
 let emitter = mitt();
 
 axios.defaults.baseURL = 'http://localhost:8080';
@@ -29,6 +24,7 @@ app.config.globalProperties.$axios = axios;
 app.config.globalProperties.store = store;
 app.config.globalProperties.emitter = emitter;
 app.component('font-awesome-icon', FontAwesomeIcon);
+library.add(fas);
 app.use(Toast, options);
 app.use(store)
 app.use(router)

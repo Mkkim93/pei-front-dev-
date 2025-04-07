@@ -3,8 +3,6 @@ import { ref, onMounted } from 'vue';
 import MiniStatisticsCard from "@/examples/Cards/MiniStatisticsCard.vue";
 import GradientLineChart from "@/examples/Charts/GradientLineChart.vue";
 // import Carousel from "./components/Carousel.vue";
-import store from '@/store/store';
-import { connectToSSE } from '@/utils/sse';
 import Calendar from '@/examples/Calendar.vue';
 import CategoriesList from "./components/CategoriesList.vue";
 import { fetchBoardList } from "@/api/board";
@@ -14,16 +12,9 @@ import ArgonButton from '@/components/ArgonButton.vue';
 const boardList = ref<BoardListType[]>([]);
 const pageData = ref<PageInfoType | null>(null);
 
-onMounted(() => {
-  const token = store.getters.accessToken;
-  if (token) {
-    connectToSSE();
-  }
-});
-
 onMounted(async () => {
   const response = await fetchBoardList(0, 8, undefined);
-  boardList.value = response.data.content; // ✅ 여기로 수정
+  boardList.value = response.data.content;
   pageData.value = response.data.page;
 });
 
@@ -171,7 +162,7 @@ const sales = {
                 <div class="p-3 pb-4 card-header d-flex justify-content-between align-items-center">
   <h6 class="mb-0">공지 사항</h6>
   <router-link to="/tables">
-  <ArgonButton class="btn btn-sm btn-outline-primary" variant="gradient">더보기</ArgonButton>
+  <ArgonButton class="btn btn-sm btn-outline-primary" variant="outline">더보기</ArgonButton>
 </router-link>
 </div>
             </div>

@@ -1,18 +1,16 @@
 <script setup>
 import { onBeforeUnmount, onBeforeMount, ref } from "vue";
 import { useStore } from "vuex";
+import { connectToSSE } from "@/utils/sse";
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 import axiosAuth from "@/plugins/axiosAuth";
 import router from "@/router/router";
-import { connectToSSE } from "@/utils/sse";
 import ArgonAlert from "@/components/ArgonAlert.vue";
 
-
 const body = document.getElementsByTagName("body")[0];
-
 const store = useStore();
 onBeforeMount(() => {
   store.state.hideConfigButton = true;
@@ -49,12 +47,9 @@ const handleLogin = async () => {
     });
 
     store.dispatch('login', response.headers['authorization']);
-    console.log('handleLogin response: ', response);
-    connectToSSE();
-
     successMessage.value = response?.data.message || "로그인 성공";
     showSuccess.value = true;
-
+    connectToSSE();
     setTimeout(() => {
       router.push('/dashboard-default');
     }, 1000);

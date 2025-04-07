@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { expiredCheck } from "@/utils/auth";
+import { connectToSSE } from "@/utils/sse";
 import Dashboard from "../views/Dashboard.vue";
 import Tables from "../views/Tables.vue";
 import Billing from "../views/Billing.vue";
@@ -128,6 +129,8 @@ router.beforeEach(async (to, from, next) => {
     if (expiredCheck()) {
       const response = await axios.post('/api/reissue');
       store.dispatch('login', response.headers['authorization']);
+      console.log('[Router Nav] conToSSE Conntect Retry');
+      await connectToSSE();
     }
 
     next();
