@@ -16,6 +16,10 @@ import axios from "@/plugins/axiosAuth";
 import store from "@/store/store";
 import AccountUsername from "@/views/AccountUsername.vue";
 import BoardWrite from "@/views/components/BoardWrite.vue";
+import MyActivity from "@/views/components/my/MyActivity.vue";
+import MyNotify from "@/views/components/my/MyNotify.vue";
+import MySetting from "@/views/components/my/MySetting.vue";
+import MyProfile from "@/views/components/my/MyProfile.vue";
 
 const routes = [
   {
@@ -52,6 +56,33 @@ const routes = [
     path: "/profile",
     name: "Profile",
     component: Profile,
+    props: true,
+    children: [
+      {
+        path: "my-activity",
+        name: "MyActivity",
+        component: MyActivity,
+        props: true,
+      },
+      {
+        path: "my-notify",
+        name: "MyNotify",
+        component: MyNotify,
+        props: true,
+      },
+      {
+        path: "my-setting",
+        name: "MySetting",
+        component: MySetting,
+        props: true,
+      },
+      {
+        path: "my-profile",
+        name: "MyProfile",
+        component: MyProfile,
+        props: true,
+      }
+    ],
   },
   {
     path: "/signin",

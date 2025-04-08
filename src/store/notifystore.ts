@@ -1,5 +1,5 @@
 // Vuex 알림 모듈
-import { NotifyType } from "@/types/nodify";
+import { NotifyType } from "@/types/notify";
 import { ActionContext } from "vuex";
 
 // 알림 상태

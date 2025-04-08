@@ -4,7 +4,7 @@ import EditorManagerment from '@/examples/editor/EditorManagerment.vue';
 import ArgonInput from '@/components/ArgonInput.vue';
 import ArgonButton from '@/components/ArgonButton.vue';
 import { createPost } from "@/api/board";
-import router from "@/router/router";
+import router from "@/router";
 
 const emit = defineEmits(['update:modelValue'])
 const title = ref('');

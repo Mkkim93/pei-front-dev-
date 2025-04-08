@@ -7,7 +7,7 @@ import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 import axiosAuth from "@/plugins/axiosAuth";
-import router from "@/router/router";
+import router from "@/router";
 import ArgonAlert from "@/components/ArgonAlert.vue";
 
 const body = document.getElementsByTagName("body")[0];

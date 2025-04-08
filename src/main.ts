@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import App from './App.vue';
 import store from "./store/store";
-import router from "./router/router";
+import router from "./router";
 import axios from "./plugins/axiosAuth";
 import argonDashboard from "./argon-dashboard";
 import "./assets/css/nucleo-icons.css";
@@ -15,7 +15,21 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fas } from "@fortawesome/free-solid-svg-icons";
 
 const app = createApp(App);
-const options: PluginOptions = {}   // TODO
+const options: PluginOptions = {
+  timeout: 4000,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  draggablePercent: 0.6,
+  showCloseButtonOnHover: false,
+  hideProgressBar: false,
+  closeButton: "button",
+  icon: true,
+  rtl: false,
+  toastClassName: "my-custom-toast", // 🔥 커스텀 클래스 지정
+  bodyClassName: "my-toast-body",    // ✨ 내부 텍스트 커스텀
+  transition: "Vue-Toastification__fade", // 또는 fade, slide 등
+}
 let emitter = mitt();
 
 axios.defaults.baseURL = 'http://localhost:8080';

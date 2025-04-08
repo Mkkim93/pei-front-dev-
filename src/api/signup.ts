@@ -2,7 +2,7 @@ import { ApiResponse, RegisterType, PasswordStranghType } from '@/types/signup.d
 import axiosPublic from '@/plugins/axiosPublic';
 import { ref, reactive, computed, watch } from "vue";
 import { AxiosError } from 'axios';
-import router from "@/router/router";
+import router from "@/router";
 
 const username = ref<string>('');
 const password = ref<string>('');

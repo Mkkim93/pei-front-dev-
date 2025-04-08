@@ -1,11 +1,10 @@
 import store from "@/store/store";
 import { useToast } from "vue-toastification";
-import { fetchNotifyList } from "@/api/nodify";
+import { fetchNotifyList } from "@/api/notify";
 import axiosPublic from "@/plugins/axiosPublic";
+import '@/assets/css/toast-custom.css';
 
 const toast = useToast();
-
-
 let eventSource: EventSource | null = null;
 
 export const connectToSSE = async () => {
@@ -32,7 +31,7 @@ eventSource.onmessage = async (event) => {
         toast.dismiss(item.id);
         console.log('알림 수신: ', event.data);
         store.dispatch("notify/addNotification", item);
-        toast(item.message, { id: item.id });
+        toast.success(item.message, { id: item.id });
         console.log('notifyList: ', notifyList);
         // toast.clear(); 모든 알림 닫기 나중에 모든 알림 닫기 창 구현
         console.log('notifyList itemIds: ', notifyList);

@@ -1,7 +1,7 @@
 // HEADER 포함 API (인증 / 인가)
 import axios from "axios";
 import store from "@/store/store";
-import router from "@/router/router";
+import router from "@/router";
 
 const instance = axios.create({
     baseURL: 'http://localhost:8080',
