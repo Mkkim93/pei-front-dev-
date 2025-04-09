@@ -1,10 +1,11 @@
 export type LogDescriptionType = {
     id: number;
     action: string;
+    createdAt: string;
     description: {
         title: string;
         content: string;
-        createdAt: Date;
+        // createdAt: string;
     }
 }
 

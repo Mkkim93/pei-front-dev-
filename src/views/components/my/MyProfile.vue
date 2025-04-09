@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, onMounted, onBeforeUnmount, reactive } from "vue";
-import { useStore } from "vuex";
+import { onMounted, reactive } from "vue";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 import { fetchUsersProfile } from "@/api/users";
@@ -22,26 +21,6 @@ onMounted(async () => {
   console.log('profile: ', profile);
   // nameInput.value = profile.name;
 });
-
-const body = document.getElementsByTagName("body")[0];
-const store = useStore();
-
-// onBeforeMount(() => {
-//   store.state.imageLayout = "profile-overview";
-//   store.state.showNavbar = false;
-//   store.state.showFooter = true;
-//   store.state.hideConfigButton = true;
-//   body.classList.add("profile-overview");
-// });
-// onBeforeUnmount(() => {
-//   store.state.isAbsolute = false;
-//   store.state.imageLayout = "default";
-//   store.state.showNavbar = true;
-//   store.state.showFooter = true;
-//   store.state.hideConfigButton = false;
-//   body.classList.remove("profile-overview");
-// });
-
 </script>
 
 <template>

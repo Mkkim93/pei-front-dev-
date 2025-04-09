@@ -16,6 +16,7 @@ onMounted(async () => {
   const response = await fetchLogActive(0, 5);
   fetchLogList.value = response?.data.content;
   pageData.value = response?.data.page;
+  console.log('fetchLogList: ', fetchLogList.value);
 });
 
 defineProps({
@@ -54,7 +55,7 @@ defineProps({
               <div class="d-flex flex-column">
                 <h6 class="mb-1 text-sm text-dark">{{ log.description.title }}</h6>
                 <div class="text-xs text-muted white-space-nowrap">
-                  {{ formatDateDetail(log.description.createdAt) }}
+                  {{ formatDateDetail(log.createdAt) }}
                 </div>
                 <span class="text-xs text-muted mt-1">{{ log.action }}</span>
               </div>
