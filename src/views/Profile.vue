@@ -39,6 +39,7 @@ onBeforeMount(() => {
   store.state.hideConfigButton = true;
   body.classList.add("profile-overview");
 });
+
 onBeforeUnmount(() => {
   store.state.isAbsolute = false;
   store.state.imageLayout = "default";

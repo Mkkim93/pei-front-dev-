@@ -10,16 +10,17 @@ import Profile from "../views/Profile.vue";
 import Signup from "../views/Signup.vue";
 import Signin from "../views/Signin.vue";
 import AuthorsTable from "@/views/components/AuthorsTable.vue";
-import TableDetail from "@/views/components/TableDetail.vue";
-import AccountPass from "@/views/AccountPass.vue";
+import AccountPass from "@/views/components/account/AccountPass.vue";
 import axios from "@/plugins/axiosAuth";
 import store from "@/store/store";
-import AccountUsername from "@/views/AccountUsername.vue";
-import BoardWrite from "@/views/components/BoardWrite.vue";
+import AccountUsername from "@/views/components/account/AccountUsername.vue";
+import BoardWrite from "@/views/components/board/BoardWrite.vue";
 import MyActivity from "@/views/components/my/MyActivity.vue";
 import MyNotify from "@/views/components/my/MyNotify.vue";
 import MySetting from "@/views/components/my/MySetting.vue";
 import MyProfile from "@/views/components/my/MyProfile.vue";
+import BoardUpdate from "@/views/components/board/BoardUpdate.vue";
+import BoardDetail from "@/views/components/board/BoardDetail.vue";
 
 const routes = [
   {
@@ -34,7 +35,7 @@ const routes = [
   },
   {
     path: "/tables",
-    name: "게시글 관리",
+    name: "공지 관리",
     component: Tables,
   },
   {
@@ -57,6 +58,7 @@ const routes = [
     name: "Profile",
     component: Profile,
     props: true,
+    redirect: { name: 'MyProfile' },
     children: [
       {
         path: "my-activity",
@@ -93,7 +95,7 @@ const routes = [
     path: "/signup",
     name: "Signup",
     component: Signup,
-  }, 
+  },
   {
     path: "/recover-username",
     name: "AccountUsername",
@@ -114,14 +116,19 @@ const routes = [
     path: "/auth-table",
     name: "게시글 목록",
     component: AuthorsTable,
-    children: [
-      {
-      path: ":id",
-      name: "게시글 상세",
-      component: TableDetail,
-      }
-    ]
   },
+  {
+    path: "/detail/:id",
+    name: "게시글 상세",
+    component: BoardDetail,
+  },
+  {
+    path: "/update/:id",
+    name: "게시글 수정",
+    component: BoardUpdate,
+    props: true,
+  },
+
 ];
 
 const router = createRouter({

@@ -28,6 +28,7 @@ instance.interceptors.request.use(
 // TODO 서버 response 응답 인터셉터 구현 (아직 테스트 안함)
 instance.interceptors.response.use(
     (response) => response,
+    
     async (error) => {
         const originalRequest = error.config;
         const code = error.response?.data?.code;
@@ -42,6 +43,10 @@ instance.interceptors.response.use(
         if (status === 401 && code === "REFRESH_TOKEN_NULL") {
             store.dispatch("logout");
             return Promise.reject(error);   
+        }
+        
+        if (status === 404) {
+            return Promise.reject(error.response);
         }
             
 

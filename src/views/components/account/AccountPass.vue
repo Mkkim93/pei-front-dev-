@@ -10,6 +10,7 @@ import { P } from 'ts-pattern';
 const body = document.getElementsByTagName("body")[0];
 
 const store = useStore();
+
 onBeforeMount(() => {
   store.state.hideConfigButton = true;
   store.state.showNavbar = false;
@@ -17,6 +18,7 @@ onBeforeMount(() => {
   store.state.showFooter = true;
   body.classList.remove("bg-gray-100");
 });
+
 onBeforeUnmount(() => {
   store.state.hideConfigButton = false;
   store.state.showNavbar = true;

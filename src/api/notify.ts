@@ -1,4 +1,5 @@
 import axiosAuth from '@/plugins/axiosAuth';
+import axiosPublic from '@/plugins/axiosPublic';
 import store from '@/store/store';
 import type { NotifyListResponse } from '@/types/notify';
 
@@ -24,7 +25,7 @@ export async function fetchNotifyListAll(
   x: number | undefined,
   y: number | undefined,
 ): Promise<NotifyListResponse> {
-  const response = await axiosAuth.get('/api/notify', {
+  const response = await axiosPublic.get('/api/notify', {
     params: {
       page: x,
       size: y,

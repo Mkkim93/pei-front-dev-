@@ -45,20 +45,6 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="/tables"
-          :class="getRoute() === 'tables' ? 'active' : ''"
-          :navText="isRTL ? '공지 관리' : '공지 관리'"
-        >
-          <template v-slot:icon>
-            <i
-              class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"
-            ></i>
-          </template>
-        </sidenav-item>
-      </li>
-
-      <li class="nav-item">
-        <sidenav-item
           to="/billing"
           :class="getRoute() === 'billing' ? 'active' : ''"
           :navText="isRTL ? '조사 관리' : '조사 관리'"
@@ -83,6 +69,20 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
+          to="/tables"
+          :class="getRoute() === 'tables' ? 'active' : ''"
+          :navText="isRTL ? '공지 관리' : '공지 관리'"
+        >
+          <template v-slot:icon>
+            <i
+              class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"
+            ></i>
+          </template>
+        </sidenav-item>
+      </li>
+
+      <li class="nav-item">
+        <sidenav-item
           to="/virtual-reality"
           :class="getRoute() === 'virtual-reality' ? 'active' : ''"
           :navText="isRTL ? '전체 현황' : '전체 현황'"
@@ -92,8 +92,6 @@ const getRoute = () => {
           </template>
         </sidenav-item>
       </li>
-
-      
 
       <li class="mt-3 nav-item">
         <h6
@@ -124,7 +122,7 @@ const getRoute = () => {
         </sidenav-item>
       </li>
 
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <sidenav-item
           to="/signin"
           :class="getRoute() === 'signin' ? 'active' : ''"
@@ -134,9 +132,9 @@ const getRoute = () => {
             <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>
           </template>
         </sidenav-item>
-      </li>
+      </li> -->
 
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <sidenav-item
           to="/signup"
           :class="getRoute() === 'signup' ? 'active' : ''"
@@ -146,7 +144,7 @@ const getRoute = () => {
             <i class="ni ni-collection text-info text-sm opacity-10"></i>
           </template>
         </sidenav-item>
-      </li>
+      </li> -->
     </ul>
   </div>
 

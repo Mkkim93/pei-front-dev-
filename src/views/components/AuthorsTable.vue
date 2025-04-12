@@ -12,7 +12,7 @@ import { decodePayload } from "@/types/jwt.d";
 
 const boardList = ref<BoardListType[]>([]);
 const pageData = ref<PageInfoType | null>(null);
-const detailViews = ref<boolean>(false);
+
 const rolesAdmin = ref<boolean>(false);
 const userId = ref<number>(0);
 const keyword = ref<string>('');
@@ -69,16 +69,14 @@ const changePage = async (page: number) => {
       <div class="card-header pb-0 d-flex justify-content-between align-items-center">
         <h6>공지 사항</h6>
         <router-link to="/board-write">
-          <ArgonButton variant="outline" size="sm" color="success">
-            <font-awesome-icon :icon="['fas', 'pen']" /> 글쓰기
+          <ArgonButton variant="contained" size="sm" color="success">
+            <font-awesome-icon :icon="['fas', 'pen']" /> 작성
           </ArgonButton>
         </router-link>
       </div>
 
       <div class="card-body px-4 pt-3 pb-2">
         <div class="table-responsive p-3">
-          <router-view />
-
           <table class="table align-items-center mb-0">
             <thead>
               <tr>
@@ -86,7 +84,6 @@ const changePage = async (page: number) => {
                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">작성자</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">조회수</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">작성일</th>
-                <th class="text-secondary opacity-7"></th>
               </tr>
             </thead>
 
@@ -98,7 +95,7 @@ const changePage = async (page: number) => {
                       <img src="../../assets/img/team-2.jpg" class="avatar avatar-sm me-3" alt="user1" />
                     </div>
                     <div class="d-flex flex-column justify-content-center">
-                      <router-link :to="`/auth-table/${board.id}`">
+                      <router-link :to="`/detail/${board.id}`">
                         <h6 class="mb-0 text-sm">{{ board.title }}</h6>
                       </router-link>
                     </div>
@@ -113,9 +110,6 @@ const changePage = async (page: number) => {
                 </td>
                 <td class="align-middle text-center">
                   <span class="text-secondary text-xs font-weight-bold">{{ formatDate(board.createAt) }}</span>
-                </td>
-                <td class="align-middle" v-if="rolesAdmin || userId === board.usersId">
-                  <a href="javascript:;" class="text-secondary font-weight-bold text-xs">수정</a>
                 </td>
               </tr>
             </tbody>

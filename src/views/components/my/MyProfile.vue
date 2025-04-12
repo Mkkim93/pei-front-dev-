@@ -29,7 +29,7 @@ onMounted(async () => {
           <div class="card">
             <div class="card-header pb-0">
               <div class="d-flex align-items-center">
-                <p class="mb-0">내 정보 수정</p>
+                <h6 class="mb-0">내 정보 수정</h6>
                 <argon-button color="success" size="sm" class="ms-auto">수정</argon-button>
               </div>
             </div>

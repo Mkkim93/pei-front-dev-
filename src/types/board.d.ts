@@ -47,4 +47,14 @@ export interface BoardDetailResponse {
     content: BoardDetailType[];
   }
 }
+
+export type BoardUpdateType = {
+  id: number;
+  title: string;
+  content: string;
+}
+
+export type BoardDeleteIdsType = {
+  id: number[] | number | undefined;
+}
   

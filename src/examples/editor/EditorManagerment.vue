@@ -1,3 +1,137 @@
+<script setup lang="ts">
+import { ref, onBeforeUnmount, computed, watchEffect, watch } from 'vue'
+import { Editor, EditorContent } from '@tiptap/vue-3'
+import StarterKit from '@tiptap/starter-kit'
+import Underline from '@tiptap/extension-underline'
+import TextAlign from '@tiptap/extension-text-align'
+import { Color } from '@tiptap/extension-color'
+import TextStyle from '@tiptap/extension-text-style'
+import Highlight from '@tiptap/extension-highlight'
+import Placeholder from '@tiptap/extension-placeholder'
+import Link from '@tiptap/extension-link'
+import ListItem from '@tiptap/extension-list-item'
+import FontFamily from '@tiptap/extension-font-family'
+import ListKeymap from '@tiptap/extension-list-keymap'
+import Image from '@tiptap/extension-image'
+
+const editor = ref<Editor | any>(null);
+
+onBeforeUnmount(() => {
+  editor.value.destroy()
+})
+
+const color = ref('#000000');
+const url = ref('');
+const showColorPicker = ref(false);
+
+// 부모 컴포넌트에서 받은 값
+const props = defineProps<{
+  modelValue: string
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
+
+editor.value?.on('update', () => {
+  emit('update:modelValue', editor.value!.getHTML())
+})
+
+watch(() => props.modelValue, (newVal) => {
+    if (editor.value && editor.value.getHTML() !== newVal) {
+      editor.value.commands.setContent(newVal, false)
+    }
+  },
+  { immediate: true }
+)
+
+const hasActiveMarks = computed(() =>
+  editor.value.isActive('bold') ||
+  editor.value.isActive('italic') ||
+  editor.value.isActive('underline') ||
+  editor.value.isActive('strike')
+)
+
+editor.value = new Editor({
+  content: props.modelValue,
+  extensions: [
+    StarterKit,
+    Color.configure({ types: [TextStyle.name, ListItem.name] }),
+    Image.configure({ allowBase64: true, inline: true }),
+    ListKeymap,
+    TextStyle.configure({ mergeNestedSpanStyles: true }),
+    FontFamily,
+    Underline,
+    Highlight,
+    Link,
+    Placeholder.configure({
+      placeholder: '내용을 입력하주세요.'
+    }),
+    TextAlign.configure({ types: ['heading', 'paragraph'] }),
+  ],
+
+  editorProps: {
+    handleDrop(view, event, _slice, moved) {
+      if (moved) {
+        return false
+      }
+      if (!event.dataTransfer) {
+        return false;
+      }
+      const hasFiles = event.dataTransfer.files.length > 0;
+      if (!hasFiles) return false
+
+      const images = Array.from(event.dataTransfer!.files).filter(file =>
+        /image/i.test(file.type)
+      )
+
+      if (images.length === 0) return false
+
+      event.preventDefault()
+
+      images.forEach(imageFile => {
+        const reader = new FileReader()
+        reader.onload = () => {
+          const base64 = reader.result as string
+          // 이미지 삽입
+          view.dispatch(
+            view.state.tr.replaceSelectionWith(
+              view.state.schema.nodes.image.create({ src: base64 })
+            )
+          )
+        }
+        reader.readAsDataURL(imageFile)
+      })
+      return true
+    },
+  },
+  onUpdate: ({ editor }) => {
+      emit('update:modelValue', editor.getHTML());
+    }
+})
+
+const addImage = () => {
+  const url = window.prompt('URL');
+
+  if (url) {
+    editor.value.chain().focus().setImage({ src: url }).run();
+  }
+}
+
+const setColorFromPalette = (selectedColor: string) => {
+  color.value = selectedColor
+  editor.value.chain().focus().setColor(selectedColor).run()
+  showColorPicker.value = false
+}
+
+const colors = [
+  '#000000', '#FF0000', '#FFA500', '#FFFF00',
+  '#008000', '#0000FF', '#800080', '#FFFFFF',
+]
+
+
+</script>
+
 <template>
   <div class="editor-toolbar mb-3">
     <button class="icon-btn" @click="editor.chain().focus().undo().run()"
@@ -66,8 +200,6 @@
     </button>
     <p class="bar">|</p>
 
-
-
     <!-- <button 
         class="icon-btn"
         @click="editor.chain().focus().setFontFamily('Inter').run()" :class="{ 'is-active': editor.isActive('textStyle', { fontFamily: 'Inter' }) }">
@@ -123,130 +255,8 @@
       add_photo_alternate
     </button>
   </div>
-  <editor-content :editor="editor" class="tiptap"/>
+  <editor-content :editor="editor" class="tiptap" />
 </template>
-
-<script setup lang="ts">
-import { ref, onBeforeUnmount, computed } from 'vue'
-import { Editor, EditorContent } from '@tiptap/vue-3'
-import StarterKit from '@tiptap/starter-kit'
-import Underline from '@tiptap/extension-underline'
-import TextAlign from '@tiptap/extension-text-align'
-import { Color } from '@tiptap/extension-color'
-import TextStyle from '@tiptap/extension-text-style'
-import Highlight from '@tiptap/extension-highlight'
-import Placeholder from '@tiptap/extension-placeholder'
-import Link from '@tiptap/extension-link'
-import ListItem from '@tiptap/extension-list-item'
-import FontFamily from '@tiptap/extension-font-family'
-import ListKeymap from '@tiptap/extension-list-keymap'
-import Image from '@tiptap/extension-image'
-const color = ref('#000000');
-const url = ref('');
-const showColorPicker = ref(false);
-
-
-
-// 에디터 업데이트 감지 → 부모에 emit
-
-
-const hasActiveMarks = computed(() =>
-  editor.isActive('bold') ||
-  editor.isActive('italic') ||
-  editor.isActive('underline') ||
-  editor.isActive('strike')
-)
-
-const editor = new Editor({
-  extensions: [
-    StarterKit,
-    Color.configure({ types: [TextStyle.name, ListItem.name] }),
-    Image.configure({ allowBase64: true, inline: true }),
-    ListKeymap,
-    TextStyle.configure({ mergeNestedSpanStyles: true }),
-    FontFamily,
-    Underline,
-    Highlight,
-    Link,
-    Placeholder.configure({
-      placeholder: '내용을 입력하주세요.'
-    }),
-    TextAlign.configure({ types: ['heading', 'paragraph'] }),
-  ],
-
-  editorProps: {
-    handleDrop(view, event, _slice, moved) {
-      if (moved) {
-        return false
-      }
-      if (!event.dataTransfer) {
-        return false;
-      }
-      const hasFiles = event.dataTransfer.files.length > 0;
-      if (!hasFiles) return false
-
-      const images = Array.from(event.dataTransfer!.files).filter(file =>
-        /image/i.test(file.type)
-      )
-
-      if (images.length === 0) return false
-
-      event.preventDefault()
-
-      images.forEach(imageFile => {
-        const reader = new FileReader()
-        reader.onload = () => {
-          const base64 = reader.result as string
-          // 이미지 삽입
-          view.dispatch(
-            view.state.tr.replaceSelectionWith(
-              view.state.schema.nodes.image.create({ src: base64 })
-            )
-          )
-        }
-        reader.readAsDataURL(imageFile)
-      })
-
-      return true
-    },
-  },
-})
-
-const props = defineProps<{ 
-  modelValue: string
-}>()
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
-}>()
-
-editor.on('update', () => {
-  emit('update:modelValue', editor.getHTML())
-})
-
-const addImage = () => {
-  const url = window.prompt('URL');
-
-  if (url) {
-    editor.chain().focus().setImage({ src: url }).run();
-  }
-}
-
-const setColorFromPalette = (selectedColor: string) => {
-  color.value = selectedColor
-  editor.chain().focus().setColor(selectedColor).run()
-  showColorPicker.value = false
-}
-
-const colors = [
-  '#000000', '#FF0000', '#FFA500', '#FFFF00',
-  '#008000', '#0000FF', '#800080', '#FFFFFF',
-]
-
-onBeforeUnmount(() => {
-  editor.destroy()
-})
-</script>
 
 <style scoped lang="scss">
 .ProseMirror {
@@ -363,7 +373,4 @@ img {
   height: 0;
   pointer-events: none;
 }
-
-
-
 </style>

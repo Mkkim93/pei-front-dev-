@@ -14,7 +14,7 @@ const submitPost = async () => {
   try {
     const response = await createPost(title.value, content.value);
     alert(response.message);
-    router.push(`/auth-table/${response.data}`)
+    router.push(`/detail/${response.data}`)
   } catch (error) {
     //TODO ERROR MESSAGE
     console.log('error: ', error);
@@ -23,11 +23,12 @@ const submitPost = async () => {
 </script>
 
 <template>
+<div class="container">
   <div class="card mt-6 px-4 custom-card">
     <div class="card-header pb-4 d-flex justify-content-between align-items-center">
       <h6>게시글 작성</h6>
       <div class="d-flex gap-2 ms-auto">
-        <ArgonButton color="primary" @click="submitPost">작성</ArgonButton>
+        <ArgonButton color="primary" @click="submitPost">저장</ArgonButton>
         <router-link to="/auth-table">
           <ArgonButton color="secondary">취소</ArgonButton>
         </router-link>
@@ -43,6 +44,7 @@ const submitPost = async () => {
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <style scoped>

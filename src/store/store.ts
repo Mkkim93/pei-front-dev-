@@ -18,6 +18,7 @@ interface State {
   showMain: boolean;
   layout: string;
   accessToken: string;
+  showAuthTalbe: boolean;
 }
 
 export default createStore<State>({
@@ -38,6 +39,7 @@ export default createStore<State>({
     showMain: true,
     layout: "default",
     accessToken: "",
+    showAuthTalbe: true,
   },
   mutations: {
     toggleConfigurator(state) {
