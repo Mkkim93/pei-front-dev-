@@ -58,7 +58,7 @@ const deleteBoards = async () => {
 </script>
 
 <template>
-  <div class="container">
+  <div class="container-flud">
     <div class="card mt-6 px-4 custom-card">
       <div class="card-header pb-4 d-flex justify-content-between align-items-center">
         <h6>상세 페이지</h6>

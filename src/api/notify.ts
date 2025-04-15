@@ -1,6 +1,6 @@
 import axiosAuth from '@/plugins/axiosAuth';
 import axiosPublic from '@/plugins/axiosPublic';
-import store from '@/store/store';
+import store from '@/store';
 import type { NotifyListResponse } from '@/types/notify';
 
 // 최근 뜨지 않은 알림 5개만 랜더링 (초기화면)

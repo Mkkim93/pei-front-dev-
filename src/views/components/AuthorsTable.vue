@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import store from "@/store/store";
+import store from "@/store";
 import { ref, onMounted, computed } from "vue";
 import { fetchBoardList } from "@/api/board";
 import { BoardListType, PageInfoType } from "@/types/board";

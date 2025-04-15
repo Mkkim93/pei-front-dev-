@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import App from './App.vue';
-import store from "./store/store";
+import store from "./store";
 import router from "./router";
 import axios from "./plugins/axiosAuth";
 import argonDashboard from "./argon-dashboard";

@@ -1,6 +1,7 @@
 <script setup>
 const emit = defineEmits(["update:modelValue"]);
 
+// 1) 속성 정의 시 추가
 defineProps({
   size: {
     type: String,
@@ -46,6 +47,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const getClasses = (size, success, error) => {
@@ -72,6 +77,7 @@ const hasIcon = (icon) => (icon ? "input-group" : null);
       <span v-if="iconDir === 'left'" class="input-group-text">
         <i :class="getIcon(icon)"></i>
       </span>
+      <!-- 2) props로 정의한 속성 추가 -->
       <input
         :id="id"
         :type="type"
@@ -81,6 +87,7 @@ const hasIcon = (icon) => (icon ? "input-group" : null);
         :value="modelValue"
         :placeholder="placeholder"
         :isRequired="isRequired"
+        :disabled="disabled"
         @input="emit('update:modelValue', $event.target.value)"
       />
       <span v-if="iconDir === 'right'" class="input-group-text">

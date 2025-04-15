@@ -57,4 +57,18 @@ export type BoardUpdateType = {
 export type BoardDeleteIdsType = {
   id: number[] | number | undefined;
 }
+
+export type BoardFileListType = {
+  name: string;
+  // path: string;
+  // orgName: string;
+  type: string;
+  size: number;
+}
+
+export interface BoardCreateType {
+  title: string;
+  content: string;
+  boardFiles: BoardFileListType[];
+}
   

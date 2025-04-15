@@ -50,6 +50,7 @@
     "npm": "^11.2.0",
     "photoswipe": "^5.4.4",
     "quill": "^2.0.3",
+    "tiptap-extension-resize-image": "^1.2.1",
     "ts-pattern": "^5.7.0",
     "vanilla-datatables": "^1.6.16",
     "vue": "^3.4.19",

@@ -22,7 +22,7 @@
         <a
           href="javascript:;"
           class="btn btn-sm btn-info mb-0 d-none d-lg-block"
-          >메세지</a
+          >-</a
         >
         <a
           href="javascript:;"
@@ -33,7 +33,7 @@
         <a
           href="javascript:;"
           class="btn btn-sm btn-dark float-right mb-0 d-none d-lg-block"
-          >1:1 대화</a
+          >-</a
         >
         <a
           href="javascript:;"
@@ -49,15 +49,15 @@
           <div class="d-flex justify-content-center">
             <div class="d-grid text-center">
               <span class="text-lg font-weight-bolder">22</span>
-              <span class="text-sm opacity-8">작성한 글</span>
+              <span class="text-sm opacity-8">-</span>
             </div>
             <div class="d-grid text-center mx-4">
               <span class="text-lg font-weight-bolder">10</span>
-              <span class="text-sm opacity-8">등록한 자료</span>
+              <span class="text-sm opacity-8">-</span>
             </div>
             <div class="d-grid text-center">
               <span class="text-lg font-weight-bolder">89</span>
-              <span class="text-sm opacity-8"></span>
+              <span class="text-sm opacity-8">-</span>
             </div>
           </div>
         </div>

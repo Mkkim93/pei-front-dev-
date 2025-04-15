@@ -1,6 +1,6 @@
 // api/board.ts
 import axiosAuth from "@/plugins/axiosAuth";
-import type { BoardListResponse, BoardDetailResponse, BoardUpdateType, BoardDeleteIdsType } from "@/types/board.d";
+import type { BoardListResponse, BoardDetailResponse, BoardUpdateType, BoardDeleteIdsType, BoardCreateType } from "@/types/board.d";
 import { ApiResponse } from "@/types/api";
 
 // 게시글 목록 조회
@@ -33,14 +33,12 @@ export async function patchBoardContent(obj: BoardUpdateType) {
 }
 
 // 작성
-export async function createPost(title: string, content: string): Promise<ApiResponse<number>> {
-  const response = await axiosAuth.post(`/api/board`, {
-    title: title,
-    content: content
-  },
-    {
-      headers: { 'Content-Type': 'application/json' }
-    })
+export async function createPost(obj: BoardCreateType): Promise<ApiResponse<number>> {
+  const response = await axiosAuth.post(`/api/board`, obj, {
+    headers: {
+      "Content-Type" : "application/json",
+    }
+  })
   return response.data;
 }
 

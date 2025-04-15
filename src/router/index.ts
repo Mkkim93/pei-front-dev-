@@ -12,7 +12,7 @@ import Signin from "../views/Signin.vue";
 import AuthorsTable from "@/views/components/AuthorsTable.vue";
 import AccountPass from "@/views/components/account/AccountPass.vue";
 import axios from "@/plugins/axiosAuth";
-import store from "@/store/store";
+import store from "@/store";
 import AccountUsername from "@/views/components/account/AccountUsername.vue";
 import BoardWrite from "@/views/components/board/BoardWrite.vue";
 import MyActivity from "@/views/components/my/MyActivity.vue";

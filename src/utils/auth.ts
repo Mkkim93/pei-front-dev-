@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import axios from '@/plugins/axiosAuth';
-import store from '@/store/store';
+import store from '@/store';
 import { jwtDecode } from "jwt-decode";
 
 export function expiredCheck() :boolean {

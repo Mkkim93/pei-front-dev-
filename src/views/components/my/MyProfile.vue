@@ -38,7 +38,7 @@ onMounted(async () => {
               <div class="row">
                 <div class="col-md-6">
                   <label for="example-text-input" class="form-control-label">아이디</label>
-                  <argon-input type="text" value="lucky.jesse" v-model="profile.username" />
+                  <argon-input type="text" v-model="profile.username" disabled />
                 </div>
                 <div class="col-md-6">
                   <label for="example-text-input" class="form-control-label">이메일</label>

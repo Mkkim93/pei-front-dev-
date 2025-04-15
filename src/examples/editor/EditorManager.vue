@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, onBeforeUnmount, computed, watchEffect, watch } from 'vue'
+import { ref, onBeforeUnmount, computed, watch } from 'vue'
+import axiosAuth from '@/plugins/axiosAuth';
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
@@ -12,16 +13,35 @@ import Link from '@tiptap/extension-link'
 import ListItem from '@tiptap/extension-list-item'
 import FontFamily from '@tiptap/extension-font-family'
 import ListKeymap from '@tiptap/extension-list-keymap'
-import Image from '@tiptap/extension-image'
+import { BoardFileListType } from '@/types/board';
+
+import ImageResize from 'tiptap-extension-resize-image';
 
 const editor = ref<Editor | any>(null);
+const fileInput = ref<HTMLInputElement | null>(null)
+const showUploadMenu = ref(false)
+const imageInput = ref<HTMLInputElement | null>(null)
+const uploadedFiles = ref<BoardFileListType[]>([])
+
+const openUploadMenu = () => {
+  showUploadMenu.value = !showUploadMenu.value
+}
+
+const handleImageUpload = () => {
+  imageInput.value?.click()
+}
+
+const handleFileUpload = () => {
+  fileInput.value?.click()
+}
+
+const triggerUpload = () => fileInput.value?.click()
 
 onBeforeUnmount(() => {
   editor.value.destroy()
 })
 
 const color = ref('#000000');
-const url = ref('');
 const showColorPicker = ref(false);
 
 // 부모 컴포넌트에서 받은 값
@@ -31,6 +51,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
+  (e: 'update:boardFiles', files: BoardFileListType[]): void
 }>()
 
 editor.value?.on('update', () => {
@@ -38,10 +59,10 @@ editor.value?.on('update', () => {
 })
 
 watch(() => props.modelValue, (newVal) => {
-    if (editor.value && editor.value.getHTML() !== newVal) {
-      editor.value.commands.setContent(newVal, false)
-    }
-  },
+  if (editor.value && editor.value.getHTML() !== newVal) {
+    editor.value.commands.setContent(newVal, false)
+  }
+},
   { immediate: true }
 )
 
@@ -57,7 +78,7 @@ editor.value = new Editor({
   extensions: [
     StarterKit,
     Color.configure({ types: [TextStyle.name, ListItem.name] }),
-    Image.configure({ allowBase64: true, inline: true }),
+    ImageResize,
     ListKeymap,
     TextStyle.configure({ mergeNestedSpanStyles: true }),
     FontFamily,
@@ -69,53 +90,63 @@ editor.value = new Editor({
     }),
     TextAlign.configure({ types: ['heading', 'paragraph'] }),
   ],
-
-  editorProps: {
-    handleDrop(view, event, _slice, moved) {
-      if (moved) {
-        return false
-      }
-      if (!event.dataTransfer) {
-        return false;
-      }
-      const hasFiles = event.dataTransfer.files.length > 0;
-      if (!hasFiles) return false
-
-      const images = Array.from(event.dataTransfer!.files).filter(file =>
-        /image/i.test(file.type)
-      )
-
-      if (images.length === 0) return false
-
-      event.preventDefault()
-
-      images.forEach(imageFile => {
-        const reader = new FileReader()
-        reader.onload = () => {
-          const base64 = reader.result as string
-          // 이미지 삽입
-          view.dispatch(
-            view.state.tr.replaceSelectionWith(
-              view.state.schema.nodes.image.create({ src: base64 })
-            )
-          )
-        }
-        reader.readAsDataURL(imageFile)
-      })
-      return true
-    },
-  },
   onUpdate: ({ editor }) => {
-      emit('update:modelValue', editor.getHTML());
-    }
+    emit('update:modelValue', editor.getHTML());
+  }
 })
 
-const addImage = () => {
-  const url = window.prompt('URL');
+const imgUpload = async (event: Event) => {
+  console.log('이미지 업로드 실행');
+  const files = (event.target as HTMLInputElement).files;
+  if (!files || files.length === 0) return
+  console.log('이미지 file: ', files);
 
-  if (url) {
-    editor.value.chain().focus().setImage({ src: url }).run();
+  const formData = new FormData();
+
+  for (const file of files) {
+    formData.append('files', file);
+    uploadedFiles.value.push({
+      // TODO
+      name: file.name,
+      size: file.size,
+      type: file.type,
+    })
   }
+
+  console.log('이미지를 저장한 객체: ', uploadedFiles);
+  const response = await axiosAuth.post(`/api/upload`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  console.log('response: ', response.data);
+
+  const imageUrls: string[] = response.data;
+
+  // TODO 어렵다..
+  const imagesHtml = imageUrls
+  .map(url => `<img src="${url}" style="max-width:100%; height=auto"/><p></p>`).join('');
+  editor.value.chain().focus().insertContent(imagesHtml).run();
+
+  emit('update:boardFiles', uploadedFiles.value);
+}
+
+const onFileSelected = async (event: Event) => {
+  const files = (event.target as HTMLInputElement).files
+  if (!files || files.length === 0) return
+  console.log('텍스트 파일 객체 추적: ', files);
+
+  for (const file of files) {
+    console.log('파일명:', file.name)
+    console.log('크기:', file.size)
+    console.log('타입:', file.type)
+
+    uploadedFiles.value.push({
+      name: file.name,
+      size: file.size,
+      type: file.type,
+    })
+  }
+  console.log("저장 후 파일 객체: ", uploadedFiles);
+  emit('update:boardFiles', uploadedFiles.value);
 }
 
 const setColorFromPalette = (selectedColor: string) => {
@@ -126,14 +157,32 @@ const setColorFromPalette = (selectedColor: string) => {
 
 const colors = [
   '#000000', '#FF0000', '#FFA500', '#FFFF00',
-  '#008000', '#0000FF', '#800080', '#FFFFFF',
+  '#008000', '#0000FF', '#800080', '#FFFFFF', '#958DF1'
 ]
-
 
 </script>
 
 <template>
   <div class="editor-toolbar mb-3">
+    <div class="upload-dropdown">
+      <button type="button" class="icon-btn material-symbols-outlined" @click="openUploadMenu">
+        add_photo_alternate
+      </button>
+
+      <!-- 드롭다운 메뉴 -->
+      <div v-if="showUploadMenu" class="upload-menu">
+        <div class="upload-menu-item" @click="handleImageUpload">
+          📷 사진
+        </div>
+        <div class="upload-menu-item" @click="handleFileUpload">
+          📁 파일
+        </div>
+      </div>
+      <!-- 숨겨진 인풋 -->
+      <input ref="imageInput" type="file" multiple accept="image/*" @change="imgUpload" style="display: none;" />
+      <input ref="fileInput" type="file" multiple @change="onFileSelected" style="display: none;" />
+    </div>
+
     <button class="icon-btn" @click="editor.chain().focus().undo().run()"
       :disabled="!editor.can().chain().focus().undo().run()">
       undo
@@ -142,7 +191,9 @@ const colors = [
       :disabled="!editor.can().chain().focus().redo().run()">
       redo
     </button>
+
     <p class="bar">|</p>
+
     <button class="icon-btn" :disabled="!editor.can().chain().focus().toggleBold().run()"
       :class="{ active: editor.isActive('bold') }" @click="editor.chain().focus().toggleBold().run()">
       format_bold
@@ -180,7 +231,9 @@ const colors = [
           @click="setColorFromPalette(c)" />
       </div>
     </div>
+
     <p class="bar">|</p>
+
     <button class="icon-btn" @click="editor.chain().focus().toggleBulletList().run()"
       :class="{ 'is-active': editor.isActive('bulletList') }">
       format_list_bulleted
@@ -198,38 +251,8 @@ const colors = [
       :disabled="!editor.can().liftListItem('listItem')">
       filter_list_off
     </button>
-    <p class="bar">|</p>
 
-    <!-- <button 
-        class="icon-btn"
-        @click="editor.chain().focus().setFontFamily('Inter').run()" :class="{ 'is-active': editor.isActive('textStyle', { fontFamily: 'Inter' }) }">
-          Inter
-        </button>
-        <button 
-        class="icon-btn"
-        @click="editor.chain().focus().setFontFamily('Comic Sans MS, Comic Sans').run()" :class="{ 'is-active': editor.isActive('textStyle', { fontFamily: 'Comic Sans MS, Comic Sans' }) }">
-          Comic Sans
-        </button>
-        <button 
-        class="icon-btn"
-        @click="editor.chain().focus().setFontFamily('serif').run()" :class="{ 'is-active': editor.isActive('textStyle', { fontFamily: 'serif' }) }">
-          Serif
-        </button>
-        <button 
-        class="icon-btn"
-        @click="editor.chain().focus().setFontFamily('monospace').run()" :class="{ 'is-active': editor.isActive('textStyle', { fontFamily: 'monospace' }) }">
-          Monospace
-        </button>
-        <button 
-        class="icon-btn"
-        @click="editor.chain().focus().setFontFamily('cursive').run()" :class="{ 'is-active': editor.isActive('textStyle', { fontFamily: 'cursive' }) }">
-          Cursive
-        </button>
-        <button 
-        class="icon-btn"
-        @click="editor.chain().focus().unsetFontFamily().run()">
-          Unset font family
-        </button> -->
+    <p class="bar">|</p>
 
     <button class="icon-btn" @click="editor.chain().focus().setTextAlign('left').run()"
       :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }">
@@ -251,9 +274,6 @@ const colors = [
       format_clear
     </button>
     <p class="bar">|</p>
-    <button class="icon-btn" @click="addImage">
-      add_photo_alternate
-    </button>
   </div>
   <editor-content :editor="editor" class="tiptap" />
 </template>
@@ -345,17 +365,6 @@ button.icon-btn {
   border-color: #000;
 }
 
-img {
-  display: block;
-  height: auto;
-  margin: 1.5rem 0;
-  max-width: 100%;
-
-  &.ProseMirror-selectednode {
-    outline: 3px solid var(--purple);
-  }
-}
-
 .bar {
   height: 21px;
   line-height: 21px;
@@ -372,5 +381,44 @@ img {
   float: left;
   height: 0;
   pointer-events: none;
+}
+
+.icon-btn.material-symbols-outlined {
+  line-height: 1;
+  padding: 6px 8px;
+  vertical-align: middle;
+}
+
+.upload-dropdown {
+  position: relative;
+}
+
+.upload-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 4px;
+  padding: 8px 0;
+  z-index: 999;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  min-width: 140px;
+}
+
+.upload-menu-item {
+  padding: 6px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #333;
+}
+
+.upload-menu-item:hover {
+  background-color: #eee;
 }
 </style>

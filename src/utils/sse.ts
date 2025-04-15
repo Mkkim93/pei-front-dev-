@@ -1,4 +1,4 @@
-import store from "@/store/store";
+import store from "@/store";
 import { useToast } from "vue-toastification";
 import { fetchNotifyList } from "@/api/notify";
 import axiosPublic from "@/plugins/axiosPublic";
