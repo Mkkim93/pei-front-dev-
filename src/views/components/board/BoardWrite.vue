@@ -29,6 +29,7 @@ const submitPost = async () => {
     content: content.value,
     boardFiles: boardFiles.value,
   };
+  console.log('emit 으로 넘어온 updateBoardfiles: ', postBoard.boardFiles);
   try {
     const response = await createPost(postBoard);
     alert(response.message);
@@ -59,6 +60,7 @@ const submitPost = async () => {
       <div class="table-responsive p-0" style="overflow: visible;">
         <div class="p-4">
           <ArgonInput type="text" placeholder="제목을 입력해주세요" class="mb-3" v-model="title" />
+          <p>파일이 들어갈 공간</p>
           <EditorManager v-model="content" @update:boardFiles="handleBoardFilesUpdate"/>
         </div>
       </div>

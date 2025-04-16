@@ -1,6 +1,6 @@
 // api/board.ts
 import axiosAuth from "@/plugins/axiosAuth";
-import type { BoardListResponse, BoardDetailResponse, BoardUpdateType, BoardDeleteIdsType, BoardCreateType } from "@/types/board.d";
+import type { BoardListResponse, BoardDetailResponse, BoardUpdateType, BoardDeleteIdsType, BoardCreateType, BoardFileListType } from "@/types/board.d";
 import { ApiResponse } from "@/types/api";
 
 // 게시글 목록 조회
@@ -50,3 +50,4 @@ export async function deleteBoardIds(ids: BoardDeleteIdsType) {
   const response = await axiosAuth.delete(`/api/board?ids=${param}`);
   return response.data;
 }
+

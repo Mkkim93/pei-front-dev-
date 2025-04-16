@@ -59,11 +59,12 @@ export type BoardDeleteIdsType = {
 }
 
 export type BoardFileListType = {
-  name: string;
-  // path: string;
-  // orgName: string;
+  name?: string;
+  path: string;
+  orgName: string;
   type: string;
   size: number;
+  renderType: string; 
 }
 
 export interface BoardCreateType {
@@ -71,4 +72,3 @@ export interface BoardCreateType {
   content: string;
   boardFiles: BoardFileListType[];
 }
-  

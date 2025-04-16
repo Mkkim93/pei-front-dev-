@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onBeforeUnmount, computed, watch } from 'vue'
-import axiosAuth from '@/plugins/axiosAuth';
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
@@ -13,15 +12,17 @@ import Link from '@tiptap/extension-link'
 import ListItem from '@tiptap/extension-list-item'
 import FontFamily from '@tiptap/extension-font-family'
 import ListKeymap from '@tiptap/extension-list-keymap'
-import { BoardFileListType } from '@/types/board';
+import { BoardFileListType } from '@/types/board'
+import { s3upload } from '@/api/s3api';
 
 import ImageResize from 'tiptap-extension-resize-image';
 
 const editor = ref<Editor | any>(null);
-const fileInput = ref<HTMLInputElement | null>(null)
-const showUploadMenu = ref(false)
-const imageInput = ref<HTMLInputElement | null>(null)
-const uploadedFiles = ref<BoardFileListType[]>([])
+const fileInput = ref<HTMLInputElement | null>(null);
+const showUploadMenu = ref(false);
+
+const imageInput = ref<HTMLInputElement | null>(null);
+const uploadedFiles = ref<BoardFileListType[]>([]);
 
 const openUploadMenu = () => {
   showUploadMenu.value = !showUploadMenu.value
@@ -96,55 +97,67 @@ editor.value = new Editor({
 })
 
 const imgUpload = async (event: Event) => {
-  console.log('이미지 업로드 실행');
   const files = (event.target as HTMLInputElement).files;
   if (!files || files.length === 0) return
-  console.log('이미지 file: ', files);
 
   const formData = new FormData();
 
   for (const file of files) {
     formData.append('files', file);
-    uploadedFiles.value.push({
-      // TODO
-      name: file.name,
-      size: file.size,
-      type: file.type,
-    })
   }
 
-  console.log('이미지를 저장한 객체: ', uploadedFiles);
-  const response = await axiosAuth.post(`/api/upload`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
+  const response = await s3upload(formData);
+  const dataList = response.data.data;
+  const imgUrls: string[] = [];
+
+  dataList.forEach((data: BoardFileListType) => {
+    imgUrls.push(data.path);
   });
-  console.log('response: ', response.data);
 
-  const imageUrls: string[] = response.data;
+  const imagesHtml = imgUrls
+    .map(url => `<img src="${url}" style="max-width:100%; height=auto"/><p></p>`)
+    .join('');
 
-  // TODO 어렵다..
-  const imagesHtml = imageUrls
-  .map(url => `<img src="${url}" style="max-width:100%; height=auto"/><p></p>`).join('');
   editor.value.chain().focus().insertContent(imagesHtml).run();
-
+  
+  for (const data of dataList) {
+    uploadedFiles.value.push({
+      name: data.name,
+      path: data.path,
+      orgName: data.orgName,
+      type: data.type,
+      size: data.size,
+      renderType: "INLINE"
+    })
+  }
   emit('update:boardFiles', uploadedFiles.value);
 }
 
-const onFileSelected = async (event: Event) => {
+const fileUpload = async (event: Event) => {
   const files = (event.target as HTMLInputElement).files
   if (!files || files.length === 0) return
   console.log('텍스트 파일 객체 추적: ', files);
-
+  const formData = new FormData();
   for (const file of files) {
-    console.log('파일명:', file.name)
-    console.log('크기:', file.size)
-    console.log('타입:', file.type)
-
-    uploadedFiles.value.push({
-      name: file.name,
-      size: file.size,
-      type: file.type,
-    })
+    formData.append("files", file);
   }
+
+  const response = await s3upload(formData);
+  const dataList = response.data.data;
+  console.log('정적 파일 dataList: ', dataList);
+  
+  dataList.forEach((data: BoardFileListType) => {
+    uploadedFiles.value.push({
+      name: data.name,
+      path: data.path,
+      orgName: data.orgName,
+      type: data.type,
+      size: data.size,
+      renderType: "LIST",
+    });
+  })
+
+  // TODO 서버에 LIST, INLINE 으로 각각 저장 했고 이제 게시글 상세 랜더링 시 각각의 타입에 맞게 랜더링
   console.log("저장 후 파일 객체: ", uploadedFiles);
   emit('update:boardFiles', uploadedFiles.value);
 }
@@ -180,7 +193,7 @@ const colors = [
       </div>
       <!-- 숨겨진 인풋 -->
       <input ref="imageInput" type="file" multiple accept="image/*" @change="imgUpload" style="display: none;" />
-      <input ref="fileInput" type="file" multiple @change="onFileSelected" style="display: none;" />
+      <input ref="fileInput" type="file" multiple @change="fileUpload" style="display: none;" />
     </div>
 
     <button class="icon-btn" @click="editor.chain().focus().undo().run()"
