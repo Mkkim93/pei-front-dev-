@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { reactive, onMounted, ref } from "vue";
-import { fetchBoardDetail, deleteBoardIds } from "@/api/board";
+import { fetchBoardDetail, deleteBoardIds, downloadFile } from "@/api/board";
 import { useRoute } from "vue-router";
-import { BoardDetailType, BoardDeleteIdsType } from "@/types/board";
+import { BoardDetailType, BoardDeleteIdsType, BoardDetailFileType } from "@/types/board";
 import { formatDateDetail } from "@/utils/date";
 import ArgonButton from "@/components/ArgonButton.vue";
 import router from "@/router";
@@ -16,22 +16,30 @@ const boardContent = reactive<BoardDetailType>({
   updatedAt: '',
   writer: '',
   views: 0,
+  boardFiles: [],
 });
+const boardFileContent = ref<BoardDetailFileType[]>([]);
 const delIds = ref<BoardDeleteIdsType>();
 
 onMounted(async () => {
+
   const id = Number(route.params.id);
+
   if (isNaN(id)) {
     console.error("존재하지 않은 게시글");
     return;
   }
+
   try {
+
     const response = await fetchBoardDetail(id);
     Object.assign(boardContent, response.data);
+    boardFileContent.value = boardContent.boardFiles;
+
   } catch (error) {
+
     console.log("로그에서 없는 게시글 조회 시: ", error);
     const axiosError = error as AxiosError | any;
-    console.log(axiosError);
     const errorMessage = axiosError.data.message || "알 수 없는 오류입니다.";
     alert(errorMessage);
     router.back();
@@ -45,13 +53,23 @@ const deleteBoards = async () => {
     delIds.value = { id: boardContent.id }
     console.log('delIds: ', delIds.value);
     try {
+
       const response = await deleteBoardIds(delIds.value);
       alert(response.message);
       router.push('/auth-table');
-    } catch (error) {
 
-      console.log('delete error: ', error);
+    } catch (error) {
+      console.error('delete error: ', error);
     }
+  }
+}
+
+// TODO 나중에 리펙토링
+const download = async (id: number, name: string) => {
+  try {
+    await downloadFile(id, name);
+  } catch (error) {
+    console.log('download error: ', error);
   }
 }
 
@@ -96,9 +114,16 @@ const deleteBoards = async () => {
               <span class="bbs-value">{{ formatDateDetail(boardContent.updatedAt) }}</span>
             </div>
 
+            <div class="col-md-4 text-md-end">
+              <div v-for="f in boardFileContent" :key="f.id">
+                <div v-if="f.renderType === 'LIST'">
+                  <span>{{ f.orgName }}</span>
+                  <argon-button @click="download(f.id, f.name)">다운로드</argon-button>
+                </div>
+              </div>
+            </div>
             <!-- 에디터 영역 -->
             <div v-html="boardContent.content"></div>
-
           </div>
         </div>
       </div>

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { BoardDetailType, BoardUpdateType } from '@/types/board';
+import { BoardDetailType, BoardUpdateType, BoardDetailFileType } from '@/types/board';
 import { formatDateDetail } from '@/utils/date';
-import { fetchBoardDetail, patchBoardContent } from '@/api/board';
+import { fetchBoardDetail, patchBoardContent, downloadFile } from '@/api/board';
 import ArgonInput from '@/components/ArgonInput.vue';
 import ArgonButton from '@/components/ArgonButton.vue';
+import ArgonCheckbox from '@/components/ArgonCheckbox.vue';
 import EditorManager from '@/examples/editor/EditorManager.vue';
 import router from '@/router';
 
@@ -19,12 +20,15 @@ const boardContent = reactive<BoardDetailType>({
     updatedAt: '',
     writer: '',
     views: 0,
+    boardFiles: [],
 });
+const boardFileContent = ref<BoardDetailFileType[]>([]);
 
 onMounted(async () => {
     const boardId = Number(route.params.id);
     const response = await fetchBoardDetail(boardId);
     Object.assign(boardContent, response.data);
+    boardFileContent.value = boardContent.boardFiles;
 })
 
 const patchContent = async () => {
@@ -39,6 +43,15 @@ const patchContent = async () => {
         router.push(`/detail/${response.data}`);
     } catch (error) {
         console.log('게시글 업데이트 실패: ', error);
+    }
+}
+
+// TODO 나중에 리펙토링
+const download = async (id: number, name: string) => {
+    try {
+        await downloadFile(id, name);
+    } catch (error) {
+        console.log('error: ', error);
     }
 }
 </script>
@@ -67,6 +80,16 @@ const patchContent = async () => {
                         </div>
                         <span class="bbs-label">제목</span>
                         <ArgonInput type="text" placeholder="제목을 입력해주세요" class="mb-3" v-model="boardContent.title" />
+                    </div>
+
+                    <div class="col-md-4 text-md-end">
+                        <div v-for="f in boardFileContent" :key="f.id">
+                            <div v-if="f.renderType === 'LIST'">
+                                <ArgonCheckbox></ArgonCheckbox>
+                                <span>{{ f.orgName }}</span>
+                                <argon-button @click="download(f.id, f.name)">다운로드</argon-button>
+                            </div>
+                        </div>
                     </div>
                     <EditorManager v-model="boardContent.content" />
                 </div>

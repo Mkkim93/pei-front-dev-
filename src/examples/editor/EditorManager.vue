@@ -107,7 +107,7 @@ const imgUpload = async (event: Event) => {
   }
 
   const response = await s3upload(formData);
-  const dataList = response.data.data;
+  const dataList = response.data;
   const imgUrls: string[] = [];
 
   dataList.forEach((data: BoardFileListType) => {
@@ -143,7 +143,7 @@ const fileUpload = async (event: Event) => {
   }
 
   const response = await s3upload(formData);
-  const dataList = response.data.data;
+  const dataList = response.data;
   console.log('정적 파일 dataList: ', dataList);
   
   dataList.forEach((data: BoardFileListType) => {

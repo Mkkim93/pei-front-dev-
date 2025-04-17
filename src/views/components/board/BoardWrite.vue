@@ -21,6 +21,7 @@ const postBoard = reactive<BoardCreateType>({
 const handleBoardFilesUpdate = (files: BoardFileListType[]) => {
   boardFiles.value = files;
   postBoard.boardFiles = files;
+  console.log("저장전 파일 객체: ",postBoard.boardFiles);
 };
 
 const submitPost = async () => {
@@ -60,7 +61,12 @@ const submitPost = async () => {
       <div class="table-responsive p-0" style="overflow: visible;">
         <div class="p-4">
           <ArgonInput type="text" placeholder="제목을 입력해주세요" class="mb-3" v-model="title" />
-          <p>파일이 들어갈 공간</p>
+          <p>파일 목록</p>
+          <div v-for="files in boardFiles">
+            <div v-if="files.renderType === 'LIST'">
+            <p>{{ files.name }}</p>
+          </div>
+          </div>
           <EditorManager v-model="content" @update:boardFiles="handleBoardFilesUpdate"/>
         </div>
       </div>

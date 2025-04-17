@@ -36,7 +36,7 @@ export async function patchBoardContent(obj: BoardUpdateType) {
 export async function createPost(obj: BoardCreateType): Promise<ApiResponse<number>> {
   const response = await axiosAuth.post(`/api/board`, obj, {
     headers: {
-      "Content-Type" : "application/json",
+      "Content-Type": "application/json",
     }
   })
   return response.data;
@@ -49,5 +49,36 @@ export async function deleteBoardIds(ids: BoardDeleteIdsType) {
     : `${ids.id}`;
   const response = await axiosAuth.delete(`/api/board?ids=${param}`);
   return response.data;
+}
+
+// TODO 파일 다운로드 api (예외처리 할 것)
+export async function downloadFile(id: number, name: string): Promise<number> {
+  let responseStatus: number = 0;
+
+  try {
+    const response = await axiosAuth.get(`/api/file/download/${id}`,
+      { responseType: 'blob' });
+    responseStatus = response.status;
+    const blob = new Blob([response.data], { type: response.headers['content-type'] });
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    
+    link.href = url;
+    
+    link.setAttribute('download', name);
+
+    document.body.appendChild(link);
+    
+    link.click();
+
+    window.URL.revokeObjectURL(url); // blob 해제  
+    
+    document.body.removeChild(link);
+  
+  } catch (error) {
+    console.log('error: ', error);
+  }
+  return responseStatus;
 }
 
