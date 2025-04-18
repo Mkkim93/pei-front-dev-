@@ -20,6 +20,7 @@ export type BoardFileListType = {
   type: string;
   size: number;
   renderType: string; 
+  used: boolean;
 }
   
 export interface PageInfoType {

@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "ES6",
+    "target": "ES2020",
+    "module": "ES2020",
+    "lib": ["ES2020", "DOM"],
     // "declaration": true, // 파일 저장할 때 자동으로 d.ts 파일 생성 (지금은 안씀)
     "moduleResolution": "node",
     "types": ["vite/client", "vue"],

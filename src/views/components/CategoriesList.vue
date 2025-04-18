@@ -40,7 +40,7 @@ defineProps({
   <div class="card">
     <div class="p-4 pb-5 card-header d-flex justify-content-between align-items-center">
       <h6 class="mb-0">{{ title }}</h6>
-      <router-link to='/profile/my-activity'>
+      <router-link to='/profile/my-notify'>
       <ArgonButton class="btn btn-sm btn-outline-primary" variant="outline" color="success">더보기</ArgonButton>
     </router-link>
     </div>

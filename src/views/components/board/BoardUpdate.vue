@@ -46,7 +46,6 @@ const patchContent = async () => {
     }
 }
 
-// TODO 나중에 리펙토링
 const download = async (id: number, name: string) => {
     try {
         await downloadFile(id, name);
@@ -81,13 +80,13 @@ const download = async (id: number, name: string) => {
                         <span class="bbs-label">제목</span>
                         <ArgonInput type="text" placeholder="제목을 입력해주세요" class="mb-3" v-model="boardContent.title" />
                     </div>
-
+                    
                     <div class="col-md-4 text-md-end">
                         <div v-for="f in boardFileContent" :key="f.id">
                             <div v-if="f.renderType === 'LIST'">
-                                <ArgonCheckbox></ArgonCheckbox>
+                                <ArgonCheckbox id="checkboxId"></ArgonCheckbox>
                                 <span>{{ f.orgName }}</span>
-                                <argon-button @click="download(f.id, f.name)">다운로드</argon-button>
+                                <argon-button size="sm" @click="download(f.id, f.name)">다운로드</argon-button>
                             </div>
                         </div>
                     </div>

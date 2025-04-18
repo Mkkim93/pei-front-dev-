@@ -54,12 +54,3 @@ const navClasses = computed(() => {
     />
   </main>
 </template>
-
-<style>
-/* .Vue-Toastification__toast--success {
-  background-color: white !important;
-  color: #28a745 !important;
-  border: 2px solid #28a745;
-  font-weight: 500;
-} */
-</style>

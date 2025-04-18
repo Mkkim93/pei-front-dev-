@@ -31,7 +31,7 @@ onMounted(async () => {
   }
 
   try {
-
+    
     const response = await fetchBoardDetail(id);
     Object.assign(boardContent, response.data);
     boardFileContent.value = boardContent.boardFiles;
@@ -64,7 +64,6 @@ const deleteBoards = async () => {
   }
 }
 
-// TODO 나중에 리펙토링
 const download = async (id: number, name: string) => {
   try {
     await downloadFile(id, name);

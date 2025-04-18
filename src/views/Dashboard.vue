@@ -13,7 +13,7 @@ const boardList = ref<BoardListType[]>([]);
 const pageData = ref<PageInfoType | null>(null);
 
 onMounted(async () => {
-  const response = await fetchBoardList(0, 6, undefined);
+  const response = await fetchBoardList(0, 8, undefined);
   boardList.value = response.data.content;
   pageData.value = response.data.page;
 });

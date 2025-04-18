@@ -93,6 +93,19 @@ editor.value = new Editor({
   ],
   onUpdate: ({ editor }) => {
     emit('update:modelValue', editor.getHTML());
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(editor.getHTML(), 'text/html');
+    const currentImageSrcs: string[] = Array.from(doc.querySelectorAll('img'))
+      .map(img => img.getAttribute('src'))
+      .filter((src): src is string => src !== null);
+
+    uploadedFiles.value.forEach((file) => {
+      if (file.renderType === 'INLINE') {
+        file.used = currentImageSrcs.includes(file.path);
+      }
+    });
+    emit('update:boardFiles', uploadedFiles.value);
   }
 })
 
@@ -119,7 +132,7 @@ const imgUpload = async (event: Event) => {
     .join('');
 
   editor.value.chain().focus().insertContent(imagesHtml).run();
-  
+
   for (const data of dataList) {
     uploadedFiles.value.push({
       name: data.name,
@@ -127,7 +140,8 @@ const imgUpload = async (event: Event) => {
       orgName: data.orgName,
       type: data.type,
       size: data.size,
-      renderType: "INLINE"
+      renderType: "INLINE",
+      used: true,
     })
   }
   emit('update:boardFiles', uploadedFiles.value);
@@ -145,7 +159,7 @@ const fileUpload = async (event: Event) => {
   const response = await s3upload(formData);
   const dataList = response.data;
   console.log('정적 파일 dataList: ', dataList);
-  
+
   dataList.forEach((data: BoardFileListType) => {
     uploadedFiles.value.push({
       name: data.name,
@@ -154,6 +168,7 @@ const fileUpload = async (event: Event) => {
       type: data.type,
       size: data.size,
       renderType: "LIST",
+      used: true,
     });
   })
 
