@@ -182,7 +182,9 @@ const sales = {
                         <div class="px-2 py-1 d-flex align-items-center">
                           <div class="ms-4">
                             <h6 class="mb-0 text-sm">
-  {{ board.title.length > 10 ? board.title.slice(0, 5) + '...' : board.title }}
+                              <router-link :to="`detail/${board.id}`">
+    {{ board.title.length > 10 ? board.title.slice(0, 5) + '...' : board.title }}
+                              </router-link>
                             </h6>
                           </div>
                         </div>

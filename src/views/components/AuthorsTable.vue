@@ -77,13 +77,13 @@ const changePage = async (page: number) => {
 
       <div class="card-body px-4 pt-3 pb-2">
         <div class="table-responsive p-3">
-          <table class="table align-items-center mb-0">
+          <table class="table align-items-center mb-0 text-end">
             <thead>
               <tr>
-                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">제목</th>
-                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">작성자</th>
-                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">조회수</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-start">제목</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">작성자</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">작성일</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">조회수</th>
               </tr>
             </thead>
 
@@ -96,20 +96,20 @@ const changePage = async (page: number) => {
                     </div>
                     <div class="d-flex flex-column justify-content-center">
                       <router-link :to="`/detail/${board.id}`">
-                        <h6 class="mb-0 text-sm">{{ board.title }}</h6>
+                        <h6 class="mb-0 text-sm text-truncate text-end">{{ board.title }}</h6>
                       </router-link>
                     </div>
                   </div>
                 </td>
-                <td>
+                <td class="align-middle text-center">
                   <p class="text-xs font-weight-bold mb-0">{{ board.writer }}</p>
                   <p class="text-xs text-secondary mb-0">{{ board.roleType }}</p>
                 </td>
-                <td class="align-middle text-center text-sm">
-                  <span class="badge badge-sm bg-gradient-success">{{ board.views }}</span>
-                </td>
                 <td class="align-middle text-center">
                   <span class="text-secondary text-xs font-weight-bold">{{ formatDate(board.createAt) }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="badge badge-sm bg-gradient-success">{{ board.views }}</span>
                 </td>
               </tr>
             </tbody>
@@ -157,3 +157,16 @@ const changePage = async (page: number) => {
     </div>
   </div>
 </template>
+<style scoped>
+.fixed-table{
+  table-layout: fixed;
+  width: 100%;
+}
+
+.text-truncate {
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+</style>

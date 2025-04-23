@@ -6,7 +6,6 @@ import setTooltip from "@/assets/js/tooltip.js";
 import { fetchUsersProfile } from "@/api/users";
 import { UsersType } from "@/types/users.d";
 
-// const nameInput = ref('');
 const profile = reactive<UsersType>({
   username: '',
   name: '',
@@ -17,10 +16,7 @@ const profile = reactive<UsersType>({
 
 onMounted(async () => {
   const response = await fetchUsersProfile();
-  console.log('response: ', response);
   Object.assign(profile, response.data); // reactive 객체 업데이트
-  console.log('profile: ', profile);
-  // nameInput.value = profile.name;
 });
 
 const body = document.getElementsByTagName("body")[0];

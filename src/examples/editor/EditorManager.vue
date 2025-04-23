@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { ref, onBeforeUnmount, computed, watch } from 'vue'
+import { ref, onBeforeUnmount, computed, watch, onMounted } from 'vue'
 import { Editor, EditorContent } from '@tiptap/vue-3'
+import { BoardFileListType } from '@/types/board'
+import { s3upload } from '@/api/s3api';
+import { Color } from '@tiptap/extension-color'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
-import { Color } from '@tiptap/extension-color'
 import TextStyle from '@tiptap/extension-text-style'
 import Highlight from '@tiptap/extension-highlight'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -12,8 +14,6 @@ import Link from '@tiptap/extension-link'
 import ListItem from '@tiptap/extension-list-item'
 import FontFamily from '@tiptap/extension-font-family'
 import ListKeymap from '@tiptap/extension-list-keymap'
-import { BoardFileListType } from '@/types/board'
-import { s3upload } from '@/api/s3api';
 
 import ImageResize from 'tiptap-extension-resize-image';
 
@@ -23,6 +23,13 @@ const showUploadMenu = ref(false);
 
 const imageInput = ref<HTMLInputElement | null>(null);
 const uploadedFiles = ref<BoardFileListType[]>([]);
+
+onMounted(() => {
+  if (props.boardFiles && props.boardFiles.length > 0) {
+    // INLINE 이미지만 uploadedFiles에 등록
+    uploadedFiles.value = props.boardFiles.filter(f => f.renderType === 'INLINE')
+  }
+})
 
 const openUploadMenu = () => {
   showUploadMenu.value = !showUploadMenu.value
@@ -36,8 +43,6 @@ const handleFileUpload = () => {
   fileInput.value?.click()
 }
 
-const triggerUpload = () => fileInput.value?.click()
-
 onBeforeUnmount(() => {
   editor.value.destroy()
 })
@@ -48,12 +53,13 @@ const showColorPicker = ref(false);
 // 부모 컴포넌트에서 받은 값
 const props = defineProps<{
   modelValue: string
+  boardFiles?: BoardFileListType[]
 }>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
   (e: 'update:boardFiles', files: BoardFileListType[]): void
-}>()
+}>();
 
 editor.value?.on('update', () => {
   emit('update:modelValue', editor.value!.getHTML())
@@ -92,29 +98,37 @@ editor.value = new Editor({
     TextAlign.configure({ types: ['heading', 'paragraph'] }),
   ],
   onUpdate: ({ editor }) => {
-    emit('update:modelValue', editor.getHTML());
+  emit('update:modelValue', editor.getHTML());
 
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(editor.getHTML(), 'text/html');
-    const currentImageSrcs: string[] = Array.from(doc.querySelectorAll('img'))
-      .map(img => img.getAttribute('src'))
-      .filter((src): src is string => src !== null);
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(editor.getHTML(), 'text/html');
+  const currentImageSrcs: string[] = Array.from(doc.querySelectorAll('img'))
+    .map(img => img.getAttribute('src'))
+    .filter((src): src is string => src !== null);
 
-    uploadedFiles.value.forEach((file) => {
-      if (file.renderType === 'INLINE') {
-        file.used = currentImageSrcs.includes(file.path);
+  let changed = false;
+
+  uploadedFiles.value.forEach((file) => {
+    if (file.renderType === 'INLINE') {
+      const shouldBeUsed = currentImageSrcs.includes(file.path);
+      if (file.used !== shouldBeUsed) {
+        file.used = shouldBeUsed;
+        changed = true;
       }
-    });
+    }
+  });
+
+  if (changed) {
     emit('update:boardFiles', uploadedFiles.value);
+    
   }
+}
 })
 
 const imgUpload = async (event: Event) => {
   const files = (event.target as HTMLInputElement).files;
   if (!files || files.length === 0) return
-
   const formData = new FormData();
-
   for (const file of files) {
     formData.append('files', file);
   }
@@ -135,6 +149,7 @@ const imgUpload = async (event: Event) => {
 
   for (const data of dataList) {
     uploadedFiles.value.push({
+      id: data.id,
       name: data.name,
       path: data.path,
       orgName: data.orgName,
@@ -150,7 +165,6 @@ const imgUpload = async (event: Event) => {
 const fileUpload = async (event: Event) => {
   const files = (event.target as HTMLInputElement).files
   if (!files || files.length === 0) return
-  console.log('텍스트 파일 객체 추적: ', files);
   const formData = new FormData();
   for (const file of files) {
     formData.append("files", file);
@@ -158,10 +172,10 @@ const fileUpload = async (event: Event) => {
 
   const response = await s3upload(formData);
   const dataList = response.data;
-  console.log('정적 파일 dataList: ', dataList);
 
   dataList.forEach((data: BoardFileListType) => {
     uploadedFiles.value.push({
+      id: data.id,
       name: data.name,
       path: data.path,
       orgName: data.orgName,
@@ -173,7 +187,6 @@ const fileUpload = async (event: Event) => {
   })
 
   // TODO 서버에 LIST, INLINE 으로 각각 저장 했고 이제 게시글 상세 랜더링 시 각각의 타입에 맞게 랜더링
-  console.log("저장 후 파일 객체: ", uploadedFiles);
   emit('update:boardFiles', uploadedFiles.value);
 }
 

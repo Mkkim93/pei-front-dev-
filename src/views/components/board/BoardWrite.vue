@@ -42,7 +42,7 @@ const submitPost = async () => {
   }
 }
 
-const removeFile = async (obj :BoardFileListType) => {
+const removeFile = async (obj: BoardFileListType) => {
   console.log('삭제할 파일:', obj);
   console.log('현재 서버로 저장될 파일들2: ', postBoard.boardFiles);
   postBoard.boardFiles.forEach((item) => {
@@ -51,6 +51,14 @@ const removeFile = async (obj :BoardFileListType) => {
     }
   });
   console.log('삭제한 파일의 used 상태: ', obj.used);
+}
+
+const nowrite = async () => {
+  const isConfirmed = confirm('게시글 작성을 취소 하시겠습니까?');
+  if (isConfirmed) {
+    alert('작성이 취소 되었습니다.');
+    router.push('/auth-table');
+  }
 }
 </script>
 
@@ -61,9 +69,7 @@ const removeFile = async (obj :BoardFileListType) => {
         <h6>게시글 작성</h6>
         <div class="d-flex gap-2 ms-auto">
           <ArgonButton color="primary" @click="submitPost">저장</ArgonButton>
-          <router-link to="/auth-table">
-            <ArgonButton color="secondary">취소</ArgonButton>
-          </router-link>
+          <ArgonButton color="secondary" @click="nowrite">취소</ArgonButton>
         </div>
       </div>
 
@@ -85,7 +91,8 @@ const removeFile = async (obj :BoardFileListType) => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(file, index) in boardFiles.filter(f => f.renderType === 'LIST' && f.used == true)" :key="index">
+                      <tr v-for="(file, index) in boardFiles.filter(f => f.renderType === 'LIST' && f.used == true)"
+                        :key="index">
                         <td class="align-middle">{{ file.name }}</td>
                         <td class="text-end align-middle" style="min-width: 400px;">{{ file.size }}</td>
                         <td class="text-end align-middle" style="min-width: 50px;">{{ file.type }}</td>

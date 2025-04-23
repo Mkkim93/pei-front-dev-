@@ -74,12 +74,24 @@ const getRoute = () => {
           :navText="isRTL ? '공지 관리' : '공지 관리'"
         >
           <template v-slot:icon>
+            <font-awesome-icon :icon="['fas', 'pen-to-square']" />
+          </template>
+        </sidenav-item>
+      </li>
+
+      <!-- <li class="nav-item">
+        <sidenav-item
+          to="#"
+          :class="getRoute() === 'tables' ? 'active' : ''"
+          :navText="isRTL ? '일정 관리' : '일정 관리'"
+        >
+          <template v-slot:icon>
             <i
               class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"
             ></i>
           </template>
         </sidenav-item>
-      </li>
+      </li> -->
 
       <li class="nav-item">
         <sidenav-item

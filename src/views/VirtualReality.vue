@@ -13,7 +13,6 @@ import setTooltip from "@/assets/js/tooltip.ts";
 import VrBg from "@/assets/img/vr-bg.jpg";
 
 const body = document.getElementsByTagName("body")[0];
-
 const store = useStore();
 
 const sidebarMinimize = () => store.commit("sidebarMinimize");

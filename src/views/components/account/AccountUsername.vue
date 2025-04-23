@@ -7,10 +7,11 @@ import { useStore } from 'vuex';
 import Navbar from '@/examples/PageLayout/Navbar.vue';
 import PeiLogo from '@/assets/img/logos/pei_logo.jpeg';
 const body = document.getElementsByTagName("body")[0];
-
-const validNumber = ref<number>(0);
-
 const store = useStore();
+const postCode = ref<boolean>(false);
+const phone = ref<string>('');
+const code = ref<string>('');
+const receivePhone = ref<string>('');
 
 onBeforeMount(() => {
   store.state.hideConfigButton = true;
@@ -26,13 +27,6 @@ onBeforeUnmount(() => {
   store.state.showFooter = false;
   body.classList.add("bg-gray-100");
 });
-
-const postCode = ref<boolean>(false);
-
-const phone = ref<string>('');
-const code = ref<string>('');
-
-const receivePhone = ref<string>('');
 
 // 인증 번호 요청
 async function postSmsCode() {

@@ -14,7 +14,8 @@ export type BoardListType = {
 }
 
 export type BoardFileListType = {
-  name?: string;
+  id: number;
+  name: string;
   path: string;
   orgName: string;
   type: string;
@@ -58,7 +59,8 @@ export type BoardDetailType = {
   updatedAt: string;
   writer: string;
   views: number;
-  boardFiles: BoardDetailFileType[]
+  usersId: number;
+  boardFiles: BoardFileListType[]
 }
 
 export type BoardDetailFileType = {
@@ -68,6 +70,7 @@ export type BoardDetailFileType = {
   orgName: string,
   path: string,
   renderType: string,
+  used: boolean,
 }
 
 // TYPE 3: BOARD UPDATE
@@ -75,6 +78,19 @@ export type BoardUpdateType = {
   id: number;
   title: string;
   content: string;
+  boardFiles: BoardFileListType[]
+}
+
+export type BoardFileUpdateType = {
+  id: number;
+  name: string;
+  path: string;
+  orgName: string;
+  type: string;
+  size: number;
+  renderType: string;
+  used: boolean;
+  boardId: number;
 }
 
 // TYPE 4: BOARD DELETE

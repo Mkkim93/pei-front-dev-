@@ -6,7 +6,11 @@ import { NotifyListType, PageInfoType } from '@/types/notify';
 import ArgonCheckbox from '@/components/ArgonCheckbox.vue';
 import ArgonPagination from '@/components/ArgonPagination.vue';
 import ArgonPaginationItem from '@/components/ArgonPaginationItem.vue';
+import ArgonSwitch from '@/components/ArgonSwitch.vue';
 
+const checkboxKey = ref<boolean>(false);
+const isChecked = ref<boolean>(false);
+const filterisRead = ref<boolean>(false);
 const notifyList = ref<NotifyListType[]>([]);
 const pageData = ref<PageInfoType | null>(null);
 const currentPage = ref(0);
@@ -22,16 +26,18 @@ const paginatedPages = computed(() => {
  
 const changePage = async (page: number) => {
   if (page < 0 || (pageData.value && page >= pageData.value.totalPages)) return;
-  const response = await fetchNotifyListAll(page, 10);
+  const response = await fetchNotifyListAll(page, 10, filterisRead.value);
   notifyList.value = response.data.content;
   pageData.value = response.data.page;
   currentPage.value = page;
+  isChecked.value = false;
+  checkboxKey.value = !checkboxKey.value;
 }
 
 const notifyIds = ref<string[]>();
 
 onMounted(async () => {
-  const response = await fetchNotifyListAll(0, 10);
+  const response = await fetchNotifyListAll(0, 10, filterisRead.value);
   notifyList.value = response.data.content;
   pageData.value = response.data.page;
 })
@@ -45,18 +51,26 @@ const isReadTrue = async () => {
   }));
 }
 
-
+const toggleNotifyFilter = async () => {
+  filterisRead.value = !filterisRead.value;
+  const response = await fetchNotifyListAll(0, 10, filterisRead.value);
+  notifyList.value = response.data.content;
+  pageData.value = response.data.page;
+  currentPage.value = 0;
+};
 </script>
 
 <template>
   <div class="card mt-1">
       <div class="card-header pb-0 d-flex justify-content-between align-items-center">
         <h6>알림 목록</h6>
-          <ArgonCheckbox variant="outline" size="sm" color="success" id="notifyIds" @change="isReadTrue">
+          <ArgonCheckbox variant="outline" size="sm" color="success" id="notifyIds" :checked="isChecked" @change="isReadTrue" :key="checkboxKey">
             모두 읽음 처리
           </ArgonCheckbox>
       </div>
-
+      <div class="card-header pb-0 d-flex justify-content-between align-items-left">
+        <ArgonSwitch id="notifyIds" name="readFilter" @change="toggleNotifyFilter">읽지 않은 알림</ArgonSwitch>
+      </div>
       <div class="card-body px-4 pt-3 pb-2">
         <div class="table-responsive p-3">
 
@@ -72,11 +86,11 @@ const isReadTrue = async () => {
             </thead>
 
             <tbody>
-              <tr v-for="notify in notifyList" :key="notify.id">
+              <tr v-for="notify in notifyList" :key="notify.id">         
                 <td>
                   <div class="d-flex px-2 py-1">
                     <div>
-                      <img src="../../assets/img/team-2.jpg" class="avatar avatar-sm me-3" alt="user1" />
+                      <!-- <img src="../../assets/img/team-2.jpg" class="avatar avatar-sm me-3" alt="user1" /> -->
                     </div>
                     <div class="d-flex flex-column justify-content-center">
                       <router-link :to="`${notify.url}${notify.targetId}`"> <!-- TODO: 나중에 NotifyList 에서 넘어온 url 로 변경-->
@@ -99,18 +113,18 @@ const isReadTrue = async () => {
                   <span class="text-secondary text-xs font-weight-bold">{{ formatDate(notify.createdAt) }}</span>
                 </td>
               </tr>
+
             </tbody>
           </table>
-          <!-- Pagination -->
+
           <ArgonPagination variant="gradient" class="mt-3 justify-content-center">
-            <!-- 이전 그룹 -->
+
             <ArgonPaginationItem
               :disabled="currentGroup === 0"
               @click="changePage((currentGroup - 1) * groupSize)"
               prev
             />
 
-            <!-- 페이지 번호 -->
             <ArgonPaginationItem
               v-for="page in paginatedPages"
               :key="page"
@@ -120,7 +134,6 @@ const isReadTrue = async () => {
               {{ page }}
             </ArgonPaginationItem>
 
-            <!-- 다음 그룹 -->
             <ArgonPaginationItem
               :disabled="(currentGroup + 1) * groupSize >= (pageData?.totalPages ?? 0)"
               @click="changePage((currentGroup + 1) * groupSize)"

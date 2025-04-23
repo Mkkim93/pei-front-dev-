@@ -3,7 +3,7 @@ import { ref, onMounted } from "vue";
 import { formatDate } from "@/utils/date";
 import ArgonPagination from "@/components/ArgonPagination.vue";
 import ArgonPaginationItem from "@/components/ArgonPaginationItem.vue";
-import { NotifyType } from "@/types/notify";
+import { NotifyListType } from "@/types/notify";
 
 </script>
 <template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onBeforeMount, watch, ref, computed } from "vue";
+import { onBeforeUnmount, onBeforeMount, watch, ref } from "vue";
 import { useStore } from "vuex";
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import AppFooter from "@/examples/PageLayout/Footer.vue";
@@ -36,7 +36,7 @@ const {
 
     username, password, confirmPassword,
     name, phone, mail, code,
-    validUsername, validPassword, validPasswordMatched, validPhone,
+    validPasswordMatched,
     
     errorMessage, showErrorMessage,
     successMessage, showSuccessMessage,

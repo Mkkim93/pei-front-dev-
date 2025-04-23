@@ -19,7 +19,6 @@ onMounted(async () => {
   console.log('response: ', response);
   Object.assign(profile, response.data); // reactive 객체 업데이트
   console.log('profile: ', profile);
-  // nameInput.value = profile.name;
 });
 </script>
 

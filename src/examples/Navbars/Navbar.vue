@@ -7,6 +7,7 @@ import axios from "@/plugins/axiosAuth";
 import { fetchNotifyListAll } from "@/api/notify";
 import { formatDateDetail } from "@/utils/date";
 
+const filterIsRead = ref<undefined>('');
 const showMenu = ref(false);
 const store = useStore();
 const isRTL = computed(() => store.state.isRTL);
@@ -17,6 +18,7 @@ const isLoading = ref(false);
 // TODO 메서드 호출 지연
 // const delay = (ms :number) => new Promise(resolve => setTimeout(resolve, ms));
 
+// TODO badge 는 최근 읽지 않은 알림이 없을 때는 비활성화 (현재는 항상 랜더링 되어 있음)
 const currentRouteName = computed(() => {
   return route.name;
 });
@@ -31,7 +33,7 @@ const toggleConfigurator = () => store.commit("toggleConfigurator");
 const closeMenu = () => {
   setTimeout(() => {
     showMenu.value = false;
-  }, 100);
+  }, 1000);
 };
 
 const logout = async () => {
@@ -50,7 +52,7 @@ const callMethodTest = async () => {
   isLoading.value = true;
   try {
     console.log('📡 callMethodTest render');
-    const response = await fetchNotifyListAll(0, 3);
+    const response = await fetchNotifyListAll(0, 3, filterIsRead);
     notifyList.value = response.data.content;
     console.log('response success: ', notifyList.value);
     showMenu.value = true;
@@ -111,7 +113,7 @@ const callMethodTest = async () => {
               </div>
             </a>
             <ul class="px-2 py-3 dropdown-menu dropdown-menu-end me-sm-n4" :class="showMenu ? 'show' : ''"
-              aria-labelledby="dropdownMenuButton">
+              >
 
               <div class="d-flex justify-content-between align-items-center px-3 mt-2">
                 <p class="m-1 mb-0">최근 알림</p>

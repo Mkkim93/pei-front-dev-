@@ -21,6 +21,7 @@ import MySetting from "@/views/components/my/MySetting.vue";
 import MyProfile from "@/views/components/my/MyProfile.vue";
 import BoardUpdate from "@/views/components/board/BoardUpdate.vue";
 import BoardDetail from "@/views/components/board/BoardDetail.vue";
+import ResetPassword from "@/views/components/account/ResetPassword.vue";
 
 const routes = [
   {
@@ -52,39 +53,6 @@ const routes = [
     path: "/rtl-page",
     name: "서비스 관리",
     component: RTL,
-  },
-  {
-    path: "/profile",
-    name: "Profile",
-    component: Profile,
-    props: true,
-    redirect: { name: 'MyProfile' },
-    children: [
-      {
-        path: "my-activity",
-        name: "MyActivity",
-        component: MyActivity,
-        props: true,
-      },
-      {
-        path: "my-notify",
-        name: "MyNotify",
-        component: MyNotify,
-        props: true,
-      },
-      {
-        path: "my-setting",
-        name: "MySetting",
-        component: MySetting,
-        props: true,
-      },
-      {
-        path: "my-profile",
-        name: "MyProfile",
-        component: MyProfile,
-        props: true,
-      }
-    ],
   },
   {
     path: "/signin",
@@ -128,7 +96,43 @@ const routes = [
     component: BoardUpdate,
     props: true,
   },
-
+  {
+    path: "/reset-password",
+    component: ResetPassword,
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
+    props: true,
+    redirect: { name: 'MyProfile' },
+    children: [
+      {
+        path: "my-activity",
+        name: "MyActivity",
+        component: MyActivity,
+        props: true,
+      },
+      {
+        path: "my-notify",
+        name: "MyNotify",
+        component: MyNotify,
+        props: true,
+      },
+      {
+        path: "my-setting",
+        name: "MySetting",
+        component: MySetting,
+        props: true,
+      },
+      {
+        path: "my-profile",
+        name: "MyProfile",
+        component: MyProfile,
+        props: true,
+      }
+    ],
+  },
 ];
 
 const router = createRouter({
@@ -157,6 +161,10 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.path === '/recover-password') {
+    return next();
+  }
+
+  if (to.path === '/reset-password') {
     return next();
   }
 

@@ -12,7 +12,6 @@ const currentPage = ref(0);
 const groupSize = 10;
 const currentGroup = computed(() => Math.floor(currentPage.value / groupSize));
 
-
 const paginatedPages = computed(() => {
   const total = pageData.value?.totalPages ?? 1;
   const start = currentGroup.value * groupSize + 1;
@@ -40,9 +39,6 @@ onMounted(async() => {
   <div class="card mt-1">
       <div class="card-header pb-0 d-flex justify-content-between align-items-center">
         <h6>활동 기록</h6>
-          <!-- <ArgonCheckbox variant="outline" size="sm" color="success" id="notifyIds" @change="isReadTrue">
-            모두 읽음 처리
-          </ArgonCheckbox> -->
       </div>
 
       <div class="card-body px-4 pt-3 pb-2">
@@ -83,16 +79,15 @@ onMounted(async() => {
               </tr>
             </tbody>
           </table>
-          <!-- Pagination -->
+
           <ArgonPagination variant="gradient" class="mt-3 justify-content-center">
-            <!-- 이전 그룹 -->
+
             <ArgonPaginationItem
               :disabled="currentGroup === 0"
               @click="changePage((currentGroup - 1) * groupSize)"
               prev
             />
 
-            <!-- 페이지 번호 -->
             <ArgonPaginationItem
               v-for="page in paginatedPages"
               :key="page"
@@ -102,7 +97,6 @@ onMounted(async() => {
               {{ page }}
             </ArgonPaginationItem>
 
-            <!-- 다음 그룹 -->
             <ArgonPaginationItem
               :disabled="(currentGroup + 1) * groupSize >= (pageData?.totalPages ?? 0)"
               @click="changePage((currentGroup + 1) * groupSize)"

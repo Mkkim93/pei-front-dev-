@@ -24,11 +24,13 @@ export async function fetchNotifyList(
 export async function fetchNotifyListAll(
   x: number | undefined,
   y: number | undefined,
+  filterisRead: boolean,
 ): Promise<NotifyListResponse> {
   const response = await axiosPublic.get('/api/notify', {
     params: {
       page: x,
       size: y,
+      filterIsRead: filterisRead,
     },
     headers: {
       Authorization: store.getters.accessToken

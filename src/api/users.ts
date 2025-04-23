@@ -18,5 +18,15 @@ export async function postUsername(phone :string, code :string): Promise<ApiResp
     const response = await axiosPublic.post(`/api/users/receiver-username?phone=${phone}&code=${code}`);
     return response.data;
 }
+
+export async function requestPasswordLink(mail :string): Promise<ApiResponse<string>> {
+    const response = await axiosPublic.post(`/api/users/auth-recover?mail=${mail}`);
+    return response.data;
+}
+
+export async function requestResetPassword(token :string, password :string): Promise<ApiResponse<string>> {
+    const response = await axiosPublic.post(`/api/users/auth-reset?token=${token}&password=${password}`);
+    return response.data;
+} 
    
 

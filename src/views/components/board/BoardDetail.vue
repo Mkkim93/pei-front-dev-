@@ -2,12 +2,17 @@
 import { reactive, onMounted, ref } from "vue";
 import { fetchBoardDetail, deleteBoardIds, downloadFile } from "@/api/board";
 import { useRoute } from "vue-router";
-import { BoardDetailType, BoardDeleteIdsType, BoardDetailFileType } from "@/types/board";
+import { BoardDetailType, BoardDeleteIdsType, BoardFileListType } from "@/types/board";
 import { formatDateDetail } from "@/utils/date";
 import ArgonButton from "@/components/ArgonButton.vue";
 import router from "@/router";
 import { AxiosError } from "axios";
+import { decodePayload } from "@/types/jwt.d";
+import store from "@/store";
 
+
+const userRoleType = ref<string>();
+const userId = ref<number>(0);
 const route = useRoute();
 const boardContent = reactive<BoardDetailType>({
   id: 0,
@@ -16,12 +21,18 @@ const boardContent = reactive<BoardDetailType>({
   updatedAt: '',
   writer: '',
   views: 0,
+  usersId: 0,
   boardFiles: [],
 });
-const boardFileContent = ref<BoardDetailFileType[]>([]);
+
+const boardFileContent = ref<BoardFileListType[]>([]);
 const delIds = ref<BoardDeleteIdsType>();
 
 onMounted(async () => {
+  const token = store.getters.accessToken;
+  const payload = decodePayload(token);
+  userRoleType.value = (await payload).roles;
+  userId.value = (await payload).id;
 
   const id = Number(route.params.id);
 
@@ -31,14 +42,10 @@ onMounted(async () => {
   }
 
   try {
-    
     const response = await fetchBoardDetail(id);
     Object.assign(boardContent, response.data);
     boardFileContent.value = boardContent.boardFiles;
-
   } catch (error) {
-
-    console.log("로그에서 없는 게시글 조회 시: ", error);
     const axiosError = error as AxiosError | any;
     const errorMessage = axiosError.data.message || "알 수 없는 오류입니다.";
     alert(errorMessage);
@@ -48,12 +55,9 @@ onMounted(async () => {
 
 const deleteBoards = async () => {
   const isConfirmed = confirm('게시글을 삭제 하시겠습니까?');
-
   if (isConfirmed) {
     delIds.value = { id: boardContent.id }
-    console.log('delIds: ', delIds.value);
     try {
-
       const response = await deleteBoardIds(delIds.value);
       alert(response.message);
       router.push('/auth-table');
@@ -84,13 +88,15 @@ const download = async (id: number, name: string) => {
           <router-link to="/auth-table">
             <argon-button color="dark">목록</argon-button>
           </router-link>
-
-          <router-link :to="`/update/${boardContent.id}`">
-            <argon-button color="secondary">수정</argon-button>
-          </router-link>
-
-          <argon-button color="light" @click="deleteBoards">삭제
-          </argon-button>
+          <div v-if="userRoleType === 'ROLE_ADMIN' || boardContent.usersId === userId">
+            <div>
+              <router-link :to="`/update/${boardContent.id}`">
+                <argon-button color="secondary">수정</argon-button>
+              </router-link>
+              <argon-button color="light" @click="deleteBoards">삭제
+              </argon-button>
+            </div>
+          </div>
         </div>
 
       </div>
