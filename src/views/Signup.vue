@@ -6,7 +6,7 @@ import AppFooter from "@/examples/PageLayout/Footer.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonCheckbox from "@/components/ArgonCheckbox.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
-import PeiLogo from '@/assets/img/logos/pei_logo.jpeg';
+
 import { userSignUp } from "@/api/signup";
 import ArgonAlert from "@/components/ArgonAlert.vue";
 import ArgonProgress from "@/components/ArgonProgress.vue";
@@ -132,9 +132,7 @@ watch([password, confirmPassword], ([newPass, newConfirm]) => {
               <h5>회원 가입</h5>
             </div>
             <div class="row px-xl-5 px-sm-4 px-3">
-              <a class="btn btn-outline-light w-100" href="javascript:;">
-                <img :src="PeiLogo" alt="logo" style="width: 20%; height: 100%;" />
-              </a>
+              
               <div class="mt-2 position-relative text-center">
                 <p class="text-sm font-weight-bold mb-2 text-secondary text-border d-inline z-index-2 bg-white px-3">
                   or

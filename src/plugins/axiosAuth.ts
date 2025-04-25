@@ -34,7 +34,7 @@ instance.interceptors.response.use(
         const code = error.response?.data?.code;
         const status = error.response?.status;
         
-        console.log("[Axios response Interceptor Issue]: ", error.response?.data); // 응답 유형 체크
+        console.log("[Axios Auth response Interceptor Issue]: ", error.response?.data); // 응답 유형 체크
 
         if (status === 400) {
             return Promise.reject(error.response);

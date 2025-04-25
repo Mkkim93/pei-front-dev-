@@ -35,6 +35,8 @@
     "@tiptap/pm": "^2.11.7",
     "@tiptap/starter-kit": "^2.11.7",
     "@tiptap/vue-3": "^2.11.7",
+    "ag-grid-community": "^33.2.4",
+    "ag-grid-vue3": "^33.2.4",
     "axios": "^1.8.4",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.8",

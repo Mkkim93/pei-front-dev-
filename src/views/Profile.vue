@@ -98,6 +98,13 @@ onBeforeUnmount(() => {
                   </li>
                   <li class="nav-item">
                     <router-link class="px-0 py-1 mb-0 nav-link active" active-class="active"
+                      :to="{ name: 'UserManager' }" role="tab" aria-selected="false">
+                      <font-awesome-icon :icon="['fas', 'users-gear']" />
+                      <span class="ms-1">권한</span>
+                    </router-link>
+                  </li>
+                  <li class="nav-item">
+                    <router-link class="px-0 py-1 mb-0 nav-link active" active-class="active"
                       :to="{ name: 'MySetting' }" role="tab" aria-selected="false">
                       <font-awesome-icon :icon="['fas', 'gear']" />
                       <span class="ms-1">설정</span>

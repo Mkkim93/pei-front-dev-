@@ -85,7 +85,7 @@ const download = async (id: number, name: string) => {
             <div class="card-header pb-4 d-flex justify-content-between align-items-center">
                 <h6>게시글 수정</h6>
                 <div class="d-flex gap-2 ms-auto">
-                    <ArgonButton color="primary" @click="patchContent">수정</ArgonButton>
+                    <ArgonButton color="primary" @click="patchContent">완료</ArgonButton>
                     <router-link :to="`/detail/${boardContent.id}`">
                         <ArgonButton color="secondary">취소</ArgonButton>
                     </router-link>
@@ -93,28 +93,39 @@ const download = async (id: number, name: string) => {
             </div>
             <div class="card-body px-4 pt-2 pb-2">
                 <div class="table-responsive p-0" style="overflow: visible;">
-                    <div class="p-4">
-                        <div class="col-md-3">
-                            <span class="bbs-label">작성자:</span>
-                            <span class="bbs-value"> {{ boardContent.writer }} </span>
+
+                    <div class="d-flex justify-content-between flex-wrap align-items-center mb-4 gap-3">
+                        <div class="text-truncate">
+                            <span class="fw-bold text-dark me-2">제목:</span>
+                            <span>{{ boardContent.title }}</span>
                         </div>
-                        <div class="col-md-3">
-                            <span class="bbs-label">작성일:</span>
-                            <span class="bbs-value"> {{ formatDateDetail(boardContent.updatedAt) }} </span>
+                        <div>
+                            <span class="fw-bold text-dark me-2">작성자:</span>
+                            <span>{{ boardContent.writer }}</span>
                         </div>
-                        <span class="bbs-label">제목</span>
-                        <ArgonInput type="text" placeholder="제목을 입력해주세요" class="mb-3" v-model="boardContent.title" />
+                        <div>
+                            <span class="fw-bold text-dark me-2">작성일:</span>
+                            <span>{{ formatDateDetail(boardContent.updatedAt) }}</span>
+                        </div>
                     </div>
 
-                    <div class="col-md-4 text-md-end">
-                        <div v-for="f in boardFileContent" :key="f.id">
-                            <div v-if="f.renderType === 'LIST' && f.used === true">
-                                <argon-button size="sm" variant="outline" @click="removeStore(f.id)">x</argon-button>
-                                <span>{{ f.orgName }}</span>
-                                <argon-button size="sm" @click="download(f.id, f.name)">다운로드</argon-button>
-                            </div>
+                    <div v-if="boardFileContent.length" class="mb-4">
+                    <div v-for="f in boardFileContent.filter(f => f.renderType === 'LIST')" :key="f.id"
+                        class="d-flex justify-content-between align-items-center list-group-item">
+                        <!-- 왼쪽: 파일 이름 -->
+                        <span>{{ f.orgName }}</span>
+
+                        <!-- 오른쪽: 버튼 그룹 -->
+                        <div class="d-flex gap-2 ms-auto">
+                            <argon-button size="sm" variant="outline" color="primary" @click="download(f.id, f.name)">
+                                <font-awesome-icon :icon="['fas', 'file-arrow-down']" />
+                            </argon-button>
+                            <argon-button size="sm" variant="outline" color="danger" @click="removeStore(f.id)">
+                                <font-awesome-icon :icon="['fas', 'trash']" />
+                            </argon-button>
                         </div>
                     </div>
+                </div>
                     <EditorManager v-model="boardContent.content" @update:boardFiles="newFileUpdate" />
                 </div>
             </div>
@@ -125,5 +136,11 @@ const download = async (id: number, name: string) => {
 <style scoped>
 .custom-card {
     min-height: 80vh;
+}
+
+.editor-content {
+    min-height: 200px;
+    font-size: 1rem;
+    line-height: 1.6;
 }
 </style>

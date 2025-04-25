@@ -102,7 +102,18 @@ export type BoardDeleteIdsType = {
 export interface BoardCreateType {
   title: string;
   content: string;
+  isTemp: boolean;
   boardFiles: BoardFileListType[]
+}
+
+// TYPE 6: BOARD TEMP
+export type BoardTempListType = {
+  id: number;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  usersId: number;
+  page: PageInfoType[]
 }
 
 

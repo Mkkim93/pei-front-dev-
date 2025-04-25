@@ -1,6 +1,6 @@
 // api/board.ts
 import axiosAuth from "@/plugins/axiosAuth";
-import type { BoardListResponse, BoardDetailResponse, BoardUpdateType, BoardDeleteIdsType, BoardCreateType } from "@/types/board.d";
+import type { BoardListResponse, BoardDetailResponse, BoardUpdateType, BoardDeleteIdsType, BoardCreateType, BoardTempListType } from "@/types/board.d";
 import { ApiResponse } from "@/types/api";
 
 // 게시글 목록 조회
@@ -42,6 +42,16 @@ export async function createPost(obj: BoardCreateType): Promise<ApiResponse<numb
   return response.data;
 }
 
+// 임시 저장
+export async function createTempPost(obj: BoardCreateType): Promise<ApiResponse<number>> {
+  const response = await axiosAuth.post(`/api/board/temp`, obj, {
+    headers: {
+      "Content-Type": "application/json",
+    }
+  })
+  return response.data;
+}
+
 // 삭제
 export async function deleteBoardIds(ids: BoardDeleteIdsType) {
   const param = Array.isArray(ids.id)
@@ -51,31 +61,44 @@ export async function deleteBoardIds(ids: BoardDeleteIdsType) {
   return response.data;
 }
 
+export async function fetchTempBoardList(
+  x: number | undefined,
+  y: number | undefined,
+  keyword: string | undefined,
+): Promise<BoardTempListType> {
+  const response = await axiosAuth.get(`/api/board/temp`, {
+    params: {
+      page: x,
+      size: y,
+      searchKeyword: keyword,
+    },
+  })
+  return response.data;
+}
+
 // TODO 파일 다운로드 api (예외처리 할 것)
 export async function downloadFile(id: number, name: string): Promise<number> {
   let responseStatus: number = 0;
-
   try {
     const response = await axiosAuth.get(`/api/file/download/${id}`,
       { responseType: 'blob' });
     responseStatus = response.status;
     const blob = new Blob([response.data], { type: response.headers['content-type'] });
-
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
-    
+
     link.href = url;
-    
+
     link.setAttribute('download', name);
 
     document.body.appendChild(link);
-    
+
     link.click();
 
     window.URL.revokeObjectURL(url); // blob 해제  
-    
+
     document.body.removeChild(link);
-  
+
   } catch (error) {
     console.log('error: ', error);
   }

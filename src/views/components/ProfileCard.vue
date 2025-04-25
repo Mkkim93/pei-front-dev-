@@ -49,11 +49,11 @@
           <div class="d-flex justify-content-center">
             <div class="d-grid text-center">
               <span class="text-lg font-weight-bolder">22</span>
-              <span class="text-sm opacity-8">-</span>
+              <span class="text-sm opacity-8">임시저장 글</span>
             </div>
             <div class="d-grid text-center mx-4">
               <span class="text-lg font-weight-bolder">10</span>
-              <span class="text-sm opacity-8">-</span>
+              <span class="text-sm opacity-8">작성한 글</span>
             </div>
             <div class="d-grid text-center">
               <span class="text-lg font-weight-bolder">89</span>

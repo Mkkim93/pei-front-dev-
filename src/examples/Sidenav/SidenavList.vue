@@ -136,12 +136,12 @@ const getRoute = () => {
 
       <!-- <li class="nav-item">
         <sidenav-item
-          to="/signin"
-          :class="getRoute() === 'signin' ? 'active' : ''"
-          :navText="isRTL ? '로그인' : '로그인'"
+          to="/user-manager"
+          :class="getRoute() === 'user-manager' ? 'active' : ''"
+          :navText="isRTL ? '사용자' : '사용자'"
         >
           <template v-slot:icon>
-            <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>
+            <font-awesome-icon :icon="['fas', 'users-gear']" />
           </template>
         </sidenav-item>
       </li> -->

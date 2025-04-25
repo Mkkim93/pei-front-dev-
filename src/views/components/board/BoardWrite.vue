@@ -1,36 +1,56 @@
 <script setup lang="ts">
-import { ref, reactive, watchEffect } from "vue";
+import { ref, reactive } from "vue";
 import EditorManager from "@/examples/editor/EditorManager.vue";
 import ArgonInput from '@/components/ArgonInput.vue';
 import ArgonButton from '@/components/ArgonButton.vue';
 import { AxiosError } from "axios";
-import { createPost } from "@/api/board";
+import { createPost, createTempPost } from "@/api/board";
 import router from "@/router";
 import { BoardCreateType, BoardFileListType } from "@/types/board";
 
 const boardFiles = ref<BoardFileListType[]>([]);
 const title = ref('');
 const content = ref('');
+const isTemp = ref<boolean>(false);
 
 const postBoard = reactive<BoardCreateType>({
   title: title.value,
   content: content.value,
+  isTemp: isTemp.value,
   boardFiles: boardFiles.value
 });
+
+const submitTemp = async () => {
+  const postBoard: BoardCreateType = {
+    title: title.value,
+    content: content.value,
+    isTemp: true,
+    boardFiles: boardFiles.value,
+  };
+  console.log('emit:updateBoardfiles: ', postBoard.boardFiles);
+  try {
+    await createTempPost(postBoard);
+    alert('임시 저장 완료');
+  } catch (error) {
+    console.error("submitTemp error: ", error);
+  }
+}
 
 const handleBoardFilesUpdate = (files: BoardFileListType[]) => {
   boardFiles.value = files;
   postBoard.boardFiles = files;
-  console.log("저장전 파일 객체: ", postBoard.boardFiles);
 };
 
 const submitPost = async () => {
+  isTemp.value = false;
   const postBoard: BoardCreateType = {
     title: title.value,
     content: content.value,
+    isTemp: isTemp.value,
     boardFiles: boardFiles.value,
   };
-  console.log('emit 으로 넘어온 updateBoardfiles: ', postBoard.boardFiles);
+  
+  console.log('emit:updateBoardfiles: ', postBoard.boardFiles);
   try {
     const response = await createPost(postBoard);
     alert(response.message);
@@ -43,14 +63,11 @@ const submitPost = async () => {
 }
 
 const removeFile = async (obj: BoardFileListType) => {
-  console.log('삭제할 파일:', obj);
-  console.log('현재 서버로 저장될 파일들2: ', postBoard.boardFiles);
   postBoard.boardFiles.forEach((item) => {
     if (item.name === obj.name) {
       obj.used = false;
     }
   });
-  console.log('삭제한 파일의 used 상태: ', obj.used);
 }
 
 const nowrite = async () => {
@@ -68,7 +85,8 @@ const nowrite = async () => {
       <div class="card-header pb-4 d-flex justify-content-between align-items-center">
         <h6>게시글 작성</h6>
         <div class="d-flex gap-2 ms-auto">
-          <ArgonButton color="primary" @click="submitPost">저장</ArgonButton>
+          <ArgonButton color="dark" variant="outline" @click="submitTemp">임시저장</ArgonButton>
+          <ArgonButton color="primary" @click="submitPost">완료</ArgonButton>
           <ArgonButton color="secondary" @click="nowrite">취소</ArgonButton>
         </div>
       </div>

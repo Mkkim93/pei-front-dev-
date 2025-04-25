@@ -4,5 +4,5 @@ export interface ApiResponse<T> {
     message: string;
     errorCode?: string | undefined;
     timestamp: string;
-    data: T;
+    data: T | null;
 }

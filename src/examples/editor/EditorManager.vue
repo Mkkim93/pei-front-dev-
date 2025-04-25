@@ -14,13 +14,11 @@ import Link from '@tiptap/extension-link'
 import ListItem from '@tiptap/extension-list-item'
 import FontFamily from '@tiptap/extension-font-family'
 import ListKeymap from '@tiptap/extension-list-keymap'
-
-import ImageResize from 'tiptap-extension-resize-image';
+import ImageResize from 'tiptap-extension-resize-image'
 
 const editor = ref<Editor | any>(null);
 const fileInput = ref<HTMLInputElement | null>(null);
 const showUploadMenu = ref(false);
-
 const imageInput = ref<HTMLInputElement | null>(null);
 const uploadedFiles = ref<BoardFileListType[]>([]);
 
@@ -288,13 +286,7 @@ const colors = [
       :disabled="!editor.can().sinkListItem('listItem')">
       format_list_bulleted_add
     </button>
-    <button class="icon-btn" @click="editor.chain().focus().liftListItem('listItem').run()"
-      :disabled="!editor.can().liftListItem('listItem')">
-      filter_list_off
-    </button>
-
     <p class="bar">|</p>
-
     <button class="icon-btn" @click="editor.chain().focus().setTextAlign('left').run()"
       :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }">
       format_align_left
@@ -311,10 +303,6 @@ const colors = [
       :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }">
       format_align_justify
     </button>
-    <button class="icon-btn" @click="editor.chain().focus().unsetTextAlign().run()">
-      format_clear
-    </button>
-    <p class="bar">|</p>
   </div>
   <editor-content :editor="editor" class="tiptap" />
 </template>

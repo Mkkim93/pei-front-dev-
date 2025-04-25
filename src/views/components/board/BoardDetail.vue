@@ -43,6 +43,7 @@ onMounted(async () => {
 
   try {
     const response = await fetchBoardDetail(id);
+    console.log('상세페이지 데이터: ', response.data);
     Object.assign(boardContent, response.data);
     boardFileContent.value = boardContent.boardFiles;
   } catch (error) {
@@ -61,7 +62,6 @@ const deleteBoards = async () => {
       const response = await deleteBoardIds(delIds.value);
       alert(response.message);
       router.push('/auth-table');
-
     } catch (error) {
       console.error('delete error: ', error);
     }
@@ -79,58 +79,58 @@ const download = async (id: number, name: string) => {
 </script>
 
 <template>
-  <div class="container-flud">
+  <div class="container-fluid">
     <div class="card mt-6 px-4 custom-card">
       <div class="card-header pb-4 d-flex justify-content-between align-items-center">
         <h6>상세 페이지</h6>
         <div class="d-flex gap-2 ms-auto">
-
           <router-link to="/auth-table">
             <argon-button color="dark">목록</argon-button>
           </router-link>
-          <div v-if="userRoleType === 'ROLE_ADMIN' || boardContent.usersId === userId">
-            <div>
-              <router-link :to="`/update/${boardContent.id}`">
-                <argon-button color="secondary">수정</argon-button>
-              </router-link>
-              <argon-button color="light" @click="deleteBoards">삭제
+          <div v-if="userRoleType === 'ROLE_ADMIN' || boardContent.usersId === userId" class="d-flex gap-2">
+            <router-link :to="`/update/${boardContent.id}`">
+              <argon-button color="secondary">수정</argon-button>
+            </router-link>
+            <argon-button color="light" @click="deleteBoards">삭제</argon-button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body px-4 pt-2 pb-4">
+        <!-- 제목 -->
+        <!-- 제목, 작성자, 작성일을 가로 정렬 -->
+        <div class="d-flex justify-content-between flex-wrap align-items-center mb-4 gap-3">
+          <div class="text-truncate">
+            <span class="fw-bold text-dark me-2">제목:</span>
+            <span>{{ boardContent.title }}</span>
+          </div>
+          <div>
+            <span class="fw-bold text-dark me-2">작성자:</span>
+            <span>{{ boardContent.writer }}</span>
+          </div>
+          <div>
+            <span class="fw-bold text-dark me-2">작성일:</span>
+            <span>{{ formatDateDetail(boardContent.updatedAt) }}</span>
+          </div>
+        </div>
+
+        <!-- 파일 다운로드 목록 -->
+        <div v-if="boardFileContent.length" class="mb-4">
+          <label class="fw-bold text-dark">첨부 파일</label>
+          <div class="list-group">
+            <div v-for="f in boardFileContent.filter(f => f.renderType === 'LIST')" :key="f.id"
+              class="d-flex justify-content-between align-items-center list-group-item">
+              <span>{{ f.orgName }}</span>
+              <argon-button size="sm" variant="outline" color="primary" @click="download(f.id, f.name)">
+                <font-awesome-icon :icon="['fas', 'file-arrow-down']" />
               </argon-button>
             </div>
           </div>
         </div>
+        <!-- 에디터 본문 -->
+        <!-- 상세 페이지 템플릿 -->
+<div class="editor-content border rounded p-3 min-editor-height" v-html="boardContent.content"></div>
 
-      </div>
-
-      <div class="card-body px-4 pt-2 pb-2">
-        <div class="table-responsive p-0" style="overflow: visible;">
-          <div class="p-4">
-            <div class="col-md-5">
-              <span class="bbs-label">제목:</span>
-              <span class="bbs-value">{{ boardContent.title }}</span>
-            </div>
-
-            <div class="col-md-3">
-              <span class="bbs-label">작성자:</span>
-              <span class="bbs-value">{{ boardContent.writer }}</span>
-            </div>
-
-            <div class="col-md-4 text-md-end">
-              <span class="bbs-label">작성일:</span>
-              <span class="bbs-value">{{ formatDateDetail(boardContent.updatedAt) }}</span>
-            </div>
-
-            <div class="col-md-4 text-md-end">
-              <div v-for="f in boardFileContent" :key="f.id">
-                <div v-if="f.renderType === 'LIST'">
-                  <span>{{ f.orgName }}</span>
-                  <argon-button @click="download(f.id, f.name)">다운로드</argon-button>
-                </div>
-              </div>
-            </div>
-            <!-- 에디터 영역 -->
-            <div v-html="boardContent.content"></div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -139,5 +139,15 @@ const download = async (id: number, name: string) => {
 <style scoped>
 .custom-card {
   min-height: 80vh;
+}
+
+.editor-content {
+  min-height: 200px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.min-editor-height {
+  min-height: 400px;
 }
 </style>

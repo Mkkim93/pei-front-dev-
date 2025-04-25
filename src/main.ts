@@ -13,6 +13,8 @@ import "material-design-icons-iconfont/dist/material-design-icons.css";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fas } from "@fortawesome/free-solid-svg-icons";
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community'; 
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 const app = createApp(App);
 const options: PluginOptions = {
@@ -37,6 +39,7 @@ axios.defaults.withCredentials = true;
 app.config.globalProperties.$axios = axios;
 app.config.globalProperties.store = store;
 app.config.globalProperties.emitter = emitter;
+
 app.component('font-awesome-icon', FontAwesomeIcon);
 library.add(fas);
 app.use(Toast, options);

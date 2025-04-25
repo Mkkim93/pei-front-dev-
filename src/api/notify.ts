@@ -10,8 +10,8 @@ export async function fetchNotifyList(
 ): Promise<NotifyListResponse> {
   const response = await axiosAuth.get('/api/notify/isDisplayed', {
     params: {
-      page: 0,
-      size: 5,
+      page: x,
+      size: y,
     },
     headers: {
       Authorization: store.getters.accessToken

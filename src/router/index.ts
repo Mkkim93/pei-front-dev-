@@ -22,6 +22,7 @@ import MyProfile from "@/views/components/my/MyProfile.vue";
 import BoardUpdate from "@/views/components/board/BoardUpdate.vue";
 import BoardDetail from "@/views/components/board/BoardDetail.vue";
 import ResetPassword from "@/views/components/account/ResetPassword.vue";
+import UserManager from "@/views/components/my/auth/UserManager.vue";
 
 const routes = [
   {
@@ -129,6 +130,12 @@ const routes = [
         path: "my-profile",
         name: "MyProfile",
         component: MyProfile,
+        props: true,
+      },
+      {
+        path: "user-manager",
+        name: "UserManager",
+        component: UserManager,
         props: true,
       }
     ],

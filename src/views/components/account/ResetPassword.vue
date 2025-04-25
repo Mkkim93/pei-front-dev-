@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import { onBeforeMount, onBeforeUnmount, ref, watch } from 'vue';
 import { useStore } from 'vuex';
+import { AxiosError } from 'axios';
 import { userSignUp } from '@/api/signup';
 import { requestResetPassword } from '@/api/users';
 import ArgonButton from '@/components/ArgonButton.vue';
 import ArgonInput from '@/components/ArgonInput.vue';
 import ArgonProgress from '@/components/ArgonProgress.vue';
-import PeiLogo from '@/assets/img/logos/pei_logo.jpeg';
+
 import router from '@/router';
+import { ApiResponse } from '@/types/api';
 const password = ref<string>('');
 const confirmPassword = ref<string>('');
 const color1 = ref<string>('#f5f5f5');
 const color2 = ref<string>('#f5f5f5');
 const store = useStore();
+const passwordValidCheck = ref<boolean>(false);
 const body = document.getElementsByTagName("body")[0];
 
 onBeforeMount(() => {
@@ -32,25 +35,37 @@ onBeforeUnmount(() => {
 
 // TODO 비밀번호 expired 만료 시간 후 어떻게 되는지 확인
 const resetPassword = async (password: string) => {
-    console.log('resetPassword go');
-    const mail = localStorage.getItem('s_qw#wsa');
-    console.log('로컬에서 꺼낸 mail: ', mail);
+    
+    if (validPasswordMatched.value == false) {
+        alert('비밀번호가 일치 하지 않습니다.');
+        return;
+    }
+
+    if (validPassword.value == false) {
+        alert('안전하지 않은 비밀번호 입니다.');
+        return;
+    }
+    const token = localStorage.getItem('token');
     try {
-        if (typeof mail === 'string') {
-            const response = await requestResetPassword(mail, password);
-            console.log('resetPasword response: ', response);
+        if (typeof token === 'string') {
+            const response = await requestResetPassword(token, password);
+            console.log('response: ', response);
             alert(response.message);
             router.push('/signin');
-        } else {
-            console.log('올바른 형식의 메일 주소 아님');
+        } 
+        else {
+            // alert('올바른 메일 형식이 아닙니다.')
             return;
         }
     } catch (error) {
         console.error('resetPasword error: ', error);
+        const axiosError = error as AxiosError<ApiResponse<string>>;
+        const errorMessage = axiosError.response?.data.message;
+        alert(errorMessage);
+        router.push('/recover-password');
     } finally {
-        localStorage.removeItem('s_qw#wsa');
-        console.log('로직 종료 후 로컬 확인: ', localStorage.getItem('s_qw#wsa'));
-        
+        localStorage.removeItem('token');
+        console.log('로직 종료 후 로컬 확인: ', localStorage.getItem('token'));
     }
 }
 
@@ -91,7 +106,7 @@ watch([password, confirmPassword], ([newPass, newConfirm]) => {
 
 const {
     passwordMatch, passMatches, validPasswordMatched, passwordStrength, passwordDescription,
-    isStrongPassword, passwordAdvicer, evaluatePasswordStrength, passwordProgress
+    isStrongPassword, passwordAdvicer, evaluatePasswordStrength, passwordProgress, validPassword
 } = userSignUp();
 
 
@@ -116,7 +131,7 @@ const {
                 <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
                     <div class="card z-index-0">
                         <div class="card-header text-center pt-4">
-                            <img :src="PeiLogo" alt="logo" style="width: 20%; height: 100%;" />
+                            <!-- <img :src="PeiLogo" alt="logo" style="width: 20%; height: 100%;" /> -->
                             <h5 class="mt-5">새로운 비밀번호</h5>
                             <ul class="text-lead mt-5 list-unstyled">
                                 <li class="d-flex align-items-center mb-2">

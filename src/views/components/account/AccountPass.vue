@@ -2,13 +2,18 @@
 import { ref, onBeforeMount, onBeforeUnmount } from 'vue'
 import ArgonInput from '@/components/ArgonInput.vue';
 import ArgonButton from '@/components/ArgonButton.vue';
+import ArgonAlert from '@/components/ArgonAlert.vue';
+import { ApiResponse } from '@/types/api';
 import { requestPasswordLink } from '@/api/users';
 import { useStore } from 'vuex';
 import Navbar from '@/examples/PageLayout/Navbar.vue';
-import PeiLogo from '@/assets/img/logos/pei_logo.jpeg';
+
+import { AxiosError } from 'axios';
 const body = document.getElementsByTagName("body")[0];
 const store = useStore();
 const mail = ref<string>('');
+const errorMessage = ref<string | any>('');
+const showErrorMessage = ref<boolean>(false);
 
 onBeforeMount(() => {
   store.state.hideConfigButton = true;
@@ -28,19 +33,26 @@ onBeforeUnmount(() => {
 
 // 계정 응답
 async function requestmail(mail: string) {
-  console.log('입력한 이메일 주소: ', mail);
   try {
     if (typeof mail === 'string') {
       const response = await requestPasswordLink(mail);
       console.log('response: ', response);
-      localStorage.setItem('s_qw#wsa', response.data);
-      alert("비밀번호 변경 링크 전송 성공");
+      if (response.data !== null) {
+        localStorage.setItem('token', response.data);
+      }
+      showErrorMessage.value = false;
+      alert(response.message);
     } else {
       alert("이메일 형식이 올바르지 않습니다.");
-      console.log('변경 감지 로직 추가');
+      showErrorMessage.value = true;
     }
   } catch (error) {
-    console.log('requestMail error: ', error);
+    console.log('error: ', error);
+    const axiosError = error as AxiosError<ApiResponse<string>>;
+    console.log('axiosError: ', axiosError);
+    errorMessage.value = axiosError.response?.data.message;
+    console.log('axiosError.message: ', axiosError.response?.data.message);
+    showErrorMessage.value = true;
   }
 }
 </script>
@@ -62,9 +74,9 @@ async function requestmail(mail: string) {
         <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
           <div class="card z-index-0">
             <div class="card-header text-center pt-4">
-              <img :src="PeiLogo" alt="logo" style="width: 20%; height: 100%;" />
+              <!-- <img :src="PeiLogo" alt="logo" style="width: 20%; height: 100%;" /> -->
               <h5 class="mt-5">비밀번호 찾기</h5>
-
+              <argon-alert v-if="showErrorMessage" color="warning">{{ errorMessage }}</argon-alert>
               <p class="text-lead mt-5">
                 계정 가입 시 등록한 이메일을 입력해주세요. 이메일을 통해 비밀번호 변경 링크가 전송됩니다.
               </p>

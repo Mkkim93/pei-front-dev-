@@ -5,7 +5,7 @@ import ArgonButton from '@/components/ArgonButton.vue';
 import { postedCode, postUsername } from '@/api/users';
 import { useStore } from 'vuex';
 import Navbar from '@/examples/PageLayout/Navbar.vue';
-import PeiLogo from '@/assets/img/logos/pei_logo.jpeg';
+
 const body = document.getElementsByTagName("body")[0];
 const store = useStore();
 const postCode = ref<boolean>(false);
@@ -33,7 +33,9 @@ async function postSmsCode() {
   try {
     const response = await postedCode(phone.value);
     console.log(response);
-    receivePhone.value = response.data;
+    if (response.data !== null) {
+      receivePhone.value = response.data;
+    }
     postCode.value = true;
   } catch (error) {
     console.log(error);
@@ -76,7 +78,7 @@ watch(phone, (newVal) => {
         <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
           <div class="card z-index-0">
             <div class="card-header text-center pt-4">
-              <img :src="PeiLogo" alt="logo" style="width: 20%; height: 100%;" />
+              <!-- <img :src="PeiLogo" alt="logo" style="width: 20%; height: 100%;" /> -->
               <h5 class="mt-5">아이디 (이메일)</h5>
 
               <p class="text-lead mt-5">

@@ -140,10 +140,10 @@ const handleLogin = async () => {
                 ">
                 <span class="mask bg-gradient-success opacity-6"></span>
                 <h4 class="mt-5 text-white font-weight-bolder position-relative">
-                  "진짜 변화는 환자의 이야기에서 시작됩니다."
+               
                 </h4>
                 <p class="text-white position-relative">
-                  환자의 경험을 정직하게 듣고, 더 나은 의료 환경을 함께 만들어 갑니다.
+                  
                 </p>
               </div>
             </div>
