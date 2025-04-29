@@ -8,7 +8,6 @@ onMounted( async() => {
   console.log('response', response);
 })
 
-
 </script>
 
 <template>

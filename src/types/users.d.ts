@@ -4,6 +4,7 @@ export interface UsersType {
     phone: string;
     roleType: string;
     username : string;
+    hospitalName: string;
 }
 
 export interface UsersUpdateType {

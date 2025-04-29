@@ -6,3 +6,20 @@ export interface ApiResponse<T> {
     timestamp: string;
     data: T | null;
 }
+
+export interface ApiPageResponse<T> {
+    status?: number;
+    message?: string;
+    timestamp?: string;
+    data: {
+        content: T[];
+        page: PageType;
+    }
+}
+
+export interface PageType {
+    size: number;
+    number: number;
+    totalElements: number;
+    totalPages: number;
+}

@@ -11,7 +11,8 @@ const profile = reactive<UsersType>({
   name: '',
   phone: '',
   mail: '',
-  roleType: ''
+  roleType: '',
+  hospitalName: '',
 });
 
 onMounted(async () => {
@@ -65,7 +66,7 @@ onMounted(async () => {
                 </div>
                 <div class="col-md-4">
                   <label for="example-text-input" class="form-control-label">소속</label>
-                  <argon-input type="text" value="United States" />
+                  <argon-input type="text" value="United States" v-model="profile.hospitalName" disabled />
                 </div>
                 <div class="col-md-4">
                   <label for="example-text-input" class="form-control-label">우편 번호</label>

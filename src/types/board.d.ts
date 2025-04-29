@@ -5,7 +5,7 @@ export type BoardListType = {
     id: number;
     title: string;
     content: string;
-    createAt: string;
+    createAt: string; 
     updateAt: string;
     writer: string;
     roleType: string;

@@ -1,9 +1,10 @@
-<script setup>
-import { computed } from "vue";
+<script setup lang="ts">
+import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-
 import SidenavItem from "./SidenavItem.vue";
+
+const isSurveyOpen = ref<boolean>(false);
 
 defineProps({
   currentPage: {
@@ -47,7 +48,7 @@ const getRoute = () => {
         <sidenav-item
           to="/billing"
           :class="getRoute() === 'billing' ? 'active' : ''"
-          :navText="isRTL ? '조사 관리' : '조사 관리'"
+          :navText="isRTL ? '설문 관리' : '설문 관리'"
         >
           <template v-slot:icon>
             <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
@@ -59,7 +60,7 @@ const getRoute = () => {
         <sidenav-item
           to="/rtl-page"
           :class="getRoute() === 'rtl-page' ? 'active' : ''"
-          navText="서비스 관리"
+          navText="통계 관리"
         >
           <template v-slot:icon>
             <i class="ni ni-world-2 text-danger text-sm opacity-10"></i>

@@ -13,7 +13,10 @@ import "material-design-icons-iconfont/dist/material-design-icons.css";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fas } from "@fortawesome/free-solid-svg-icons";
-import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community'; 
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+import { surveyPlugin } from 'survey-vue3-ui'
+import "survey-core/survey-core.min.css"
+import "survey-creator-core/survey-creator-core.min.css";
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const app = createApp(App);
@@ -42,6 +45,7 @@ app.config.globalProperties.emitter = emitter;
 
 app.component('font-awesome-icon', FontAwesomeIcon);
 library.add(fas);
+app.use(surveyPlugin)
 app.use(Toast, options);
 app.use(store)
 app.use(router)

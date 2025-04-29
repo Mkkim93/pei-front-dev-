@@ -33,7 +33,7 @@ const darkMode = computed(() => store.state.darkMode);
         id="iconSidenav"
       ></i>
 
-      <router-link class="m-0 navbar-brand" to="/">
+      <router-link class="m-0 navbar-brand" to="/dashboard-default">
         <img
           :src="darkMode || sidebarType === 'bg-default' ? logoWhite : logo"
           class="navbar-brand-img h-100"

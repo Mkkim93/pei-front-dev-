@@ -23,12 +23,17 @@ import BoardUpdate from "@/views/components/board/BoardUpdate.vue";
 import BoardDetail from "@/views/components/board/BoardDetail.vue";
 import ResetPassword from "@/views/components/account/ResetPassword.vue";
 import UserManager from "@/views/components/my/auth/UserManager.vue";
+import SurveyMain from "@/views/components/survery/SurveyMain.vue";
+import SurveyTemplate from "@/examples/Survey/SurveyTemplate.vue";
+import SurveyCreatorPage from "@/examples/Survey/SurveyCreatorPage.vue";
+import SurveyBeforePage from "@/examples/Survey/SurveyBeforePage.vue";
 
 const routes = [
   {
     path: "/",
-    name: "/",
-    redirect: "/dashboard-default",
+    name: "SurveyMain",
+    component: SurveyMain,
+    // redirect: "/",
   },
   {
     path: "/dashboard-default",
@@ -42,8 +47,27 @@ const routes = [
   },
   {
     path: "/billing",
-    name: "조사 관리",
+    name: "설문 관리",
     component: Billing,
+  },
+
+  {
+    path: "/survey-template",
+    name: "설문 양식",
+    component: SurveyTemplate,
+    props: true,
+  },
+  {
+    path: "/survey-creator",
+    name: "설문지 추가",
+    component: SurveyCreatorPage,
+    props: true,
+  },
+  {
+    path: "/survey-before",
+    name: "설문 형식 지정",
+    component: SurveyBeforePage,
+    props: true,
   },
   {
     path: "/virtual-reality",
@@ -52,7 +76,7 @@ const routes = [
   },
   {
     path: "/rtl-page",
-    name: "서비스 관리",
+    name: "통계 관리",
     component: RTL,
   },
   {
@@ -172,6 +196,10 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.path === '/reset-password') {
+    return next();
+  }
+  
+  if (to.path === '/') {
     return next();
   }
 

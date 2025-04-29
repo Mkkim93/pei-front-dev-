@@ -6,13 +6,15 @@ import ArgonButton from "@/components/ArgonButton.vue";
     <div class="card-header pb-0 p-3">
       <div class="row">
         <div class="col-6 d-flex align-items-center">
-          <h6 class="mb-0">질문지 추가</h6>
+          <h6 class="mb-0">최근 수정된 양식</h6>
         </div>
         <div class="col-6 text-end">
+          <router-link to="/survey-creator">
           <argon-button color="dark" variant="gradient">
             <i class="fas fa-plus me-2"></i>
-            질문지 추가
+            설문양식 추가
           </argon-button>
+        </router-link>
         </div>
       </div>
     </div>
