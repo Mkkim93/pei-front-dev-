@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive, onMounted } from 'vue';
 import { SurveyCreatorModel } from "survey-creator-core";
 import { SurveyCreatorComponent } from "survey-creator-vue";
 import { SurveyPostType } from "@/types/survey";
 import { postSurvey } from '@/api/survey';
-
-
+import { useStore } from 'vuex';
 import { surveyLocalization } from "survey-core";
 
 surveyLocalization.locales["ko"] = {
@@ -100,17 +99,22 @@ surveyLocalization.locales["ko"] = {
 
 surveyLocalization.currentLocale = "ko"; // ✅ 한국어 적용 완료
 
+const store = useStore();
 
 const creator = new SurveyCreatorModel();
 creator.showLogicTab = true;
 creator.showThemeTab = true;
 
 const postData = reactive<SurveyPostType>({
+    title: '',
     category: '',
     content: '',
-    surveyType: 0,
-    surveyDepart: 0,
-    hospital: 0,
+    openAt: '',
+    closeAt: '',
+    surveyTypeId: 0,
+    surveyDepartId: 0,
+    hospitalId: 0,
+    usersId: 0,
 });
 
 const saveSurvey = async () => {
@@ -121,6 +125,11 @@ const saveSurvey = async () => {
     const response = await postSurvey(postData);
     console.log('response: ', response);
 }
+
+onMounted( async () => {
+  Object.assign(postData, store.getters.survey);
+  console.log('현재 넘어온 state를 postData에 저장 : ', postData);
+})
 </script>
 
 <template>

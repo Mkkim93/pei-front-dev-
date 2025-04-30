@@ -9,7 +9,7 @@ import ArgonButton from "@/components/ArgonButton.vue";
           <h6 class="mb-0">최근 수정된 양식</h6>
         </div>
         <div class="col-6 text-end">
-          <router-link to="/survey-creator">
+          <router-link to="/survey-before">
           <argon-button color="dark" variant="gradient">
             <i class="fas fa-plus me-2"></i>
             설문양식 추가

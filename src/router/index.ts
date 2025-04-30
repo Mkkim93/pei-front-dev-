@@ -27,7 +27,7 @@ import SurveyMain from "@/views/components/survery/SurveyMain.vue";
 import SurveyTemplate from "@/examples/Survey/SurveyTemplate.vue";
 import SurveyCreatorPage from "@/examples/Survey/SurveyCreatorPage.vue";
 import SurveyBeforePage from "@/examples/Survey/SurveyBeforePage.vue";
-
+import SurveyList from "@/views/components/survery/SurveyList.vue";
 const routes = [
   {
     path: "/",
@@ -50,7 +50,11 @@ const routes = [
     name: "설문 관리",
     component: Billing,
   },
-
+  {
+    path: "/survey-list",
+    name: "설문 리스트",
+    component: SurveyList,
+  },
   {
     path: "/survey-template",
     name: "설문 양식",

@@ -6,6 +6,7 @@ interface JwtPayload {
     id: number;
     username: string;
     roles: string;
+    hospital: number;
     exp: number;
 }
 

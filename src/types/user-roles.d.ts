@@ -6,6 +6,7 @@ export type UsersListType = {
     mail: string;
     createAt: string;
     roleType: string;
+    hospitalName: string; // 소속 추가
     page?: UsersListPage[],
 }
 

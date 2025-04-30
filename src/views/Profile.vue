@@ -11,7 +11,8 @@ const profile = reactive<UsersType>({
   name: '',
   phone: '',
   mail: '',
-  roleType: ''
+  roleType: '',
+  hospitalName: '',
 });
 
 onMounted(async () => {

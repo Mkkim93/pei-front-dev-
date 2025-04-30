@@ -4,7 +4,7 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import SidenavItem from "./SidenavItem.vue";
 
-const isSurveyOpen = ref<boolean>(false);
+const isSurveyDropdownOpen = ref(false);
 
 defineProps({
   currentPage: {
@@ -55,6 +55,25 @@ const getRoute = () => {
           </template>
         </sidenav-item>
       </li>
+
+        <!-- 드롭다운 메뉴 -->
+  <!-- <ul v-if="isSurveyDropdownOpen" class="navbar-nav ps-4">
+    <li class="nav-item">
+      <sidenav-item
+        to="/survey-list"
+        :class="getRoute() === 'survey-list' ? 'active' : ''"
+        navText="설문 목록"
+      />
+    </li>
+    <li class="nav-item">
+      <sidenav-item
+        to="/survey-before"
+        :class="getRoute() === 'survey-before' ? 'active' : ''"
+        navText="설문 작성"
+      />
+    </li>
+  </ul>
+</li> -->
 
       <li class="nav-item">
         <sidenav-item
