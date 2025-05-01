@@ -23,11 +23,14 @@ import BoardUpdate from "@/views/components/board/BoardUpdate.vue";
 import BoardDetail from "@/views/components/board/BoardDetail.vue";
 import ResetPassword from "@/views/components/account/ResetPassword.vue";
 import UserManager from "@/views/components/my/auth/UserManager.vue";
-import SurveyMain from "@/views/components/survery/SurveyMain.vue";
+import SurveyMain from "@/views/SurveyMain.vue";
 import SurveyTemplate from "@/examples/Survey/SurveyTemplate.vue";
 import SurveyCreatorPage from "@/examples/Survey/SurveyCreatorPage.vue";
 import SurveyBeforePage from "@/examples/Survey/SurveyBeforePage.vue";
-import SurveyList from "@/views/components/survery/SurveyList.vue";
+import SurveyList from "@/examples/Survey/SurveyList.vue";
+import SurveyManager from "@/examples/Survey/SurveyManager.vue";
+import SurveyEdit from "@/examples/Survey/SurveyEdit.vue";
+
 const routes = [
   {
     path: "/",
@@ -56,14 +59,32 @@ const routes = [
     component: SurveyList,
   },
   {
-    path: "/survey-template",
+    path: "/survey-template/:id",
     name: "설문 양식",
     component: SurveyTemplate,
     props: true,
   },
   {
+    path: "/survey-manager",
+    name: "설문 폼",
+    component: SurveyManager,
+    props: true,
+  },
+  {
+    path: "/survey-edit/:id",
+    name: "설문 수정",
+    component: SurveyEdit,
+    props: true,
+  },
+  {
     path: "/survey-creator",
-    name: "설문지 추가",
+    name: "설문 작성",
+    component: SurveyCreatorPage,
+    props: true,
+  },
+  {
+    path: "/survey-creator/:id",
+    name: "설문",
     component: SurveyCreatorPage,
     props: true,
   },

@@ -23,3 +23,16 @@ export interface SurveyHospitalType {
     surveyTypeName: string;
     surveyDepartName: string;
 }
+
+export interface SurveyDetailDTO {
+    id: number;
+    title: string;
+    category: string;
+    content: unknown;
+    createdAt: string;
+    openAt: string;
+    closeAt: string;
+    surveyDepartId: number;
+    surveyTypeId: number;
+    writer: string;
+}

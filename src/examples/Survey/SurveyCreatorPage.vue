@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { reactive, onMounted } from 'vue';
-import { SurveyCreatorModel } from "survey-creator-core";
+import { reactive, onMounted, computed, ref } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 import { SurveyCreatorComponent } from "survey-creator-vue";
+import { SurveyCreatorModel } from "survey-creator-core";
+import { surveyLocalization } from "survey-core";
+
 import { SurveyPostType } from "@/types/survey";
 import { postSurvey } from '@/api/survey';
-import { useStore } from 'vuex';
-import { surveyLocalization } from "survey-core";
+
+import ArgonButton from '@/components/ArgonButton.vue';
+
+const route = useRoute();
+const surveyId = computed(() => route.params.id);
 
 surveyLocalization.locales["ko"] = {
   pagePrevText: "이전",
@@ -100,7 +107,6 @@ surveyLocalization.locales["ko"] = {
 surveyLocalization.currentLocale = "ko"; // ✅ 한국어 적용 완료
 
 const store = useStore();
-
 const creator = new SurveyCreatorModel();
 creator.showLogicTab = true;
 creator.showThemeTab = true;
@@ -120,23 +126,36 @@ const postData = reactive<SurveyPostType>({
 const saveSurvey = async () => {
     const json = creator.JSON;
     console.log("설문 JSON:", json);
-    // 여기서 서버로 POST 요청 보내서 저장
-    postData.content = JSON.stringify(creator.JSON);
+    console.log('스토어로 받은 survey 데이터', store.getters.surveyDetail);
+    postData.content = json;
+    console.log('postData.content: ', postData.content);
     const response = await postSurvey(postData);
-    console.log('response: ', response);
+    // TODO 저장 후 로직 
 }
 
 onMounted( async () => {
-  Object.assign(postData, store.getters.survey);
-  console.log('현재 넘어온 state를 postData에 저장 : ', postData);
+  // 기존 양식 수정 모드
+  if (surveyId.value) {
+    Object.assign(postData, store.getters.surveyDetail);
+    console.log('수정폼 postData: ', postData);
+    creator.JSON = postData.content;
+  }
+  
+  // 새로운 양식 작성 모드
+  else if(!surveyId.value) {
+    Object.assign(postData, store.getters.survey);
+    console.log('신규폼 postData: ', postData);
+    creator.JSON = postData.content;
+  }
 })
+
 </script>
 
 <template>
     <div class="creator-wrapper">
       <SurveyCreatorComponent :model="creator" />
       <div class="bottom-button-wrapper">
-        <button @click="saveSurvey">설문 저장</button>
+        <argon-button @click="saveSurvey">설문 저장</argon-button>
       </div>
     </div>
   </template>

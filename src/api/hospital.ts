@@ -1,6 +1,6 @@
 import axiosPublic from '@/plugins/axiosPublic';
 import { HospitalListType } from '@/types/hospital';
-import { ApiResponse, ApiPageResponse } from '@/types/api';
+import { ApiPageResponse } from '@/types/api';
 
 // 병원 리스트 조회
 export async function fetchHospitalList(
