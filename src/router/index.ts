@@ -30,6 +30,7 @@ import SurveyBeforePage from "@/examples/Survey/SurveyBeforePage.vue";
 import SurveyList from "@/examples/Survey/SurveyList.vue";
 import SurveyManager from "@/examples/Survey/SurveyManager.vue";
 import SurveyEdit from "@/examples/Survey/SurveyEdit.vue";
+import SurveyCate from "@/views/components/survery/SurveyCate.vue";
 
 const routes = [
   {
@@ -37,6 +38,11 @@ const routes = [
     name: "SurveyMain",
     component: SurveyMain,
     // redirect: "/",
+  },
+  { 
+    path: "/survey-cate",
+    name: "surveyCate",
+    component: SurveyCate,
   },
   {
     path: "/dashboard-default",
@@ -225,6 +231,10 @@ router.beforeEach(async (to, from, next) => {
   }
   
   if (to.path === '/') {
+    return next();
+  }
+
+  if (to.path === '/survey-cate') {
     return next();
   }
 

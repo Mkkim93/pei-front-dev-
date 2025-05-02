@@ -35,12 +35,13 @@ const postSurveyStorage = reactive<SurveyPostType>({
   closeAt: '',
   surveyTypeId: 0,
   surveyDepartId: 0,
+  isVisible: false,
   hospitalId: 0,
   usersId: 0,
 })
 
 onMounted(async () => {
-  const typeResponse = await fetchsurveyTypeList(0, 10);
+  const typeResponse = await fetchsurveyTypeList(0, 10, undefined);
   surveyType.value = typeResponse.data.content;
 
   const cateResponse: string[] | any = await fetchCategoryList();

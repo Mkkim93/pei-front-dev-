@@ -6,7 +6,7 @@ import ArgonButton from "@/components/ArgonButton.vue";
     <div class="card-header pb-0 px-3">
       <div class="row">
         <div class="col-md-6">
-          <h6 class="mb-0">보고서 관리</h6>
+          <h6 class="mb-0">종료된 설문</h6>
         </div>
         <div class="col-md-6 d-flex justify-content-end align-items-center">
           <i class="far fa-calendar-alt me-2" aria-hidden="true"></i>

@@ -1,20 +1,11 @@
-<script setup>
-import ArgonButton from "@/components/ArgonButton.vue";
+<script setup lang="ts">
 </script>
 <template>
-  <div class="card mt-4">
+  <div class="card mt-5">
     <div class="card-header pb-0 p-3">
       <div class="row">
         <div class="col-6 d-flex align-items-center">
-          <h6 class="mb-0">최근 수정된 양식</h6>
-        </div>
-        <div class="col-6 text-end">
-          <router-link to="/survey-before">
-          <argon-button color="dark" variant="gradient">
-            <i class="fas fa-plus me-2"></i>
-            설문양식 추가
-          </argon-button>
-        </router-link>
+          <h6 class="mb-3">양식 추가</h6>
         </div>
       </div>
     </div>
@@ -30,17 +21,19 @@ import ArgonButton from "@/components/ArgonButton.vue";
               alt="logo"
             />
             <h6 class="mb-0">
-              ****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;7852
+              통합 양식
             </h6>
+            <router-link to="/survey-before" class="ms-auto">
             <i
               class="fas fa-pencil-alt ms-auto text-dark cursor-pointer"
               data-bs-toggle="tooltip"
               data-bs-placement="top"
-              title
+
               aria-hidden="true"
               data-bs-original-title="Edit Card"
               aria-label="Edit Card"
             ></i>
+            </router-link>
             <span class="sr-only">Edit Card</span>
           </div>
         </div>
@@ -54,17 +47,18 @@ import ArgonButton from "@/components/ArgonButton.vue";
               alt="logo"
             />
             <h6 class="mb-0">
-              ****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;5248
+              개인 양식
             </h6>
+            <router-link to="/survey-before" class="ms-auto">
             <i
               class="fas fa-pencil-alt ms-auto text-dark cursor-pointer"
               data-bs-toggle="tooltip"
               data-bs-placement="top"
-              title
               aria-hidden="true"
               data-bs-original-title="Edit Card"
               aria-label="Edit Card"
             ></i>
+          </router-link>
             <span class="sr-only">Edit Card</span>
           </div>
         </div>

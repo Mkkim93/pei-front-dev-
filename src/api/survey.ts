@@ -1,7 +1,7 @@
 import axiosPublic from '@/plugins/axiosPublic';
 import axiosAuth from '@/plugins/axiosAuth';
 import { ApiPageResponse, ApiResponse } from '@/types/api';
-import { SurveyPostType, CategoryMap, SurveyHospitalType, SurveyDetailDTO } from '@/types/survey';
+import { SurveyPostType, CategoryMap, SurveyHospitalType, SurveyDetailDTO, SurveyUpdateDTO } from '@/types/survey';
 
 export async function fetchSurveyTemplate(id :number) :Promise<ApiResponse<SurveyDetailDTO>>{
     const response = await axiosAuth.get<ApiResponse<SurveyDetailDTO>>(`/api/survey?id=${id}`);
@@ -12,6 +12,15 @@ export async function postSurvey(obj :SurveyPostType) {
     const response = await axiosPublic.post('/api/survey', obj, {
         headers: {
             "Content-Type": "application/json",
+        }
+    });
+    return response.data;
+}
+
+export async function updatedSurvey(obj :SurveyUpdateDTO) {
+    const response = await axiosPublic.post('/api/survey/update', obj, {
+        headers: {
+            "Content-Type" : "application/json",
         }
     });
     return response.data;

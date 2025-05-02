@@ -6,7 +6,7 @@ import ArgonButton from '@/components/ArgonButton.vue';
 const surveyHosList = ref<SurveyHospitalType[]>();
 
 onMounted(async () => {
-  const response = await fetchSurveyHosList(0, 5);
+  const response = await fetchSurveyHosList(0, 3);
   console.log('response1: ', response);
   surveyHosList.value = response.data.content;
 })

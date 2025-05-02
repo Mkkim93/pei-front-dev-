@@ -38,7 +38,7 @@ onMounted(async () => {
     const id = Number(surveyId.value);
     const response: ApiResponse<SurveyDetailDTO> | any = await fetchSurveyTemplate(id);
     const departresponse: SurveyDepartList[] | any = await fetchSurveyDepartList(0, 20, true);
-    const typeResponse = await fetchsurveyTypeList(0, 10);
+    const typeResponse = await fetchsurveyTypeList(0, 10, undefined);
     const cateReponse = await fetchCategoryList();
 
     surveyType.value = typeResponse.data.content;

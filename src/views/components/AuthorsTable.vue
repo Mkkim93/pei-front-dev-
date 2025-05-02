@@ -88,7 +88,7 @@ const changePage = async (page: number) => {
             </thead>
 
             <tbody>
-              <tr v-for="board in boardList" :key="board.id">
+              <tr v-for="board in boardList" :key="board.id" class="border-bottom border-light">
                 <td>
                   <div class="d-flex px-2 py-1">
                     <div>

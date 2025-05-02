@@ -2,17 +2,21 @@
 import { reactive, onMounted, computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
+import router from '@/router';
 import { SurveyCreatorComponent } from "survey-creator-vue";
 import { SurveyCreatorModel } from "survey-creator-core";
 import { surveyLocalization } from "survey-core";
 
-import { SurveyPostType } from "@/types/survey";
-import { postSurvey } from '@/api/survey';
+import { SurveyPostType, SurveyUpdateDTO } from "@/types/survey";
+import { postSurvey, updatedSurvey } from '@/api/survey';
 
 import ArgonButton from '@/components/ArgonButton.vue';
+import ArgonSwitch from '@/components/ArgonSwitch.vue';
 
 const route = useRoute();
 const surveyId = computed(() => route.params.id);
+const isUpdate = ref<boolean>(false);
+const isVisibled = ref<boolean>(false);
 
 surveyLocalization.locales["ko"] = {
   pagePrevText: "이전",
@@ -34,7 +38,7 @@ surveyLocalization.locales["ko"] = {
   completingSurveyBefore: "이미 이 설문을 완료하셨습니다.",
   loadingSurvey: "설문을 불러오는 중입니다...",
   placeholder: "선택하세요...",
-  
+
   // 오류 메시지
   requiredError: "이 질문은 필수 항목입니다.",
   requiredErrorInPanel: "모든 질문에 답변해주세요.",
@@ -58,7 +62,7 @@ surveyLocalization.locales["ko"] = {
   uploadingFile: "파일 업로드 중입니다. 잠시 기다려 주세요...",
   loadingFile: "로드 중...",
   chooseFile: "파일 선택...",
-  
+
   // 설문 진행 관련
   removeFile: "선택한 파일 삭제",
   booleanCheckedLabel: "예",
@@ -78,7 +82,7 @@ surveyLocalization.locales["ko"] = {
   savingData: "서버에 결과를 저장하는 중입니다...",
   savingDataError: "오류가 발생하여 결과를 저장할 수 없습니다.",
   savingDataSuccess: "결과가 저장되었습니다!",
-  
+
   saveAgainButton: "다시 시도",
   timerMin: "분",
   timerSec: "초",
@@ -112,37 +116,65 @@ creator.showLogicTab = true;
 creator.showThemeTab = true;
 
 const postData = reactive<SurveyPostType>({
-    title: '',
-    category: '',
-    content: '',
-    openAt: '',
-    closeAt: '',
-    surveyTypeId: 0,
-    surveyDepartId: 0,
-    hospitalId: 0,
-    usersId: 0,
+  title: '',
+  category: '',
+  content: '',
+  openAt: '',
+  closeAt: '',
+  surveyTypeId: 0,
+  surveyDepartId: 0,
+  hospitalId: 0,
+  isVisible: false,
+  usersId: 0,
 });
 
+const updateData = reactive<SurveyUpdateDTO>({
+  id: 0,
+  category: {},
+  title: '',
+  content: '',
+  updatedAt: '',
+  openAt: '',
+  closeAt: '',
+  isVisible: false,
+  surveyDepartId: 0,
+  surveyTypeId: 0,
+})
+
 const saveSurvey = async () => {
+  const isconfirm = confirm(postData.title + '(을)를 등록 하시겠습니까?');
+  if (isconfirm) {
     const json = creator.JSON;
-    console.log("설문 JSON:", json);
-    console.log('스토어로 받은 survey 데이터', store.getters.surveyDetail);
     postData.content = json;
-    console.log('postData.content: ', postData.content);
     const response = await postSurvey(postData);
-    // TODO 저장 후 로직 
+    alert(response.message);
+    router.push('/survey-list');
+  }
 }
 
-onMounted( async () => {
+const updateSurvey = async () => {
+  const isconfirm = confirm(updateData.title + '(을)를 수정 하시겠습니까?');
+  if (isconfirm) {
+    const json = creator.JSON;
+    updateData.content = json;
+    updateData.isVisible = isVisibled.value;
+    const response = await updatedSurvey(updateData);
+    alert(response.message);
+    router.push('/survey-list');
+  }
+}
+
+onMounted(async () => {
   // 기존 양식 수정 모드
   if (surveyId.value) {
-    Object.assign(postData, store.getters.surveyDetail);
-    console.log('수정폼 postData: ', postData);
-    creator.JSON = postData.content;
+    isUpdate.value = true;
+    Object.assign(updateData, store.getters.surveyDetail);
+    console.log('수정폼 updateData: ', updateData);
+    creator.JSON = updateData.content;
   }
-  
+
   // 새로운 양식 작성 모드
-  else if(!surveyId.value) {
+  else if (!surveyId.value) {
     Object.assign(postData, store.getters.survey);
     console.log('신규폼 postData: ', postData);
     creator.JSON = postData.content;
@@ -152,31 +184,38 @@ onMounted( async () => {
 </script>
 
 <template>
-    <div class="creator-wrapper">
-      <SurveyCreatorComponent :model="creator" />
-      <div class="bottom-button-wrapper">
+  <div class="creator-wrapper">
+    <SurveyCreatorComponent :model="creator" />
+    <div class="bottom-button-wrapper">
+      <div v-if="!isUpdate">
         <argon-button @click="saveSurvey">설문 저장</argon-button>
       </div>
+      <div v-if="isUpdate">
+        <argon-button @click=updateSurvey>설문 수정</argon-button>
+      </div>
+      <argon-switch v-model="isVisibled" id="isVisibled" name="isVisibled" :checked="isVisibled">
+        {{ isVisibled ? '공개' : '비공개' }}
+      </argon-switch>
     </div>
-  </template>
-  
-  <style scoped>
-  .creator-wrapper {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    padding: 1rem;
-    box-sizing: border-box;
-  }
-  
-  .svc-creator {
-    flex: 1 1 auto;
-    min-height: 0;
-  }
-  
-  .bottom-button-wrapper {
-    padding-top: 1rem;
-    text-align: right;
-  }
-  </style>
-  
+  </div>
+</template>
+
+<style scoped>
+.creator-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.svc-creator {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.bottom-button-wrapper {
+  padding-top: 1rem;
+  text-align: right;
+}
+</style>

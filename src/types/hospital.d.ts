@@ -2,4 +2,6 @@
 export interface HospitalListType {
     id: number;
     name: string;
+    description: string;
+    imgUrl: string;
 }

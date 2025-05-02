@@ -7,7 +7,21 @@ export interface SurveyPostType {
     surveyTypeId: number;
     surveyDepartId: number | undefined;
     hospitalId: number;
+    isVisible: boolean;
     usersId: number;
+}
+
+export interface SurveyUpdateDTO {
+    id: number;
+    category: CategoryMap;
+    title: string;
+    content: string;
+    updatedAt: string;
+    openAt: string;
+    closeAt: string;
+    isVisible: boolean;
+    surveyDepartId: number;
+    surveyTypeId: number;
 }
 
 export type CategoryMap = Record<string, string>;
@@ -19,6 +33,7 @@ export interface SurveyHospitalType {
     createdAt: string;
     openAt: string;
     closeAt: string;
+    visible: boolean;
     surveyStatus: string;
     surveyTypeName: string;
     surveyDepartName: string;
@@ -36,3 +51,4 @@ export interface SurveyDetailDTO {
     surveyTypeId: number;
     writer: string;
 }
+
