@@ -31,6 +31,10 @@ import SurveyList from "@/examples/Survey/SurveyList.vue";
 import SurveyManager from "@/examples/Survey/SurveyManager.vue";
 import SurveyEdit from "@/examples/Survey/SurveyEdit.vue";
 import SurveyCate from "@/views/components/survery/SurveyCate.vue";
+import SurveyTypeDetail from "@/examples/Survey/SurveyTypeDetail.vue";
+
+import Hospital from "@/views/Hospital.vue";
+import MyHospital from "@/views/components/hospital/MyHospital.vue";
 
 const routes = [
   {
@@ -101,6 +105,12 @@ const routes = [
     props: true,
   },
   {
+    path: "/survey-type-detail",
+    name: "설문 유형 상세",
+    component: SurveyTypeDetail,
+    props: true,
+  },
+  {
     path: "/virtual-reality",
     name: "전체 현황",
     component: VirtualReality,
@@ -155,6 +165,22 @@ const routes = [
   {
     path: "/reset-password",
     component: ResetPassword,
+  },
+
+  {
+    path: "/hospital",
+    name: "Hospital",
+    component: Hospital,
+    props: true,
+    redirect: { name: "MyHospital"},
+    children: [
+      {
+        path: "my-hospital",
+        name: "MyHospital",
+        component: MyHospital,
+        props: true,
+      }
+    ]
   },
   {
     path: "/profile",
@@ -235,6 +261,10 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.path === '/survey-cate') {
+    return next();
+  }
+
+  if (to.path === '/hospital') {
     return next();
   }
 

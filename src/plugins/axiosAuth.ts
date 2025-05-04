@@ -49,9 +49,13 @@ instance.interceptors.response.use(
             return Promise.reject(error.response);
         }
             
-
         if (status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
+        }
+
+        if (status === 409 && !originalRequest._retry) {
+            console.log('errror: ', error.response);
+            return Promise.reject(error.response);
         }
         
             try {

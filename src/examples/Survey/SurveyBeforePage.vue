@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, toRaw } from 'vue';
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 
 import { decodePayload } from '@/types/jwt.d';
 import { SurveyPostType, CategoryMap } from '@/types/survey';
 import { SurveyTypeList } from '@/types/survey-type';
 import { SurveyDepartList } from '@/types/survey-depart';
 
-import { fetchsurveyTypeList } from '@/api/survey-type';
+import { fetchSurveyTypeList } from '@/api/survey-type';
 import { fetchCategoryList } from '@/api/survey';
 import { fetchSurveyDepartList } from '@/api/survey-depart';
 
@@ -15,6 +16,7 @@ import ArgonRadio from '@/components/ArgonRadio.vue';
 import ArgonInput from '@/components/ArgonInput.vue';
 import ArgonButton from '@/components/ArgonButton.vue';
 
+const route = useRoute();
 const store = useStore();
 const surveyType = ref<SurveyTypeList[]>();
 const surveyTypeSelectedId = ref<number>(0);
@@ -26,7 +28,8 @@ const selectedCloseAt = ref<string>('');
 const inputTitle = ref<string>('');
 const surveyDepartType = ref<SurveyDepartList[]>([]);
 const onlylistPlag = ref<boolean>(true);
-
+const publicc = ref<boolean>(false);
+const isPublic = route.query.isPublic;
 const postSurveyStorage = reactive<SurveyPostType>({
   title: '',
   category: '',
@@ -41,8 +44,14 @@ const postSurveyStorage = reactive<SurveyPostType>({
 })
 
 onMounted(async () => {
-  const typeResponse = await fetchsurveyTypeList(0, 10, undefined);
-  surveyType.value = typeResponse.data.content;
+  if (isPublic === 'true') {
+    publicc.value = true;
+  } else {
+    publicc.value = false;
+  }
+
+  const typeResponse :SurveyTypeList[] | any = await fetchSurveyTypeList(publicc.value);
+  surveyType.value = typeResponse.data;
 
   const cateResponse: string[] | any = await fetchCategoryList();
   surveyCategoryList.value = cateResponse.data;
@@ -142,7 +151,6 @@ const SurveyCreator = async () => {
           </div>
         </div>
       </label>
-
 
         <!-- 다음 버튼 -->
         <div class="mt-4">

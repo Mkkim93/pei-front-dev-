@@ -5,6 +5,9 @@ export const formatDate = (date: string | Date, format = "YYYY.MM.DD") => {
 };
 
 export const formatDateDetail = (date: string | Date, format = "YYYY.MM.DD HH:mm") => {
+  if (typeof date !== 'string' ) {
+    return '-';
+  }
   return dayjs(date).format(format);
 }
 

@@ -8,14 +8,13 @@ const props = defineProps<{
   surveyJson: any
 }>();
 
-const survey = ref<Model | null>(null);
+const survey = ref<Model |any>(null);
 
 onMounted( async () => {
   if (props.surveyJson) {
     survey.value = new Model(props.surveyJson.data.content);
     survey.value.applyTheme(SurveyTheme.BorderlessDark);
-
-    survey.value.onComplete.add((sender) => {
+    survey.value.onComplete.add((sender :any) => {
       console.log(JSON.stringify(sender.data, null, 2));
     });
   }

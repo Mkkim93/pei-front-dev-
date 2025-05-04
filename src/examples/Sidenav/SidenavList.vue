@@ -72,8 +72,7 @@ const getRoute = () => {
         navText="설문 작성"
       />
     </li>
-  </ul>
-</li> -->
+  </ul> -->
 
       <li class="nav-item">
         <sidenav-item
@@ -99,7 +98,7 @@ const getRoute = () => {
         </sidenav-item>
       </li>
 
-      <!-- <li class="nav-item">
+      <li class="nav-item">
         <sidenav-item
           to="#"
           :class="getRoute() === 'tables' ? 'active' : ''"
@@ -111,7 +110,7 @@ const getRoute = () => {
             ></i>
           </template>
         </sidenav-item>
-      </li> -->
+      </li>
 
       <li class="nav-item">
         <sidenav-item
@@ -150,6 +149,18 @@ const getRoute = () => {
         >
           <template v-slot:icon>
             <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
+
+      <li class="nav-item">
+        <sidenav-item
+          to="/hospital"
+          :class="getRoute() === 'hospital' ? 'active' : ''"
+          :navText="isRTL ? '병원 관리' : '병원 관리'"
+        >
+          <template v-slot:icon>
+            <font-awesome-icon :icon="['fas', 'hospital']" />
           </template>
         </sidenav-item>
       </li>

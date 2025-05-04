@@ -4,7 +4,7 @@
 
 <template>
   <div>
-    <p>나의 병원 정보 관리</p>
+    <p>나의 병원 관리</p>
   </div>
 </template>
 

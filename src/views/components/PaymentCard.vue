@@ -1,4 +1,24 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+import ArgonButton from '@/components/ArgonButton.vue';
+import router from '@/router';
+const isPublic = ref<boolean>(false);
+
+const publicSurvey = (isPublic :boolean) => {
+  
+  router.push({
+    path: '/survey-before',
+    query: { isPublic: isPublic.toString() }
+  })
+}
+
+const mySurvey = (isPublic :boolean) => {
+  
+  router.push({
+    path: '/survey-before',
+    query: { isPublic: isPublic.toString() }
+  })
+}
 </script>
 <template>
   <div class="card mt-5">
@@ -17,23 +37,22 @@
           >
             <img
               class="w-10 me-3 mb-0"
-              src="@/assets/img/logos/mastercard.png"
+              src="@/assets/img/logos/group.png"
               alt="logo"
             />
             <h6 class="mb-0">
               통합 양식
             </h6>
-            <router-link to="/survey-before" class="ms-auto">
+            <argon-button color="dark" variant="outline" @click="publicSurvey(true)" class="ms-auto">
             <i
               class="fas fa-pencil-alt ms-auto text-dark cursor-pointer"
               data-bs-toggle="tooltip"
               data-bs-placement="top"
-
               aria-hidden="true"
               data-bs-original-title="Edit Card"
               aria-label="Edit Card"
             ></i>
-            </router-link>
+            </argon-button>
             <span class="sr-only">Edit Card</span>
           </div>
         </div>
@@ -43,13 +62,13 @@
           >
             <img
               class="w-10 me-3 mb-0"
-              src="@/assets/img/logos/visa.png"
+              src="@/assets/img/logos/solo.png"
               alt="logo"
             />
             <h6 class="mb-0">
               개인 양식
             </h6>
-            <router-link to="/survey-before" class="ms-auto">
+            <argon-button color="dark" variant="outline" @click="mySurvey(false)" class="ms-auto">
             <i
               class="fas fa-pencil-alt ms-auto text-dark cursor-pointer"
               data-bs-toggle="tooltip"
@@ -58,8 +77,7 @@
               data-bs-original-title="Edit Card"
               aria-label="Edit Card"
             ></i>
-          </router-link>
-            <span class="sr-only">Edit Card</span>
+            </argon-button>
           </div>
         </div>
       </div>

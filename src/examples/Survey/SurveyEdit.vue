@@ -11,24 +11,27 @@ import { CategoryMap, SurveyDetailDTO } from '@/types/survey';
 
 import { fetchSurveyTemplate, fetchCategoryList } from '@/api/survey';
 import { fetchSurveyDepartList } from '@/api/survey-depart';
-import { fetchsurveyTypeList } from '@/api/survey-type';
+import { fetchSurveyTypeList } from '@/api/survey-type';
 
 import ArgonInput from '@/components/ArgonInput.vue';
 import ArgonButton from '@/components/ArgonButton.vue';
 import ArgonRadio from '@/components/ArgonRadio.vue';
+import ArgonSwitch from '@/components/ArgonSwitch.vue';
 
 const route = useRoute();
 const store = useStore();
 const modifiy = ref<boolean>(false);
 const surveyId = computed(() => route.params.id);
 const beforeData = ref<any>();
+const isPublic = ref<boolean>(false);
+const isVisibled = ref<boolean>(false);
 
-const surveyType = ref<SurveyTypeList[]>();
+const surveyType = ref<SurveyTypeList[]>([]);
 const surveyCategoryList = ref<string[] | any>([]);
 const surveyDepartType = ref<SurveyDepartList[]>([]);
 
 const surveyDepartSelectedId = ref<number>(1);
-const surveyTypeSelectedId = ref<number>();
+const surveyTypeSelectedId = ref<number>(0);
 const selectedCategory = ref<CategoryMap | any>();
 const selectedOpenAt = ref<string>();
 const selectedCloseAt = ref<string>();
@@ -38,20 +41,23 @@ onMounted(async () => {
     const id = Number(surveyId.value);
     const response: ApiResponse<SurveyDetailDTO> | any = await fetchSurveyTemplate(id);
     const departresponse: SurveyDepartList[] | any = await fetchSurveyDepartList(0, 20, true);
-    const typeResponse = await fetchsurveyTypeList(0, 10, undefined);
+    const typeResponse: SurveyTypeList[] | any = await fetchSurveyTypeList(isPublic.value);
     const cateReponse = await fetchCategoryList();
 
-    surveyType.value = typeResponse.data.content;
-    surveyDepartType.value = departresponse.data;
-    surveyCategoryList.value = cateReponse.data;
-
     beforeData.value = response.data;
-    console.log('responseData: ', response.data);
+    surveyDepartType.value = departresponse.data;
+    surveyType.value = typeResponse.data;
+    surveyCategoryList.value = cateReponse.data;
     console.log('beforeData: ', beforeData.value);
 
     surveyDepartSelectedId.value = beforeData.value.surveyDepartId;
     surveyTypeSelectedId.value = beforeData.value.surveyTypeId;
+    console.log('befor type Id: ', beforeData.value.surveyTypeId);
+    console.log('surtype id: ', surveyTypeSelectedId.value)
     selectedCategory.value = beforeData.value.category;
+    selectedOpenAt.value = beforeData.value.openAt;
+    selectedCloseAt.value = beforeData.value.closeAt;
+    isVisibled.value = beforeData.value.isVisible;
 });
 
 const updatedBeforeData = () => {
@@ -60,6 +66,7 @@ const updatedBeforeData = () => {
     beforeData.value.category = selectedCategory.value;
     beforeData.value.openAt = selectedOpenAt.value;
     beforeData.value.closeAt = selectedCloseAt.value;
+    beforeData.value.isVisible = isVisibled.value;
     store.commit('setUpdateSurveyData', beforeData.value);
     router.push(`/survey-creator/${beforeData.value.id}`);
 }
@@ -82,10 +89,11 @@ const updatedBeforeData = () => {
                 </div>
                 <!-- 설문 유형 -->
                 <div class="mb-4">
-                    <label for="surveyTypeSelect" class="form-label fw-bold">설문 유형 선택</label>
-                    <select id="updateData" class="form-select" v-if="beforeData" v-model="surveyTypeSelectedId">
+                    <label for="form-label fw-bold" class="form-label fw-bold">설문 유형 선택</label>
 
-                        <option v-for="type in surveyType" :key="type.id" :value="type.id">
+                    <select v-if="surveyType.length && surveyTypeSelectedId !== 0" v-model="surveyTypeSelectedId"
+                        class="form-select">
+                        <option v-for="type in surveyType" :key="type.id" :value="Number(type.id)">
                             {{ type.name }}
                         </option>
                     </select>
@@ -133,8 +141,12 @@ const updatedBeforeData = () => {
                     </div>
                 </label>
                 <div class="d-flex justify-content-end">
-                    <argon-button size="lg" @click="updatedBeforeData">기본 정보 수정</argon-button>
+                    <argon-button size="lg" @click="updatedBeforeData">다음으로</argon-button>
                 </div>
+
+                <argon-switch v-model="isVisibled" id="isVisibled" name="isVisibled" :checked="isVisibled">
+                    {{ isVisibled ? '공개' : '비공개' }}
+                </argon-switch>
             </div>
         </div>
     </div>

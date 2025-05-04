@@ -24,6 +24,9 @@ instance.interceptors.response.use(
         if (status === 410) {
             return Promise.reject(error);
         }
+        if (status === 409) {
+            return Promise.reject(error);
+        }
     }
 )
 export default instance;
