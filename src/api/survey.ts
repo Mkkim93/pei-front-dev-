@@ -2,6 +2,8 @@ import axiosPublic from '@/plugins/axiosPublic';
 import axiosAuth from '@/plugins/axiosAuth';
 import { ApiPageResponse, ApiResponse } from '@/types/api';
 import { SurveyPostType, CategoryMap, SurveyHospitalType, SurveyDetailDTO, SurveyUpdateDTO } from '@/types/survey';
+import { CommonSurvey } from '@/types/common/survey';
+import { s } from '@fullcalendar/core/internal-common';
 
 export async function fetchSurveyTemplate(id :number) :Promise<ApiResponse<SurveyDetailDTO>>{
     const response = await axiosAuth.get<ApiResponse<SurveyDetailDTO>>(`/api/survey?id=${id}`);
@@ -39,6 +41,24 @@ export async function fetchSurveyHosList(
         params: {
             page: x,
             size: y
+        }
+    })
+    return response.data;
+}
+
+// 설문자 전용
+export async function fetchCommonSurvey(
+    x: number | undefined,
+    y: number | undefined,
+    hospitalId: number,
+    status: string | undefined
+) :Promise<ApiPageResponse<CommonSurvey>> {
+    const response = await axiosPublic.get<ApiPageResponse<CommonSurvey>>(`/api/common-survey`, {
+        params: {
+            page: x,
+            size: y,
+            hospitalId: hospitalId,
+            status: status,
         }
     })
     return response.data;

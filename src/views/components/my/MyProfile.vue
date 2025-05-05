@@ -21,6 +21,7 @@ onMounted(async () => {
   Object.assign(profile, response.data); // reactive 객체 업데이트
   console.log('profile: ', profile);
 });
+
 </script>
 
 <template>

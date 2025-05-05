@@ -34,7 +34,11 @@ import SurveyCate from "@/views/components/survery/SurveyCate.vue";
 import SurveyTypeDetail from "@/examples/Survey/SurveyTypeDetail.vue";
 
 import Hospital from "@/views/Hospital.vue";
+import MyHospitalWard from "@/views/components/hospital/MyHospitalWard.vue";
+import MyHospitalSetting from "@/views/components/hospital/MyHospitalSetting.vue";
 import MyHospital from "@/views/components/hospital/MyHospital.vue";
+import MyHospitalDepart from "@/views/components/hospital/MyHospitalDepart.vue";
+import SurveyActiveDetail from "@/examples/Survey/SurveyActiveDetail.vue";
 
 const routes = [
   {
@@ -44,9 +48,10 @@ const routes = [
     // redirect: "/",
   },
   { 
-    path: "/survey-cate",
+    path: "/survey-cate/:id",
     name: "surveyCate",
     component: SurveyCate,
+    props: true,
   },
   {
     path: "/dashboard-default",
@@ -109,6 +114,11 @@ const routes = [
     name: "설문 유형 상세",
     component: SurveyTypeDetail,
     props: true,
+  },
+  {
+    path: "/survey-active",
+    name: "진행 중인 설문 목록",
+    component: SurveyActiveDetail,
   },
   {
     path: "/virtual-reality",
@@ -179,7 +189,25 @@ const routes = [
         name: "MyHospital",
         component: MyHospital,
         props: true,
-      }
+      },
+      {
+        path: "my-depart",
+        name: "MyHospitalDepart",
+        component: MyHospitalDepart,
+        props: true,
+      },
+      {
+        path: "my-setting",
+        name: "MyHospitalSetting",
+        component: MyHospitalSetting,
+        props: true,
+      },
+      {
+        path: "my-ward",
+        name: "MyHospitalWard",
+        component: MyHospitalWard,
+        props: true,
+      },
     ]
   },
   {
@@ -235,7 +263,6 @@ const router = createRouter({
 // next: 훅 해결을 위해 호출 action은 next() 에 제공된 전달 인자에 달려 있다.
 // next(false) : 현재 네비게이션 중단 시 사용 (from 경로의 Url 로 재설정)
 router.beforeEach(async (to, from, next) => {
-  // 로그인 페이지는 제외
   if (to.path === '/signin') {
     return next();
   }

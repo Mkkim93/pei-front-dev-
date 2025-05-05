@@ -111,7 +111,7 @@ const getRoute = () => {
           </template>
         </sidenav-item>
       </li>
-
+<!-- 
       <li class="nav-item">
         <sidenav-item
           to="/virtual-reality"
@@ -122,7 +122,7 @@ const getRoute = () => {
             <i class="ni ni-app text-info text-sm opacity-10"></i>
           </template>
         </sidenav-item>
-      </li>
+      </li> -->
 
       <li class="mt-3 nav-item">
         <h6

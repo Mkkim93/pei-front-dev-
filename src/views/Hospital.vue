@@ -1,13 +1,24 @@
 <script setup lang="ts">
-import { onBeforeMount, onMounted, onBeforeUnmount } from "vue";
+import { onBeforeMount, onMounted, onBeforeUnmount, reactive } from "vue";
 import { useStore } from "vuex";
 import setNavPills from "@/assets/js/nav-pills.js";
 import setTooltip from "@/assets/js/tooltip.js";
+import { HospitalListType } from "@/types/hospital";
+import { fetchHospitalData } from "@/api/hospital";
 
 const body = document.getElementsByTagName("body")[0];
 const store = useStore();
 
-onMounted(() => {
+const hospitalData = reactive<HospitalListType>({
+  id: 0,
+  name: '',
+  description: '',
+  imgUrl: '',
+})
+
+onMounted( async () => {
+  const response = await fetchHospitalData();
+  Object.assign(hospitalData,  response.data);
   store.state.isAbsolute = true;
   setNavPills();
   setTooltip();
@@ -61,7 +72,7 @@ onBeforeUnmount(() => {
                 <ul class="p-1 bg-transparent nav nav-pills nav-fill" role="tablist">
                   <li class="nav-item">
                     <router-link class="px-0 py-1 mb-0 nav-link active" active-class="active"
-                      :to="{ name: 'MyProfile' }">
+                      :to="{ name: 'MyHospital' }">
                       <font-awesome-icon :icon="['fas', 'circle-user']" />
                       <span class="ms-1">정보</span>
                     </router-link>
@@ -69,14 +80,14 @@ onBeforeUnmount(() => {
 
                   <li class="nav-item">
                     <router-link class="px-0 py-1 mb-0 nav-link active" active-class="active"
-                      :to="{ name: 'MyActivity' }" role="tab" aria-selected="true">
+                      :to="{ name: 'MyHospitalDepart' }" role="tab" aria-selected="true">
                       <font-awesome-icon :icon="['fas', 'dice-d6']" />
                       <span class="ms-1">진료과</span>
                     </router-link>
                   </li>
 
                   <li class="nav-item">
-                    <router-link class="px-0 py-1 mb-0 nav-link active" active-class="active" :to="{ name: 'MyNotify' }"
+                    <router-link class="px-0 py-1 mb-0 nav-link active" active-class="active" :to="{ name: 'MyHospitalWard' }"
                       role="tab" aria-selected="false">
                       <font-awesome-icon :icon="['fas', 'bell']" />
                       <span class="ms-1">병동</span>
@@ -84,16 +95,9 @@ onBeforeUnmount(() => {
                   </li>
                   <li class="nav-item">
                     <router-link class="px-0 py-1 mb-0 nav-link active" active-class="active"
-                      :to="{ name: 'UserManager' }" role="tab" aria-selected="false">
+                      :to="{ name: 'MyHospitalSetting' }" role="tab" aria-selected="false">
                       <font-awesome-icon :icon="['fas', 'users-gear']" />
                       <span class="ms-1">관리</span>
-                    </router-link>
-                  </li>
-                  <li class="nav-item">
-                    <router-link class="px-0 py-1 mb-0 nav-link active" active-class="active"
-                      :to="{ name: 'MySetting' }" role="tab" aria-selected="false">
-                      <font-awesome-icon :icon="['fas', 'gear']" />
-                      <span class="ms-1">설정</span>
                     </router-link>
                   </li>
                 </ul>

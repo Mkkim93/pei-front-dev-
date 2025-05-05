@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { fetchSurveyTypeStatusPage } from '@/api/survey-type';
-import { ApiPageResponse } from '@/types/api';
 import { SurveyTypeStatusList } from '@/types/survey-type';
 import { formatDate } from "@/utils/date";
 const surveyTypeStatusData = ref<SurveyTypeStatusList[]>();
@@ -12,13 +11,17 @@ onMounted(async () => {
     surveyTypeStatusData.value = response.data.content;
 })
 </script>
-
 <template>
     <div class="card mt-4">
         <div class="card-header pb-4 p-3">
             <div class="row">
                 <div class="col-6 d-flex align-items-center">
                     <h6 class="mb-3">진행 중인 설문</h6>
+                </div>
+                <div class="col-6 text-end">
+                    <router-link to="/survey-active">
+                    <button class="btn btn-sm btn-outline-primary">더보기</button>
+                </router-link>
                 </div>
             </div>
         </div>

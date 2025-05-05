@@ -2,7 +2,7 @@
 import { ref, onMounted, onBeforeMount, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { fetchHospitalList } from '@/api/hospital';
+import { fetchHospitalMainList } from '@/api/hospital';
 import { HospitalListType } from '@/types/hospital';
 import ArgonButton from '@/components/ArgonButton.vue';
 
@@ -13,7 +13,7 @@ const store = useStore();
 const hospitalListData = ref<HospitalListType[]>();
 
 onMounted(async () => {
-  const response = await fetchHospitalList(0, 10);
+  const response = await fetchHospitalMainList(0, 10);
   hospitalListData.value = response.data.content;
   console.log('hospi.value: ', hospitalListData.value);
 
@@ -35,8 +35,8 @@ onBeforeUnmount(() => {
   body.classList.add("bg-gray-100");
 });
 
-const showCate = () => {
-  router.push('/survey-cate');
+const showCate = (hospitalId :number) => {
+  router.push(`/survey-cate/${hospitalId}`);
 }
 
 </script>
@@ -91,7 +91,7 @@ const showCate = () => {
                 </div>
                 <h2 class="fs-3 pt-2 fw-bold">{{ hospital.name }}</h2>
                 <p class="mb-3">{{ hospital.description }}</p>
-                <argon-button size="md" color="primary" @click="showCate">바로 가기</argon-button>
+                <argon-button size="md" color="primary" @click="showCate(hospital.id)">바로 가기</argon-button>
               </div>
             </div>
           </div>

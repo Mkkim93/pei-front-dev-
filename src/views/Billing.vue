@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import SurveyActiveCard from "./components/SurveyActiveCard.vue";
-import DefaultInfoCard from "@/examples/Cards/DefaultInfoCard.vue";
 import PaymentCard from "./components/PaymentCard.vue";
 import InvoiceCard from "./components/InvoiceCard.vue";
 import BillingCard from "./components/BillingCard.vue";
@@ -21,7 +20,6 @@ onMounted(async () => {
 })
 
 const onChangeSurveyType = async (type: 'my' | 'common' | 'more') => {
-  // 예: API 호출 분기
   if (type === 'my') {
     isPublic.value = false;
     const response = await fetchsurveyTypePage(0, 5, isPublic.value);
@@ -43,7 +41,6 @@ const onChangeSurveyType = async (type: 'my' | 'common' | 'more') => {
             <payment-card />
             <SurveyActiveCard />
           </div>
-          
         </div>
       </div>
       <div class="col-lg-4">

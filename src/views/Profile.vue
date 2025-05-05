@@ -15,15 +15,12 @@ const profile = reactive<UsersType>({
   hospitalName: '',
 });
 
-onMounted(async () => {
-  const response = await fetchUsersProfile();
-  Object.assign(profile, response.data); // reactive 객체 업데이트
-});
-
 const body = document.getElementsByTagName("body")[0];
 const store = useStore();
 
-onMounted(() => {
+onMounted( async () => {
+  const response = await fetchUsersProfile();
+  Object.assign(profile, response.data); // reactive 객체 업데이트
   store.state.isAbsolute = true;
   setNavPills();
   setTooltip();

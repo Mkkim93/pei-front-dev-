@@ -4,6 +4,7 @@
 
 <template>
   <div>
+    <p>관리</p>
   </div>
 </template>
 

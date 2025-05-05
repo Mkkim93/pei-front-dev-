@@ -64,7 +64,7 @@ const sales = {
         <div class="row">
           <div class="col-lg-3 col-md-6 col-12">
             <mini-statistics-card
-              title="일별 자료"
+              title="일별 응답률"
               value="일별 내용"
               description="<span
                 class='text-sm font-weight-bolder text-success'
@@ -78,7 +78,7 @@ const sales = {
           </div>
           <div class="col-lg-3 col-md-6 col-12">
             <mini-statistics-card
-              title="주간 자료"
+              title="주간 응답률"
               value="주간 내용"
               description="<span
                 class='text-sm font-weight-bolder text-success'
@@ -92,7 +92,7 @@ const sales = {
           </div>
           <div class="col-lg-3 col-md-6 col-12">
             <mini-statistics-card
-              title="월별 자료"
+              title="월별 응답률"
               value="월별 내용"
               description="<span
                 class='text-sm font-weight-bolder text-danger'
@@ -106,7 +106,7 @@ const sales = {
           </div>
           <div class="col-lg-3 col-md-6 col-12">
             <mini-statistics-card
-              title="연간 자료"
+              title="연간 응답률"
               value="연간 내용"
               description="<span
                 class='text-sm font-weight-bolder text-success'

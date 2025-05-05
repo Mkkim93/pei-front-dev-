@@ -59,6 +59,8 @@ export async function fetchSurveyTypeStatusPage(
     isPublic: boolean | undefined,
     status: string | undefined,
 ) :Promise<ApiPageResponse<SurveyTypeStatusList>>{
+    console.log('isPublic: ', isPublic);
+    console.log('status: ', status);
     const response = await axiosAuth.get<ApiPageResponse<SurveyTypeStatusList>>(`/api/survey-type/status`, {
         params: {
             page: x,
@@ -67,5 +69,6 @@ export async function fetchSurveyTypeStatusPage(
             status: status,
         }
     })
+    console.log('ts 에서 데이터 확인: ', response.data);
     return response.data;
 }
