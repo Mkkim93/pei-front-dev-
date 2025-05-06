@@ -3,7 +3,6 @@ import axiosAuth from '@/plugins/axiosAuth';
 import { ApiPageResponse, ApiResponse } from '@/types/api';
 import { SurveyPostType, CategoryMap, SurveyHospitalType, SurveyDetailDTO, SurveyUpdateDTO } from '@/types/survey';
 import { CommonSurvey } from '@/types/common/survey';
-import { s } from '@fullcalendar/core/internal-common';
 
 export async function fetchSurveyTemplate(id :number) :Promise<ApiResponse<SurveyDetailDTO>>{
     const response = await axiosAuth.get<ApiResponse<SurveyDetailDTO>>(`/api/survey?id=${id}`);
@@ -61,5 +60,13 @@ export async function fetchCommonSurvey(
             status: status,
         }
     })
+    return response.data;
+}
+
+export async function fetchCommonSurveyDetail(
+    hospitalId: number,
+    surveyId: number,
+) :Promise<ApiResponse<CommonSurvey>> {
+    const response = await axiosPublic.get<ApiResponse<CommonSurvey>>(`/api/common-survey/detail?hospitalId=${hospitalId}&surveyId=${surveyId}`);
     return response.data;
 }

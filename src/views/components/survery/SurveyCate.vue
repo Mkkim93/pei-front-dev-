@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeMount, onBeforeUnmount, computed } from 'vue';
+import { ref, onMounted, onBeforeMount, onBeforeUnmount } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import type { CommonSurvey } from '@/types/common/survey';
@@ -11,16 +11,18 @@ const route = useRoute();
 const fallbackImg = 'https://dummyimage.com/450x300/dee2e6/6c757d.jpg';
 const body = document.getElementsByTagName("body")[0];
 const surveySelectList = ref<CommonSurvey[]>();
-const hosId = ref<number>();
+const hos = ref<number>();
 
 onMounted( async () => {
-  hosId.value = Number(route.params.id);
-  const res = await fetchCommonSurvey(0, 10, hosId.value, 'ACTIVE');
+  hos.value = Number(route.params.id);
+  const res = await fetchCommonSurvey(0, 10, hos.value, 'ACTIVE');
   surveySelectList.value = res.data.content;
+  console.log('surveySelectList.value: ', surveySelectList.value);
 });
 
-function goToSurveyList(hospitalId: number) {
-  router.push({ name: 'SurveyCategoryList', params: { id: hospitalId } });
+const goToSurveyPart = (surveyId: number) => {
+  const hospitalId :number | undefined = hos.value;
+  router.push({ name: 'SurveyParticipant', params: { hospitalId, surveyId } });
 }
 
 onBeforeMount(() => {
@@ -60,7 +62,6 @@ onBeforeUnmount(() => {
       </div>
     </nav>
 
-    <!-- Header -->
     <header class="bg-dark py-5">
       <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
@@ -70,14 +71,14 @@ onBeforeUnmount(() => {
       </div>
     </header>
 
-    <!-- Hospital List Section -->
+
     <section class="py-5">
       <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
           <div v-for="survey in surveySelectList" :key="survey.id" class="col mb-5 position-relative">
-            <div class="card h-100" @click="goToSurveyList(survey.id)" style="cursor: pointer; position: relative;">
+            <div class="card h-100" @click="goToSurveyPart(survey.id)" style="cursor: pointer; position: relative;">
 
-              <!-- 📌 Category Badge -->
+
               <span class="badge bg-primary position-absolute top-0 start-0 m-2">
                 {{ survey.category }}
               </span>

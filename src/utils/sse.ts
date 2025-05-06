@@ -6,6 +6,8 @@ import '@/assets/css/toast-custom.css';
 
 const toast = useToast();
 let eventSource: EventSource | null = null;
+let reconnectAttempts = 0;
+const MAX_RECONNECTS = 5;
 
 export const connectToSSE = async () => {
     if (eventSource) {
@@ -21,7 +23,7 @@ export const connectToSSE = async () => {
     const token = accessToken.split(' ')[1];
     // TODO 나중에 .env 파일로 도메인 경로 prefix 로 설정해야됨
     eventSource = new EventSource(`http://localhost:8080/api/notify/subscribe?token=${token}`);
-
+    
     // SSE 알림 수신 로그
     eventSource.onmessage = async (event) => {
         const updatedIds: string[] = [];
@@ -35,6 +37,7 @@ export const connectToSSE = async () => {
             console.log('notifyList: ', notifyList);
             // toast.clear(); 모든 알림 닫기 나중에 모든 알림 닫기 창 구현
             console.log('notifyList itemIds: ', notifyList);
+
             if (item.id !== "") {
                 updatedIds.push(item.id);
             }
@@ -52,6 +55,18 @@ export const connectToSSE = async () => {
     eventSource!.onerror = (error) => {
         console.error('SSE 연결 오류: ', error);
         eventSource?.close();
+        eventSource = null;
+        
+        if (reconnectAttempts < MAX_RECONNECTS) {
+            reconnectAttempts++;
+            const retryDelay = 2000; // 2초
+            console.log(`SSE 재연결 시도 ${reconnectAttempts}회 후 ${retryDelay}ms 지연`);
+            setTimeout(() => {
+                connectToSSE();
+            }, retryDelay);
+        } else {
+            console.warn("SSE 재연결 최대 횟수 초과. 중단합니다.");
+        }
     };
 };
 

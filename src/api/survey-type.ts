@@ -1,7 +1,6 @@
 import axiosAuth from '@/plugins/axiosAuth';
 import { ApiPageResponse } from '@/types/api';
 import { SurveyTypeList, SuveyTypeDetailList, SurveyTypeRecent, SurveyTypeStatusList } from '@/types/survey-type';
-import { aC } from '@fullcalendar/core/internal-common';
 
 export async function fetchsurveyTypePage(
     x: number | undefined,

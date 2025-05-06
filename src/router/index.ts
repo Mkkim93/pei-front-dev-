@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { expiredCheck } from "@/utils/auth";
 import { connectToSSE } from "@/utils/sse";
+import axios from "@/plugins/axiosAuth";
+import store from "@/store";
 import Dashboard from "../views/Dashboard.vue";
 import Tables from "../views/Tables.vue";
 import Billing from "../views/Billing.vue";
@@ -11,8 +13,6 @@ import Signup from "../views/Signup.vue";
 import Signin from "../views/Signin.vue";
 import AuthorsTable from "@/views/components/AuthorsTable.vue";
 import AccountPass from "@/views/components/account/AccountPass.vue";
-import axios from "@/plugins/axiosAuth";
-import store from "@/store";
 import AccountUsername from "@/views/components/account/AccountUsername.vue";
 import BoardWrite from "@/views/components/board/BoardWrite.vue";
 import MyActivity from "@/views/components/my/MyActivity.vue";
@@ -39,6 +39,8 @@ import MyHospitalSetting from "@/views/components/hospital/MyHospitalSetting.vue
 import MyHospital from "@/views/components/hospital/MyHospital.vue";
 import MyHospitalDepart from "@/views/components/hospital/MyHospitalDepart.vue";
 import SurveyActiveDetail from "@/examples/Survey/SurveyActiveDetail.vue";
+import SurveyWrite from "@/views/components/survery/SurveyWrite.vue";
+import SurveyParticipant from "@/views/components/survery/SurveyParticipant.vue";
 
 const routes = [
   {
@@ -47,11 +49,22 @@ const routes = [
     component: SurveyMain,
     // redirect: "/",
   },
+  {
+    path: "/survey-part/:hospitalId/:surveyId",
+    name: "SurveyParticipant",
+    component: SurveyParticipant,
+    props: true,
+  },
   { 
     path: "/survey-cate/:id",
     name: "surveyCate",
     component: SurveyCate,
     props: true,
+  },
+  {
+    path: "/survey-write/:surveyId",
+    name: "SurveyWrite",
+    component: SurveyWrite,
   },
   {
     path: "/dashboard-default",
@@ -263,6 +276,10 @@ const router = createRouter({
 // next: 훅 해결을 위해 호출 action은 next() 에 제공된 전달 인자에 달려 있다.
 // next(false) : 현재 네비게이션 중단 시 사용 (from 경로의 Url 로 재설정)
 router.beforeEach(async (to, from, next) => {
+  if (to.path === '/') {
+    return next();
+  }
+
   if (to.path === '/signin') {
     return next();
   }
@@ -282,16 +299,20 @@ router.beforeEach(async (to, from, next) => {
   if (to.path === '/reset-password') {
     return next();
   }
-  
-  if (to.path === '/') {
-    return next();
-  }
-
-  if (to.path === '/survey-cate') {
-    return next();
-  }
 
   if (to.path === '/hospital') {
+    return next();
+  }
+
+  if (to.path.startsWith('/survey-cate')) {
+    return next();
+  }
+
+  if (to.path.startsWith('/survey-write')) {
+    return next();
+  }
+
+  if (to.path.startsWith('/survey-part')) {
     return next();
   }
 

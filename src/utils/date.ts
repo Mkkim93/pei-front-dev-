@@ -15,6 +15,10 @@ export const formatDateVeryDetail = (date: string | Date, format = "YYYY.MM.DD'T
   return dayjs(date).format(format);
 }
 
+export const formatDateOrgDetail = (date: string | Date, format = "YYYY.MM.DDTHH:mm:ss") => {
+  return dayjs(date).format(format);
+}
+
 export const beforeFormatDate = (date: string | Date, format = "YYYY.MM.DD HH:mm:ss") => {
   const today = dayjs(); // 현재 시간
   const workDay = dayjs(date); // 전달받은 날짜

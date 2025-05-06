@@ -37,6 +37,7 @@ instance.interceptors.response.use(
         console.log("[Axios Auth response Interceptor Issue]: ", error.response?.data); // 응답 유형 체크
 
         if (status === 400) {
+            alert('로그인이 필요한 서비스 입니다.');
             return Promise.reject(error.response);
         }
 

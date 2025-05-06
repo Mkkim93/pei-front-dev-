@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
 import notify from "./notifystore";
 import survey from "./surveystore";
+import surveyresstore from "./surveyresstore";
 
 interface State {
   hideConfigButton: boolean;
@@ -94,6 +95,7 @@ export default createStore<State>({
 
   modules: {
     notify,
-    survey
+    survey,
+    surveyresstore
   }
 });

@@ -8,3 +8,10 @@ export interface CommonSurvey {
     closeAt: string;
     surveyStatus: string;
 }
+
+export interface CommonSurveyTemplate {
+    id: number;
+    title: string;
+    category: string;
+    content: string;
+}

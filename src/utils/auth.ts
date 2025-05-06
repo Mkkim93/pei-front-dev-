@@ -2,8 +2,10 @@ import dayjs from 'dayjs';
 import axios from '@/plugins/axiosAuth';
 import store from '@/store';
 import { jwtDecode } from "jwt-decode";
+import router from '@/router';
 
 export function expiredCheck() :boolean {
+    // console.log('expiredCheck(): ');
     const token = store.getters.accessToken;
     if (!token) {
         return true;
@@ -16,6 +18,20 @@ export function expiredCheck() :boolean {
     } catch (error) {
         console.warn("Jwt 디코드 실패: ", error);
         return true;
+    }
+}
+
+export function adminChecked() {
+    const token = store.getters.accessToken;
+    
+    if (!token) {
+        alert('로그인이 필요한 서비스 입니다.');
+        router.push('/signin'); 
+    } 
+    const bool :boolean = expiredCheck();
+    
+    if (bool) {
+        router.push('/default-dashboard');
     }
 }
 
