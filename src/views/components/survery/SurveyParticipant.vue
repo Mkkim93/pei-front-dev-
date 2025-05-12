@@ -5,7 +5,6 @@ import { useRoute, useRouter } from 'vue-router';
 import { fetchResponseMetaData } from '@/api/survey-res';
 import { SurveyResponseMetaType, DepartList, WardList, ageGroupList, genderTypeList, SurveyMetaStoreType} from '@/types/common/survey-res';
 import ArgonRadio from '@/components/ArgonRadio.vue';
-import { formatDateOrgDetail } from '@/utils/date';
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
@@ -19,15 +18,8 @@ const selectedDepart = ref<number>(0);
 const nextSurveyId = computed(() => route.params.surveyId);
 const selectedAge = ref<string>('');
 const selectedGender = ref<string>('');
-
-const postStoreMetaData = ref<SurveyMetaStoreType>({
-  wardId: 0,
-  departId: 0,
-  ageGroup: '',
-  genderType: '',
-  submittedAt: '',
-  // TODO 다른 데이터도 저장 (환자 연령대, 성별 등)
-});
+const consentChecked = ref<boolean>(false);
+const surveyMainTitle = ref<string>('');
 
 onMounted(async () => {
   console.log('nextsurvey: ', nextSurveyId.value);
@@ -37,9 +29,9 @@ onMounted(async () => {
   departList.value = metaType.value?.departList ?? [];
   ageGroupList.value = metaType.value?.ageGroup ?? [];
   genderTypeList.value = metaType.value?.genderType ?? [];
-
   console.log('ageG: ', ageGroupList.value);
   console.log('genT: ', genderTypeList.value);
+  surveyMainTitle.value = localStorage.getItem('title') as string;
 });
 
 onBeforeMount(() => {
@@ -51,6 +43,10 @@ onBeforeMount(() => {
 });
 
 const goToSurveyWrite = () => {
+  if (!consentChecked.value) {
+    alert('개인정보 수집 및 이용에 동의해주세요.')
+    return
+  }
   console.log('goToSurvey');
   console.log('selectedward: ', selectedWard.value);
   console.log('selectedDepart: ', selectedDepart.value);
@@ -80,12 +76,49 @@ onBeforeUnmount(() => {
   document.body.classList.add("bg-gray-100");
 });
 
-
-
 </script>
 
 <template>
   <div class="container py-5">
+    <!-- 개인정보 동의 안내 -->
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-gradient-primary text-white text-center">
+            <h5 class="mb-0">{{ surveyMainTitle }}</h5>
+          </div>
+          <div class="card-body">
+            <h6 class="fw-bold mb-3">개인정보 수집·이용 동의</h6>
+            <div class="bg-light p-3 rounded text-sm text-muted mb-3">
+              <p class="mb-2">※ 입력하신 개인정보는 아래의 목적에 따라 사용됩니다.</p>
+              <ul class="ps-3 mb-2">
+                <li>수집 항목: 연락처</li>
+                <li>수집 목적: 설문조사 이벤트 당첨 통보</li>
+                <li>보유 기간: 수집일로부터 1년</li>
+              </ul>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" v-model="consentChecked" id="consentCheckbox" />
+              <label class="form-check-label" for="consentCheckbox">
+                위 개인정보 수집·이용에 동의합니다.
+              </label>
+            </div>
+            <hr class="my-4" />
+            <p class="text-sm mb-1">
+              본 병원은 더 나은 의료서비스 제공을 위해 매년 외래환자 만족도 조사를 시행하고 있습니다.
+            </p>
+            <p class="text-sm mb-2">
+              올해는 코로나19로 인해 홈페이지를 통한 비대면 설문조사를 진행하게 되었으니 많은 참여 부탁드립니다.
+            </p>
+            <ul class="text-sm ps-3">
+              <li>이벤트 참여자 중 추첨을 통해 커피 쿠폰 제공</li>
+              <li>문의: 기획실 051-664-4912</li>
+              <li class="text-primary fw-bold">조사 기간: 2020.09.07 ~ 2020.10.10</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card shadow-sm border-0">
@@ -148,9 +181,6 @@ onBeforeUnmount(() => {
                         </div>
                     </div>
                 </div>
-
-
-
             <div class="text-end mt-4">
               <button 
                 class="btn btn-outline-primary"

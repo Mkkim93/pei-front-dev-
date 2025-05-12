@@ -32,7 +32,6 @@ import SurveyManager from "@/examples/Survey/SurveyManager.vue";
 import SurveyEdit from "@/examples/Survey/SurveyEdit.vue";
 import SurveyCate from "@/views/components/survery/SurveyCate.vue";
 import SurveyTypeDetail from "@/examples/Survey/SurveyTypeDetail.vue";
-
 import Hospital from "@/views/Hospital.vue";
 import MyHospitalWard from "@/views/components/hospital/MyHospitalWard.vue";
 import MyHospitalSetting from "@/views/components/hospital/MyHospitalSetting.vue";
@@ -41,6 +40,7 @@ import MyHospitalDepart from "@/views/components/hospital/MyHospitalDepart.vue";
 import SurveyActiveDetail from "@/examples/Survey/SurveyActiveDetail.vue";
 import SurveyWrite from "@/views/components/survery/SurveyWrite.vue";
 import SurveyParticipant from "@/views/components/survery/SurveyParticipant.vue";
+import CalenderView from "@/views/CalenderView.vue";
 
 const routes = [
   {
@@ -142,6 +142,12 @@ const routes = [
     path: "/rtl-page",
     name: "통계 관리",
     component: RTL,
+  },
+  {
+    path: "/calender",
+    name: '일정 관리',
+    component: CalenderView,
+    props: true,
   },
   {
     path: "/signin",

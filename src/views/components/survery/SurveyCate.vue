@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router';
 import type { CommonSurvey } from '@/types/common/survey';
 import { fetchCommonSurvey } from '@/api/survey';
 import router from '@/router';
-
+import { formatDate } from '@/utils/date';
 const store = useStore();
 const route = useRoute();
 const fallbackImg = 'https://dummyimage.com/450x300/dee2e6/6c757d.jpg';
@@ -13,15 +13,16 @@ const body = document.getElementsByTagName("body")[0];
 const surveySelectList = ref<CommonSurvey[]>();
 const hos = ref<number>();
 
-onMounted( async () => {
+onMounted(async () => {
   hos.value = Number(route.params.id);
   const res = await fetchCommonSurvey(0, 10, hos.value, 'ACTIVE');
   surveySelectList.value = res.data.content;
   console.log('surveySelectList.value: ', surveySelectList.value);
 });
 
-const goToSurveyPart = (surveyId: number) => {
-  const hospitalId :number | undefined = hos.value;
+const goToSurveyPart = (surveyId: number, surveyTitle: string) => {
+  localStorage.setItem('title', surveyTitle);
+  const hospitalId: number | undefined = hos.value;
   router.push({ name: 'SurveyParticipant', params: { hospitalId, surveyId } });
 }
 
@@ -65,7 +66,7 @@ onBeforeUnmount(() => {
     <header class="bg-dark py-5">
       <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
-          <h1 class="display-4 fw-bolder">병원을 선택해주세요</h1>
+          <h1 class="display-4 text-white fw-bolder">참여할 설문주제 선택해주세요</h1>
           <p class="lead fw-normal text-white-50 mb-0">병원별 설문 리스트로 이동합니다.</p>
         </div>
       </div>
@@ -76,7 +77,8 @@ onBeforeUnmount(() => {
       <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
           <div v-for="survey in surveySelectList" :key="survey.id" class="col mb-5 position-relative">
-            <div class="card h-100" @click="goToSurveyPart(survey.id)" style="cursor: pointer; position: relative;">
+            <div class="card h-100" @click="goToSurveyPart(survey.id, survey.title)"
+              style="cursor: pointer; position: relative;">
 
 
               <span class="badge bg-primary position-absolute top-0 start-0 m-2">
@@ -88,6 +90,14 @@ onBeforeUnmount(() => {
               <div class="card-body p-4 text-center">
                 <h5 class="fw-bolder">{{ survey.title }}</h5>
                 <p class="text-muted small">{{ survey.description }}</p>
+                <div>
+                  <span class="text-muted small">시작일</span><br />
+                  <span class="fw-bold text-dark">{{ formatDate(survey.openAt) }}</span>
+                </div>
+                <div>
+                  <span class="text-muted small">종료일</span><br />
+                  <span class="fw-bold text-danger">{{ formatDate(survey.closeAt) }}</span>
+                </div>
               </div>
 
               <div class="card-footer p-4 pt-0 border-top-0 bg-transparent text-center">

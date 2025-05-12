@@ -7,7 +7,7 @@ export interface SurveyPostType {
     surveyTypeId: number;
     surveyDepartId: number | undefined;
     hospitalId: number;
-    isVisible: boolean;
+    visible: boolean;
     usersId: number;
 }
 
@@ -19,7 +19,7 @@ export interface SurveyUpdateDTO {
     updatedAt: string;
     openAt: string;
     closeAt: string;
-    isVisible: boolean;
+    visible: boolean;
     surveyDepartId: number;
     surveyTypeId: number;
 }

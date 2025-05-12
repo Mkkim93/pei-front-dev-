@@ -14,6 +14,9 @@ const store = useStore();
 const hospitalListData = ref<HospitalListType[]>();
 
 onMounted(async () => {
+  if (localStorage.getItem('hospitalId') != null) {
+    localStorage.removeItem('hospitalId');
+  }
   const response = await fetchHospitalMainList(0, 10);
   hospitalListData.value = response.data.content;
   console.log('hospi.value: ', hospitalListData.value);

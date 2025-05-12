@@ -24,19 +24,6 @@ import team4 from "@/assets/img/team-4.jpg";
 
 const store = useStore();
 
-// 좌우 전환
-// onBeforeMount(() => {
-//   store.state.isRTL = true;
-//   document.querySelector("html").setAttribute("lang", "ar");
-//   document.querySelector("html").setAttribute("dir", "rtl");
-//   document.querySelector("#app").classList.add("rtl");
-// });
-// onBeforeUnmount(() => {
-//   store.state.isRTL = false;
-//   document.querySelector("html").removeAttribute("lang");
-//   document.querySelector("html").removeAttribute("dir");
-//   document.querySelector("#app").classList.remove("rtl");
-// });
 </script>
 <template>
   <div class="py-4 container-fluid">
@@ -91,6 +78,8 @@ const store = useStore();
         />
       </div>
     </div>
+
+    
     <div class="row">
       <div class="col-lg-7 mb-lg-0 mb-4">
         <developer-card />

@@ -63,96 +63,71 @@ const sales = {
       <div class="col-lg-12">
         <div class="row">
           <div class="col-lg-3 col-md-6 col-12">
-            <mini-statistics-card
-              title="일별 응답률"
-              value="일별 내용"
-              description="<span
+            <mini-statistics-card title="일별 응답률" value="일별 내용" description="<span
                 class='text-sm font-weight-bolder text-success'
-                >+55%</span> 전일 대비"
-              :icon="{
-                component: 'ni ni-money-coins',
-                background: 'bg-gradient-primary',
-                shape: 'rounded-circle',
-              }"
-            />
+                >+55%</span> 전일 대비" :icon="{
+                  component: 'ni ni-money-coins',
+                  background: 'bg-gradient-primary',
+                  shape: 'rounded-circle',
+                }" />
           </div>
           <div class="col-lg-3 col-md-6 col-12">
-            <mini-statistics-card
-              title="주간 응답률"
-              value="주간 내용"
-              description="<span
+            <mini-statistics-card title="주간 응답률" value="주간 내용" description="<span
                 class='text-sm font-weight-bolder text-success'
-                >+3%</span> 전주 대비"
-              :icon="{
-                component: 'ni ni-world',
-                background: 'bg-gradient-danger',
-                shape: 'rounded-circle',
-              }"
-            />
+                >+3%</span> 전주 대비" :icon="{
+                  component: 'ni ni-world',
+                  background: 'bg-gradient-danger',
+                  shape: 'rounded-circle',
+                }" />
           </div>
           <div class="col-lg-3 col-md-6 col-12">
-            <mini-statistics-card
-              title="월별 응답률"
-              value="월별 내용"
-              description="<span
+            <mini-statistics-card title="월별 응답률" value="월별 내용" description="<span
                 class='text-sm font-weight-bolder text-danger'
-                >-2%</span> 전월 대비"
-              :icon="{
-                component: 'ni ni-paper-diploma',
-                background: 'bg-gradient-success',
-                shape: 'rounded-circle',
-              }"
-            />
+                >-2%</span> 전월 대비" :icon="{
+                  component: 'ni ni-paper-diploma',
+                  background: 'bg-gradient-success',
+                  shape: 'rounded-circle',
+                }" />
           </div>
           <div class="col-lg-3 col-md-6 col-12">
-            <mini-statistics-card
-              title="연간 응답률"
-              value="연간 내용"
-              description="<span
+            <mini-statistics-card title="연간 응답률" value="연간 내용" description="<span
                 class='text-sm font-weight-bolder text-success'
-                >+5%</span> 전년도 대비"
-              :icon="{
-                component: 'ni ni-cart',
-                background: 'bg-gradient-warning',
-                shape: 'rounded-circle',
-              }"
-            />
+                >+5%</span> 전년도 대비" :icon="{
+                  component: 'ni ni-cart',
+                  background: 'bg-gradient-warning',
+                  shape: 'rounded-circle',
+                }" />
           </div>
         </div>
         <div class="row align-items-stretch">
           <div class="col-lg-7 mb-lg">
             <!-- line chart 여기 차트를 일별, 월별, 주간, 월별 로 슬라이드 해서 보여줄 수 있도록 구현하는것도 괜찮을 듯-->
             <div class="card z-index-2 h-100" style="min-height: 450px;">
-              <gradient-line-chart
-                id="chart-line"
-                title="월별 조사 현황"
-                description="<i class='fa fa-arrow-up text-success'></i>
-      <span class='font-weight-bold'>4% </span> in 2025"
-                :chart="{ 
-                  labels: [
-                    'Apr',
-                    'May',
-                    'Jun',
-                    'Jul',
-                    'Aug',
-                    'Sep',
-                    'Oct',
-                    'Nov',
-                    'Dec',
-                  ],
-                  datasets: [
-                    {
-                      label: 'Mobile Apps',
-                      data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-                    },
-                  ],
-                }"
-              />
+              <gradient-line-chart id="chart-line" title="진행 중인 설문 참여율" description="<i class='fa fa-arrow-up text-success'></i>
+      <span class='font-weight-bold'>4% </span> in 2025" :chart="{
+        labels: [
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
+        datasets: [
+          {
+            label: 'Mobile Apps',
+            data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+          },
+        ],
+      }" />
             </div>
           </div>
           <div class="col-lg-5">
             <!-- <carousel /> -->
-             <calendar></calendar>
+            <calendar></calendar>
           </div>
         </div>
         <div class="row mt-4">
@@ -160,20 +135,20 @@ const sales = {
             <div class="card">
               <div class="p-3 card-header">
                 <div class="p-3 pb-4 card-header d-flex justify-content-between align-items-center">
-  <h6 class="mb-0">공지 사항</h6>
-  <router-link to="/tables">
-  <ArgonButton class="btn btn-sm btn-outline-primary" variant="outline">더보기</ArgonButton>
-</router-link>
-</div>
-            </div>
+                  <h6 class="mb-0">공지 사항</h6>
+                  <router-link to="/tables">
+                    <ArgonButton class="btn btn-sm btn-outline-primary" variant="outline">더보기</ArgonButton>
+                  </router-link>
+                </div>
+              </div>
               <div class="table-responsive">
                 <table class="table align-items-center">
                   <thead>
                     <tr class="text-center">
-                    <th>제목</th>
-                    <th>작성자</th>
-                    <th>작성일</th>
-                    <th>조회수</th>
+                      <th>제목</th>
+                      <th>작성자</th>
+                      <th>작성일</th>
+                      <th>조회수</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -183,7 +158,7 @@ const sales = {
                           <div class="ms-4">
                             <h6 class="mb-0 text-sm">
                               <router-link :to="`detail/${board.id}`">
-    {{ board.title.length > 10 ? board.title.slice(0, 5) + '...' : board.title }}
+                                {{ board.title.length > 10 ? board.title.slice(0, 5) + '...' : board.title }}
                               </router-link>
                             </h6>
                           </div>
@@ -191,19 +166,19 @@ const sales = {
                       </td>
                       <td>
                         <div class="text-center">
-                          
+
                           <h6 class="mb-0 text-sm">{{ board.writer }}</h6>
                         </div>
                       </td>
                       <td>
                         <div class="text-center">
-                          
-                          <h6 class="mb-0 text-sm">{{ formatDate(board.createAt)  }}</h6>
+
+                          <h6 class="mb-0 text-sm">{{ formatDate(board.createAt) }}</h6>
                         </div>
                       </td>
                       <td class="text-sm align-middle">
                         <div class="text-center col">
-                          
+
                           <h6 class="mb-0 text-sm">{{ board.views }}</h6>
                         </div>
                       </td>
@@ -214,36 +189,34 @@ const sales = {
             </div>
           </div>
           <div class="col-lg-5">
-            <categories-list
-              :categories="[
-                {
-                  icon: {
-                    component: 'ni ni-mobile-button',
-                    background: 'dark',
-                  },
-                  label: 'Devices',
-                  description: '250 in stock <strong>346+ sold</strong>',
+            <categories-list :categories="[
+              {
+                icon: {
+                  component: 'ni ni-mobile-button',
+                  background: 'dark',
                 },
-                {
-                  icon: {
-                    component: 'ni ni-tag',
-                    background: 'dark',
-                  },
-                  label: 'Tickets',
-                  description: '123 closed <strong>15 open</strong>',
+                label: 'Devices',
+                description: '250 in stock <strong>346+ sold</strong>',
+              },
+              {
+                icon: {
+                  component: 'ni ni-tag',
+                  background: 'dark',
                 },
-                {
-                  icon: { component: 'ni ni-box-2', background: 'dark' },
-                  label: 'Error logs',
-                  description: '1 is active <strong>40 closed</strong>',
-                },
-                {
-                  icon: { component: 'ni ni-satisfied', background: 'dark' },
-                  label: 'Happy Users',
-                  description: '+ 430',
-                },
-              ]"
-            />
+                label: 'Tickets',
+                description: '123 closed <strong>15 open</strong>',
+              },
+              {
+                icon: { component: 'ni ni-box-2', background: 'dark' },
+                label: 'Error logs',
+                description: '1 is active <strong>40 closed</strong>',
+              },
+              {
+                icon: { component: 'ni ni-satisfied', background: 'dark' },
+                label: 'Happy Users',
+                description: '+ 430',
+              },
+            ]" />
           </div>
         </div>
       </div>

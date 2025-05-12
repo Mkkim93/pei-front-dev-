@@ -14,7 +14,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
-    "@fullcalendar/vue3": "^6.1.15",
+    "@fullcalendar/vue3": "^6.1.17",
     "@popperjs/core": "^2.11.8",
     "@tiptap/extension-bullet-list": "^2.11.7",
     "@tiptap/extension-color": "^2.11.7",

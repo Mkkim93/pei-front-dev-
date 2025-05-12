@@ -28,11 +28,8 @@ export function adminChecked() {
         alert('로그인이 필요한 서비스 입니다.');
         router.push('/signin'); 
     } 
-    const bool :boolean = expiredCheck();
     
-    if (bool) {
-        router.push('/default-dashboard');
-    }
+
 }
 
 

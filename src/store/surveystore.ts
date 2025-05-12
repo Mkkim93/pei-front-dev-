@@ -6,8 +6,8 @@ interface SurveyState {
 }
 
 const state = () => ({
-    survey: [],
-    surveyDetail: [],
+    survey: {} as SurveyPostType,
+    surveyDetail: {} as SurveyDetailDTO,
 });
 
 const mutations = {
@@ -20,7 +20,7 @@ const mutations = {
 };
 
 const actions = {
-
+    
 }
 
 const getters = {

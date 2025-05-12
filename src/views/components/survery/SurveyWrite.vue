@@ -42,9 +42,9 @@ const submitSurveyHandler = async (payload: SurveyResponsePostType) => {
   console.log('payload: ', payload);
   const response = await postSurveyResponseData(payload);
   console.log('설문 전송 후 res: ', response);
+  localStorage.removeItem('title');
   alert(response.message);
   router.push('/');
-  
 }
 </script>
 

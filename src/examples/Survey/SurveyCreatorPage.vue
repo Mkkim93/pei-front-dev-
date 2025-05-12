@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, onMounted, computed, ref } from 'vue';
+import { reactive, onMounted, computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import router from '@/router';
@@ -124,7 +124,7 @@ const postData = reactive<SurveyPostType>({
   surveyTypeId: 0,
   surveyDepartId: 0,
   hospitalId: 0,
-  isVisible: false,
+  visible: false,
   usersId: 0,
 });
 
@@ -136,7 +136,7 @@ const updateData = reactive<SurveyUpdateDTO>({
   updatedAt: '',
   openAt: '',
   closeAt: '',
-  isVisible: false,
+  visible: false,
   surveyDepartId: 0,
   surveyTypeId: 0,
 })
@@ -157,12 +157,21 @@ const updateSurvey = async () => {
   if (isconfirm) {
     const json = creator.JSON;
     updateData.content = json;
-    updateData.isVisible = isVisibled.value;
+    updateData.visible = isVisibled.value;
+    console.log('수정 전 공개/비공개 확인: ', updateData.visible);
+    console.log('그냥 visibled: ', isVisibled.value);
+    updateData.openAt = parseDateToISO(updateData.openAt) as string;
+    updateData.closeAt = parseDateToISO(updateData.closeAt) as string;
     const response = await updatedSurvey(updateData);
     alert(response.message);
     router.push('/survey-list');
   }
 }
+
+const parseDateToISO = (date: string | Date) => {
+  const parsed = new Date(date);
+  return isNaN(parsed.getTime()) ? null : parsed.toISOString();
+};
 
 onMounted(async () => {
   // 기존 양식 수정 모드
@@ -180,6 +189,10 @@ onMounted(async () => {
     creator.JSON = postData.content;
   }
 })
+
+watch(isVisibled, (newVal) => {
+  console.log('스위치 상태 변경됨:', newVal ? '공개' : '비공개');
+});
 
 </script>
 

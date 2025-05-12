@@ -12,6 +12,7 @@ import ArgonAlert from "@/components/ArgonAlert.vue";
 
 const body = document.getElementsByTagName("body")[0];
 const store = useStore();
+
 onBeforeMount(() => {
   store.state.hideConfigButton = true;
   store.state.showNavbar = false;

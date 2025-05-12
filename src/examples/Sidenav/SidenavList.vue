@@ -100,8 +100,8 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="#"
-          :class="getRoute() === 'tables' ? 'active' : ''"
+          to="/calender"
+          :class="getRoute() === 'calender' ? 'active' : ''"
           :navText="isRTL ? '일정 관리' : '일정 관리'"
         >
           <template v-slot:icon>
