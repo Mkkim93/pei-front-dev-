@@ -7,6 +7,8 @@ import Calendar from '@/examples/Calendar.vue';
 </script>
 
 <template>
+  <div class="container-flud">
   <Calendar />
+</div>
 </template>
 <style scoped></style>

@@ -17,3 +17,19 @@ export interface ScheduleUpdateDTO {
     endTime: string | Date;
     isDeleted: boolean | undefined;
 }
+
+export interface ScheduleCreateDTO {
+    id?: number;
+    title: string;
+    description: string;
+    startTime: string | Date;
+    endTime: string | Date;
+}
+
+export interface SchduleResponseDTO {
+    id: number;
+    title: string;
+    description: string;
+    startTime: string | Date;
+    endTime: string | Date;
+}
